@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.data.HistoryAudioBeanDao
 
-@Database( entities = [HistoryAudioBean::class],version = 1)
+@Database( entities = [HistoryAudioBean::class],version = 1 ,exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun historyAudioDao():HistoryAudioBeanDao

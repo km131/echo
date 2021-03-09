@@ -1,45 +1,45 @@
 package com.example.echo_kt.ui.main
 
-open class AudioBean {
+class AudioBean {
     /**
      * 歌曲名
      */
-    open var name: String? = null
+     var name: String? = null
 
     /**
      * 歌手
      */
-    open var singer: String? = null
+     var singer: String? = null
 
     /**
      * 歌曲所占空间大小
      */
-    open var size: Long = 0
+     var size: Long = 0
 
     /**
      * 歌曲时间长度
      */
-    open var duration = 0
+     var duration = 0
 
     /**
      * 歌曲地址
      */
-    open var path: String? = null
+     var path: String? = null
 
     /**
      * 图片id
      */
-    open var albumId: Long = 0
+     var albumId: Long = 0
 
     /**
      * 歌曲id
      */
-    open var id: Long = 0
+     var id: Long = 0
 
     /**
      * 排序id
      */
-    open var sortId: Long = 0
+     var sortId: Long = 0
 
     override fun toString(): String {
         return "\nAudioBean(sortId=$sortId,name=$name, singer=$singer, size=$size, duration=$duration, path=$path, albumId=$albumId, id=$id)"
