@@ -2,17 +2,15 @@ package com.example.echo_kt.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
 import com.example.echo_kt.databinding.MainFragmentBinding
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainFragment : Fragment(),AudioObserver {
 
@@ -22,11 +20,14 @@ class MainFragment : Fragment(),AudioObserver {
 
     private lateinit var viewModel: MainViewModel
 
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = MainFragmentBinding.inflate(inflater, container, false)
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
         val viewPage = binding.vpHome
         val btnNav = binding.navView
         viewPage.adapter = MainPagerAdapter(this)
@@ -48,6 +49,25 @@ class MainFragment : Fragment(),AudioObserver {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onClick()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //将bind置空，控制binding生命周期
+        _binding=null
+    }
+
+    private fun onClick() {
+        binding.playView.setOnClickListener{
+            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_playFragment)
+            val lise:MutableList<AudioBean> = PlayList.instance.readLocalPlayList(BaseApplication.getContext())
+            Log.i("hhh", "onClick: " +lise)
+        }
     }
 
     override fun onPlayMode(playMode: Int) {
@@ -83,5 +103,4 @@ class MainFragment : Fragment(),AudioObserver {
     private fun stringForTime(duration: Int): String? {
         TODO("Not yet implemented")
     }
-
 }

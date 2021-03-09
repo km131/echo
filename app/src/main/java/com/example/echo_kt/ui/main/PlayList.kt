@@ -56,7 +56,7 @@ class PlayList private constructor() {
     }
 
     //读取本地音频列表
-    private fun readLocalPlayList(context:Context): MutableList<AudioBean> {
+    public fun readLocalPlayList(context:Context): MutableList<AudioBean> {
         val audioList = mutableListOf<AudioBean>()
         val cursor:Cursor? = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
