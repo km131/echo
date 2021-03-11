@@ -31,6 +31,7 @@ class MainFragment : Fragment(),AudioObserver {
         val viewPage = binding.vpHome
         val btnNav = binding.navView
         viewPage.adapter = MainPagerAdapter(this)
+        viewPage.isUserInputEnabled = false
         btnNav.run {
             setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
@@ -68,6 +69,9 @@ class MainFragment : Fragment(),AudioObserver {
             val lise:MutableList<AudioBean> = PlayList.instance.readLocalPlayList(BaseApplication.getContext())
             Log.i("hhh", "onClick: " +lise)
         }
+        binding.ibtnMusicList.setOnClickListener{
+            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_audioListDialogFragment)
+        }
     }
 
     override fun onPlayMode(playMode: Int) {
@@ -75,7 +79,6 @@ class MainFragment : Fragment(),AudioObserver {
            PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.play_order)
            PlayList.PlayMode.RANDOM_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.play_random)
            PlayList.PlayMode.SINGLE_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.play_single)
-
        }
     }
 

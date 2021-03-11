@@ -17,7 +17,10 @@
 package com.example.echo_kt.ui.main
 
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import java.net.URL
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -39,4 +42,8 @@ fun imgPlay(view: View,playStatus: Int){
             view.isSelected = true
         }
     }
+}
+@BindingAdapter("url")
+fun setImgUrl(view: ImageView, url: Int) {
+    Glide.with(view.context).load(url).into(view);
 }
