@@ -1,4 +1,4 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.ui.work
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -16,11 +16,7 @@ import com.example.echo_kt.data.AcrossBean
 import com.example.echo_kt.data.BannerBean
 import com.example.echo_kt.data.ErectBean
 import com.example.echo_kt.databinding.MyFragmentBinding
-import com.youth.banner.adapter.BannerAdapter
-import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.indicator.CircleIndicator
-import com.youth.banner.indicator.Indicator
-import java.net.URL
 
 class MyFragment : Fragment() {
 

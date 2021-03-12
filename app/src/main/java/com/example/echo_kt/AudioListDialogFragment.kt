@@ -1,6 +1,5 @@
 package com.example.echo_kt
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,26 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.echo_kt.databinding.AudioListDialogBinding
 
-// TODO: Customize parameter argument names
 const val ARG_ITEM_COUNT = "item_count"
 
-/**
- *
- * A fragment that shows a list of items as a modal bottom sheet.
- *
- * You can show this modal bottom sheet from your activity like this:
- * <pre>
- *    AudioListDialogFragment.newInstance(30).show(supportFragmentManager, "dialog")
- * </pre>
- */
 class AudioListDialogFragment : BottomSheetDialogFragment() {
+
+    private var _binding: AudioListDialogBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_audio_list_dialog_list_dialog, container, false)
+        _binding = AudioListDialogBinding.inflate(inflater, container, false)
+        binding.bottomList.adapter = ItemAdapter(100)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,12 +33,13 @@ class AudioListDialogFragment : BottomSheetDialogFragment() {
             arguments?.getInt(ARG_ITEM_COUNT)?.let { ItemAdapter(it) }
     }
 
+
     private inner class ViewHolder internal constructor(
         inflater: LayoutInflater,
         parent: ViewGroup
     ) : RecyclerView.ViewHolder(
         inflater.inflate(
-            R.layout.fragment_audio_list_dialog_list_dialog_item,
+            R.layout.audio_list_dialog_item,
             parent,
             false
         )

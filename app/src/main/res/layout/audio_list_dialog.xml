@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bottom_list"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            android:paddingBottom="@dimen/list_item_spacing_half"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:context=".AudioListDialogFragment"
+            tools:listitem="@layout/audio_list_dialog_item" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

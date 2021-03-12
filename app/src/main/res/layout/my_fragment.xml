@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.main.MyFragment">
+            tools:context=".ui.work.MyFragment">
 
             <com.youth.banner.Banner
                 android:id="@+id/banner"
