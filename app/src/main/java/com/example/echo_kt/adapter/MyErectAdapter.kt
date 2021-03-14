@@ -3,13 +3,10 @@ package com.example.echo_kt.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
 import com.example.echo_kt.data.ErectBean
 import com.example.echo_kt.databinding.ListItemWork1Binding
-import com.youth.banner.holder.IViewHolder
 
 class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.Adapter<ErectViewHolder>() {
 

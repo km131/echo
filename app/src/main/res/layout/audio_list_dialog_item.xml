@@ -5,7 +5,10 @@
     <data>
         <variable
             name="pvm"
-            type="com.example.echo_kt.ui.main.MainViewModel" />
+            type="com.example.echo_kt.ui.main.AudioBean" />
+        <variable
+            name="playOnclick"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +20,8 @@
         android:paddingRight="@dimen/list_item_spacing"
         android:paddingBottom="@dimen/list_item_spacing_half"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:onClick="@{playOnclick}">
 
         <TextView
             android:id="@+id/item_tv_music"
@@ -25,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="@{pvm.songName}"
+            android:text="@{pvm.name}"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

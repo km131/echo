@@ -3,6 +3,7 @@ package com.example.echo_kt.ui.main
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.example.echo_kt.R
+import com.example.echo_kt.play.PlayerManager
 
 class MainViewModel : ViewModel() {
     /**

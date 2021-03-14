@@ -1,6 +1,7 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.play
 
 import android.content.Context
+import com.example.echo_kt.ui.main.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -14,7 +15,8 @@ import java.util.concurrent.TimeUnit
  * @author zs
  * @data 2020/6/25
  */
-class PlayerManager private constructor() : IPlayerStatus {
+class PlayerManager private constructor() :
+    IPlayerStatus {
 
     /**
      * 单例创建PlayerManager
@@ -54,7 +56,8 @@ class PlayerManager private constructor() : IPlayerStatus {
      */
     private val observers = mutableListOf<AudioObserver>()
 
-    private val playerHelper: IPlayer = MediaPlayerHelper()
+    private val playerHelper: IPlayer =
+        MediaPlayerHelper()
 
     /**
      * 用于关闭rxJava
@@ -65,7 +68,8 @@ class PlayerManager private constructor() : IPlayerStatus {
     /**
      * 播放状态，默认为重置
      */
-    private var playStatus = RELEASE
+    private var playStatus =
+        RELEASE
     /**
      * 播放列表
      */

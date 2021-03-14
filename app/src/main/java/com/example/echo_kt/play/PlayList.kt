@@ -1,9 +1,10 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.play
 
 import android.content.Context
 import android.database.Cursor
 import android.provider.MediaStore
 import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.ui.main.AudioBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,12 +40,13 @@ class PlayList private constructor() {
     /**
      * 只读，下同
      */
-    var localList: List<AudioBean> = _localList
+    var localList: MutableList<AudioBean> = _localList
 
     /**
      * 播放模式，默认为顺序播放
      */
-    private var playMode = PlayMode.ORDER_PLAY_MODE
+    private var playMode =
+        PlayMode.ORDER_PLAY_MODE
 
 
     init {
@@ -53,10 +55,16 @@ class PlayList private constructor() {
             _localList = readLocalPlayList(BaseApplication.getContext())
             localList = _localList
         }
+        switchPlayList()
+    }
+
+    //初始化并切换播放列表
+    private fun switchPlayList() {
+       currentAudioList= localList
     }
 
     //读取本地音频列表
-    public fun readLocalPlayList(context:Context): MutableList<AudioBean> {
+    fun readLocalPlayList(context:Context): MutableList<AudioBean> {
         val audioList = mutableListOf<AudioBean>()
         val cursor:Cursor? = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -110,6 +118,7 @@ class PlayList private constructor() {
      * 设置当前播放列表和currentIndex
      */
     fun setCurrentAudio(audioBean: AudioBean) {
+        switchPlayList()
         //重置当前角标
         currentIndex = getIndexByAudio(audioBean)
     }
@@ -128,7 +137,7 @@ class PlayList private constructor() {
     fun nextAudio(): AudioBean? {
         if (currentAudioList.size>0) {
             when (playMode) {
-                //顺序
+                //顺序播放
                 PlayMode.ORDER_PLAY_MODE -> {
                     currentIndex = if (currentIndex < currentAudioList.size - 1) {
                         currentIndex + 1
@@ -136,10 +145,10 @@ class PlayList private constructor() {
                         0
                     }
                 }
-                //单曲(不做处理)
+                //单曲循环(不做处理)
                 PlayMode.SINGLE_PLAY_MODE -> {
                 }
-                //随机
+                //随机播放
                 PlayMode.RANDOM_PLAY_MODE -> {
                     currentIndex = getRandom(0, currentAudioList.size - 1)
                 }
@@ -176,7 +185,7 @@ class PlayList private constructor() {
             }
             currentAudio = currentAudioList[currentIndex]
         } else {
-            //当前播放列表为空将丹铅播放置为null
+            //当前播放列表为空将当前播放置为null
             currentAudio = null
         }
         return currentAudio
@@ -191,13 +200,16 @@ class PlayList private constructor() {
     fun switchPlayMode(): Int {
         when (playMode) {
             PlayMode.ORDER_PLAY_MODE -> {
-                playMode = PlayMode.SINGLE_PLAY_MODE
+                playMode =
+                    PlayMode.SINGLE_PLAY_MODE
             }
             PlayMode.SINGLE_PLAY_MODE -> {
-                playMode = PlayMode.RANDOM_PLAY_MODE
+                playMode =
+                    PlayMode.RANDOM_PLAY_MODE
             }
             PlayMode.RANDOM_PLAY_MODE -> {
-                playMode = PlayMode.ORDER_PLAY_MODE
+                playMode =
+                    PlayMode.ORDER_PLAY_MODE
             }
         }
         return playMode

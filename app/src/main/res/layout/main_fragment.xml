@@ -58,10 +58,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.7"
-                app:srcCompat="@android:mipmap/sym_def_app_icon" />
+                urlL="@{mainVM.albumPic}"/>
 
             <TextView
                 android:id="@+id/tv_music"
+                android:text="@{mainVM.songName}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="48dp"

@@ -16,11 +16,13 @@
 
 package com.example.echo_kt.ui.main
 
+import android.content.ContentUris
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import java.net.URL
+import com.example.echo_kt.play.PlayerManager
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -35,15 +37,24 @@ fun bindIsGone(view: View, isGone: Boolean) {
 fun imgPlay(view: View,playStatus: Int){
     //改变播放键显示
     when(playStatus){
-        PlayerManager.RELEASE,PlayerManager.PAUSE ->{
+        PlayerManager.RELEASE, PlayerManager.PAUSE ->{
             view.isSelected = false
         }
-        PlayerManager.START,PlayerManager.RESUME ->{
+        PlayerManager.START, PlayerManager.RESUME ->{
             view.isSelected = true
         }
     }
 }
 @BindingAdapter("url")
 fun setImgUrl(view: ImageView, url: Int) {
-    Glide.with(view.context).load(url).into(view);
+    Glide.with(view.context).load(url).into(view)
+}
+
+@BindingAdapter("urlL")
+fun setImgUrlL(view: ImageView, url: Long) {
+    Glide.with(view.context).load(
+        ContentUris.withAppendedId(
+            Uri.parse("content://media/external/audio/albumart"), url
+        )
+    ).into(view)
 }

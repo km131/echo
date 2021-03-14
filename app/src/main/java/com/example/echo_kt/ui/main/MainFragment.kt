@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
 import com.example.echo_kt.databinding.MainFragmentBinding
+import com.example.echo_kt.play.PlayList
 
 class MainFragment : Fragment(),AudioObserver {
 
@@ -51,6 +52,7 @@ class MainFragment : Fragment(),AudioObserver {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
+        binding.mainVM=viewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,6 +104,10 @@ class MainFragment : Fragment(),AudioObserver {
 //            }
 //            viewModel.collect.set(bean != null)
 //        }
+    }
+
+    override fun onPlayStatus(playStatus: Int) {
+        super.onPlayStatus(playStatus)
     }
 
     private fun stringForTime(duration: Int): String? {

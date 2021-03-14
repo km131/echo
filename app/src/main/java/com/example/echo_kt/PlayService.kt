@@ -3,7 +3,7 @@ package com.example.echo_kt
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.example.echo_kt.ui.main.PlayerManager
+import com.example.echo_kt.play.PlayerManager
 
 /**
  * 空壳，只做播放初始化
