@@ -45,8 +45,7 @@ class PlayList private constructor() {
     /**
      * 播放模式，默认为顺序播放
      */
-    private var playMode =
-        PlayMode.ORDER_PLAY_MODE
+    private var playMode = PlayMode.ORDER_PLAY_MODE
 
 
     init {

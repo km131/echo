@@ -1,5 +1,6 @@
 package com.example.echo_kt.ui.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,8 @@ import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
 import com.example.echo_kt.databinding.MainFragmentBinding
 import com.example.echo_kt.play.PlayList
+import com.example.echo_kt.play.PlayerManager
+import java.util.*
 
 class MainFragment : Fragment(),AudioObserver {
 
@@ -50,14 +53,20 @@ class MainFragment : Fragment(),AudioObserver {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
         binding.mainVM=viewModel
+        Log.i("oooo", "2")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onClick()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.context?.let { PlayerManager.instance.init(it) }
+        this.context?.let { PlayerManager.instance.register(this) }
     }
 
     override fun onDestroyView() {
@@ -75,13 +84,31 @@ class MainFragment : Fragment(),AudioObserver {
         binding.btnMusicList.setOnClickListener{
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_audioListDialogFragment)
         }
+        binding.btnPlay.setOnClickListener{
+            PlayerManager.instance.controlPlay()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = activity?.let { ViewModelProvider(it).get(MainViewModel::class.java) }!!
+        Log.i("oooo", "1")
     }
 
     override fun onPlayMode(playMode: Int) {
        when (playMode){
-           PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.play_order)
-           PlayList.PlayMode.RANDOM_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.play_random)
-           PlayList.PlayMode.SINGLE_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.play_single)
+           PlayList.PlayMode.ORDER_PLAY_MODE ->{
+               viewModel.playModePic.set(R.mipmap.play_order)
+               viewModel.playModeText.set("顺序播放")
+           }
+           PlayList.PlayMode.RANDOM_PLAY_MODE ->{
+               viewModel.playModePic.set(R.mipmap.play_random)
+               viewModel.playModeText.set("随机播放")
+           }
+           PlayList.PlayMode.SINGLE_PLAY_MODE ->{
+               viewModel.playModePic.set(R.mipmap.play_single)
+               viewModel.playModeText.set("单曲循环")
+           }
        }
     }
 
@@ -99,7 +126,7 @@ class MainFragment : Fragment(),AudioObserver {
 //        lifecycleScope.launch {
 //            val bean = withContext(Dispatchers.IO) {
 //                AppDataBase.getInstance()
-//                    .//historyAudioDao()
+//                    .XXXDao()
 //                    .findAudioById(audioBean.id)
 //            }
 //            viewModel.collect.set(bean != null)
@@ -108,9 +135,14 @@ class MainFragment : Fragment(),AudioObserver {
 
     override fun onPlayStatus(playStatus: Int) {
         super.onPlayStatus(playStatus)
+        viewModel.playStatus.set(playStatus)
     }
 
     private fun stringForTime(duration: Int): String? {
-        TODO("Not yet implemented")
+        val totalSeconds = duration/1000
+        val seconds = totalSeconds % 60
+        val minutes = (totalSeconds/60)%60
+
+        return Formatter().format("%02d:%02d",minutes,seconds).toString();
     }
 }

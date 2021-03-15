@@ -28,8 +28,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 url="@{mainVm.playModePic}"
-                android:layout_margin="10dp"
-                tools:src="@drawable/selector_play_float_pic"/>
+                android:layout_margin="10dp" />
 
             <TextView
                 android:id="@+id/imageModeText"
@@ -55,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
-            app:layout_constraintVertical_bias="0.00999999"
+            app:layout_constraintVertical_bias="0"
             tools:context=".AudioListDialogFragment"
             tools:listitem="@layout/audio_list_dialog_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>

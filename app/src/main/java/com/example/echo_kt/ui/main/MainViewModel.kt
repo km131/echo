@@ -6,6 +6,11 @@ import com.example.echo_kt.R
 import com.example.echo_kt.play.PlayerManager
 
 class MainViewModel : ViewModel() {
+    companion object{
+        val instance: MainViewModel by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            MainViewModel()
+        }
+    }
     /**
      * 歌名
      */
@@ -36,7 +41,9 @@ class MainViewModel : ViewModel() {
     /**
      * 文字播放模式
      */
-    val playModeText = ObservableField<String>()
+    val playModeText = ObservableField<String>().apply {
+        set("顺序播放")
+    }
 
     /**
      * 总播放时长-文本
@@ -74,7 +81,7 @@ class MainViewModel : ViewModel() {
         songName.set("")
         singer.set("")
         albumPic.set(-1)
-        playStatus.set(PlayerManager.PAUSE)
+        playStatus.set(PlayerManager.RELEASE)
         maxDuration.set("00:00")
         currentDuration.set("00:00")
         maxProgress.set(0)

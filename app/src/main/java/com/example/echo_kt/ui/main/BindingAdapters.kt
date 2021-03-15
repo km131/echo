@@ -18,10 +18,14 @@ package com.example.echo_kt.ui.main
 
 import android.content.ContentUris
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.example.echo_kt.R
 import com.example.echo_kt.play.PlayerManager
 
 @BindingAdapter("isGone")
@@ -39,9 +43,11 @@ fun imgPlay(view: View,playStatus: Int){
     when(playStatus){
         PlayerManager.RELEASE, PlayerManager.PAUSE ->{
             view.isSelected = false
+            Log.i("iiiii", "暂停")
         }
         PlayerManager.START, PlayerManager.RESUME ->{
             view.isSelected = true
+            Log.i("iiiii", "播放")
         }
     }
 }
@@ -50,11 +56,11 @@ fun setImgUrl(view: ImageView, url: Int) {
     Glide.with(view.context).load(url).into(view)
 }
 
-@BindingAdapter("urlL")
-fun setImgUrlL(view: ImageView, url: Long) {
-    Glide.with(view.context).load(
-        ContentUris.withAppendedId(
-            Uri.parse("content://media/external/audio/albumart"), url
-        )
-    ).into(view)
+@BindingAdapter("urlAlbum")
+fun setImgUrl(view: ImageView, url: Long) {
+    Glide.with(view.context)
+        .load(ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), url))
+        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+        .error(R.mipmap.album)
+        .into(view)
 }

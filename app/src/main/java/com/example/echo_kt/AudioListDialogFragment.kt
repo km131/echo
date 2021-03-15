@@ -1,37 +1,47 @@
 package com.example.echo_kt
 
+import android.content.Context
 import android.os.Bundle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.databinding.AudioListDialogBinding
 import com.example.echo_kt.databinding.AudioListDialogItemBinding
 import com.example.echo_kt.ui.main.AudioBean
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.ui.main.AudioObserver
 import com.example.echo_kt.ui.main.MainViewModel
 
 const val ARG_ITEM_COUNT = "item_count"
 
-class AudioListDialogFragment : BottomSheetDialogFragment() {
+class AudioListDialogFragment : BottomSheetDialogFragment(),AudioObserver {
 
     private var _binding: AudioListDialogBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        this.context?.let { PlayerManager.instance.register(this) }
         _binding = AudioListDialogBinding.inflate(inflater, container, false)
         binding.bottomList.adapter = initAudioData()?.let { ItemAdapter(it) }
-        binding.mainVm = MainViewModel()
+        binding.mainVm = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
 
@@ -48,7 +58,6 @@ class AudioListDialogFragment : BottomSheetDialogFragment() {
         }
         init {
             binding.playOnclick= View.OnClickListener {
-                context?.let { it1 -> PlayerManager.instance.init(it1) }
                 //PlayerManager.instance.getPlayList()
                 PlayerManager.instance.play(binding.pvm)
             }
@@ -90,5 +99,27 @@ class AudioListDialogFragment : BottomSheetDialogFragment() {
      */
     private fun initAudioData(): MutableList<AudioBean>? {
         return this.context?.let { PlayList.instance.readLocalPlayList(it) }
+    }
+
+    override fun onPlayMode(playMode: Int) {
+        when (playMode) {
+            PlayList.PlayMode.ORDER_PLAY_MODE ->{
+                viewModel.playModePic.set(R.mipmap.play_order)
+                viewModel.playModeText.set("顺序播放")
+            }
+
+            PlayList.PlayMode.RANDOM_PLAY_MODE ->{
+                viewModel.playModePic.set(R.mipmap.play_random)
+                viewModel.playModeText.set("随机播放")
+            }
+            PlayList.PlayMode.SINGLE_PLAY_MODE ->{
+                viewModel.playModePic.set(R.mipmap.play_single)
+                viewModel.playModeText.set("单曲循环")
+            }
+        }
+    }
+
+    override fun onReset() {
+        viewModel.reset()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.echo_kt.play
 
 import android.content.Context
+import android.util.Log
 import com.example.echo_kt.ui.main.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,12 +9,10 @@ import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
 /**
- * des 音频管理
- *     通过单例模式实现,托管音频状态与信息,并且作为唯一的可信源
- *     通过观察者模式统一对状态进行分发
- *     实则是一个代理,将目标对象Player与调用者隔离,并且在内部实现了对观察者的注册与通知
- * @author zs
- * @data 2020/6/25
+ *  音频管理
+ *  通过单例模式实现,托管音频状态与信息,并且作为唯一的可信源
+ *  通过观察者模式统一对状态进行分发
+ *  实则是一个代理,将目标对象Player与调用者隔离,并且在内部实现了对观察者的注册与通知
  */
 class PlayerManager private constructor() :
     IPlayerStatus {
@@ -26,7 +25,7 @@ class PlayerManager private constructor() :
             PlayerManager()
         }
 
-        //播放器状态,当前共4种,可在此处随时扩展
+        //播放器状态
         /**
          * 重置
          */
@@ -49,15 +48,14 @@ class PlayerManager private constructor() :
     }
 
     /**
-     * 音乐观察者集合,目前有三个
+     * 音乐观察者集合
      * 1.播放界面
      * 2.悬浮窗
      * 3.通知栏
      */
     private val observers = mutableListOf<AudioObserver>()
 
-    private val playerHelper: IPlayer =
-        MediaPlayerHelper()
+    private val playerHelper: IPlayer = MediaPlayerHelper()
 
     /**
      * 用于关闭rxJava
@@ -68,8 +66,8 @@ class PlayerManager private constructor() :
     /**
      * 播放状态，默认为重置
      */
-    private var playStatus =
-        RELEASE
+    private var playStatus = RELEASE
+
     /**
      * 播放列表
      */
@@ -82,23 +80,8 @@ class PlayerManager private constructor() :
     }
 
     /**
-     * 开启定时器,用于更新进度
-     * 每1000毫秒更新一次
-     */
-    private fun startTimer() {
-        disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                //仅在播放状态下通知观察者
-                if (playerHelper.isPlaying()) {
-                    sendProgressToObserver(playerHelper.getProgress())
-                }
-            }
-    }
-
-    /**
      * 与播放按钮相对应,点击播放按钮存在三种场景
-     * 1.播放器还未被初始化: 播放第一首音频,与start()对应
+     * 1.播放器还未被初始化,列表为空，点击无用
      * 2.暂停状态: 切换为播放状态,与resume()对应
      * 3.播放状态: 切换为暂停状态,与pause()对应
      *
@@ -107,7 +90,8 @@ class PlayerManager private constructor() :
     fun controlPlay() {
         //对应场景1
         if (playList.currentAudio() == null) {
-            start()
+            playStatus = RELEASE
+            //start()
         } else {
             //对应场景3
             if (playerHelper.isPlaying()) {
@@ -185,7 +169,7 @@ class PlayerManager private constructor() :
     }
 
     /**
-     * 跳转至指定播放位置
+     * 切换播放顺序
      */
     fun switchPlayMode() {
         sendPlayModeToObserver(playList.switchPlayMode())
@@ -307,4 +291,19 @@ class PlayerManager private constructor() :
         playList.nextAudio()?.let { play(it) }
     }
 
+    /**
+     * 开启定时器,用于更新进度
+     * 每1000毫秒更新一次
+     */
+    private fun startTimer() {
+        disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                //仅在播放状态下通知观察者
+                if (playerHelper.isPlaying()) {
+                    sendProgressToObserver(playerHelper.getProgress())
+                    Log.i("", "startTimer: 播放")
+                }
+            }
+    }
 }

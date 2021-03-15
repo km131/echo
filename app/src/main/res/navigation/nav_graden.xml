@@ -27,7 +27,11 @@
         android:id="@+id/playFragment"
         android:name="com.example.echo_kt.ui.main.PlayFragment"
         android:label="PlayFragment"
-        tools:layout="@layout/play_fragment"/>
+        tools:layout="@layout/play_fragment">
+        <action
+            android:id="@+id/action_playFragment_to_audioListDialogFragment"
+            app:destination="@id/audioListDialogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/localSongFragment"
         android:name="com.example.echo_kt.ui.main.LocalSongFragment"
