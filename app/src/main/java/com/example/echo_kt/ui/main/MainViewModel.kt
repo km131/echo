@@ -1,6 +1,7 @@
 package com.example.echo_kt.ui.main
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.echo_kt.R
 import com.example.echo_kt.play.PlayerManager
@@ -67,7 +68,7 @@ class MainViewModel : ViewModel() {
     /**
      * 播放进度
      */
-    val playProgress = ObservableField<Int>()
+    val playProgress = MutableLiveData<Int>()
 
 //    /**
 //     * 是否收藏
@@ -85,7 +86,7 @@ class MainViewModel : ViewModel() {
         maxDuration.set("00:00")
         currentDuration.set("00:00")
         maxProgress.set(0)
-        playProgress.set(0)
+        playProgress.postValue(0)
 //        collect.set(false)
     }
 

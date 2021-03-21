@@ -36,7 +36,7 @@ class MainFragment : Fragment(),AudioObserver {
         val btnNav = binding.navView
         viewPage.adapter = MainPagerAdapter(this)
 //        禁止滑动
-//        viewPage.isUserInputEnabled = false
+        viewPage.isUserInputEnabled = false
         btnNav.run {
             setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
@@ -55,7 +55,6 @@ class MainFragment : Fragment(),AudioObserver {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
         binding.mainVM=viewModel
-        Log.i("oooo", "2")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +78,7 @@ class MainFragment : Fragment(),AudioObserver {
         binding.playView.setOnClickListener{
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_playFragment)
             val lise:MutableList<AudioBean> = PlayList.instance.readLocalPlayList(BaseApplication.getContext())
-            Log.i("hhh", "onClick: " +lise)
+            //Log.i("hhh", "onClick: " +lise)
         }
         binding.btnMusicList.setOnClickListener{
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_audioListDialogFragment)

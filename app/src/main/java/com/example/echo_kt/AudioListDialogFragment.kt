@@ -98,7 +98,10 @@ class AudioListDialogFragment : BottomSheetDialogFragment(),AudioObserver {
      * 获取音频列表数据
      */
     private fun initAudioData(): MutableList<AudioBean>? {
-        return this.context?.let { PlayList.instance.readLocalPlayList(it) }
+        if (PlayerManager.instance.getPlayList().size == 0) {
+            return this.context?.let { PlayList.instance.readLocalPlayList(it) }
+        }
+        return PlayerManager.instance.getPlayList()
     }
 
     override fun onPlayMode(playMode: Int) {

@@ -3,6 +3,7 @@ package com.example.echo_kt.play
 import android.content.Context
 import android.util.Log
 import com.example.echo_kt.ui.main.*
+import com.example.echo_kt.ui.setting.SettingViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -61,8 +62,13 @@ class PlayerManager private constructor() :
      * 用于关闭rxJava
      */
     private var disposable: Disposable? = null
+    private var countdownDisposable: Disposable? = null
 
+    private var settingViewModel : SettingViewModel? = null
 
+    fun getSettingViewModel():SettingViewModel?{
+        return settingViewModel
+    }
     /**
      * 播放状态，默认为重置
      */
@@ -302,8 +308,42 @@ class PlayerManager private constructor() :
                 //仅在播放状态下通知观察者
                 if (playerHelper.isPlaying()) {
                     sendProgressToObserver(playerHelper.getProgress())
-                    Log.i("", "startTimer: 播放")
                 }
             }
+    }
+
+    fun startTimer(vm: SettingViewModel) {
+        settingViewModel = vm
+        countdownDisposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                vm.countdownBean.value=(
+                    SettingViewModel.CountdownBean(
+                        vm.countdownBean.value?.countdown!!.minus(
+                            1000
+                        ), true
+                    )
+                )
+                Log.i("TAG", "startTimer:倒计时 " + vm.countdownBean.value+vm)
+                //倒计时结束
+                if (vm.countdownBean.value!!.countdown <= 0L) {
+                    //如果正在播放，则停止播放
+                    if (playerHelper.isPlaying()){controlPlay()}
+                    //关闭定时关闭按钮（暂时无法关闭按钮）
+                    vm.countdownBean.value=(SettingViewModel.CountdownBean(0, false))
+                    Log.i("TAG", "关闭按钮值:"+ vm.countdownBean.value!!.countdownState)
+                    cleanCountdown()
+                    Log.i("TAG", "关闭按钮值2:"+ vm.countdownBean.value!!.countdownState)
+                }
+            }
+    }
+
+    //关闭定时结束任务
+    fun cleanCountdown() {
+        if (playerHelper.isPlaying()){
+            controlPlay()
+        }
+        countdownDisposable?.dispose()
+        settingViewModel = null
     }
 }

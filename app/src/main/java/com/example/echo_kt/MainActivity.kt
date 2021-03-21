@@ -2,6 +2,8 @@ package com.example.echo_kt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() , AudioObserver {
 
     override fun onProgress(currentDuration: Int, totalDuration: Int) {
         viewModel.currentDuration.set(stringForTime(currentDuration))
-        viewModel.playProgress.set(totalDuration)
+        viewModel.playProgress.postValue(totalDuration)
     }
 
     override fun onPlayMode(playMode: Int) {
@@ -51,7 +53,6 @@ class MainActivity : AppCompatActivity() , AudioObserver {
     }
 
     override fun onAudioBean(audioBean: AudioBean) {
-        super.onAudioBean(audioBean)
         viewModel.songName.set(audioBean.name)
         viewModel.singer.set(audioBean.singer)
         viewModel.maxDuration.set(stringForTime(audioBean.duration))
@@ -65,5 +66,28 @@ class MainActivity : AppCompatActivity() , AudioObserver {
         val minutes = (totalSeconds/60)%60
 
         return Formatter().format("%02d:%02d",minutes,seconds).toString();
+    }
+
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//        if (keyCode == KeyEvent.KEYCODE_BACK){
+//            moveTaskToBack(false)
+//            return true
+//        }
+//        return super.onKeyDown(keyCode, event)
+//    }
+    override fun onBackPressed() {
+        //获取hostFragment
+        val mMainNavFragment: Fragment? =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        //获取当前所在的fragment
+        val fragment =
+            mMainNavFragment?.childFragmentManager?.primaryNavigationFragment
+        //如果当前处于根fragment即HostFragment
+        if (fragment is MainFragment) {
+            //Activity退出但不销毁
+            moveTaskToBack(false)
+        } else {
+            super.onBackPressed()
+        }
     }
 }

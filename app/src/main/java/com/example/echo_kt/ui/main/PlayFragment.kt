@@ -15,6 +15,7 @@ import com.example.echo_kt.R
 import com.example.echo_kt.databinding.PlayFragmentBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.util.stringForTime
 import java.util.*
 
 class PlayFragment : Fragment(),AudioObserver {
@@ -49,7 +50,7 @@ class PlayFragment : Fragment(),AudioObserver {
         binding.seekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 binding.tvProgress.text=stringForTime(seekBar.progress)
-                Log.i("", "onProgressChanged: 进度改变")
+                //Log.i("", "onProgressChanged: 进度改变")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -66,6 +67,7 @@ class PlayFragment : Fragment(),AudioObserver {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
+        binding.lifecycleOwner = this
         binding.pvm=viewModel
         binding.onClick=onClick()
     }
@@ -101,14 +103,6 @@ class PlayFragment : Fragment(),AudioObserver {
 
     override fun onProgress(currentDuration: Int, totalDuration: Int) {
         viewModel.currentDuration.set(stringForTime(currentDuration))
-        viewModel.playProgress.set(currentDuration)
-    }
-
-    private fun stringForTime(duration: Int): String? {
-        val totalSeconds = duration/1000
-        val seconds = totalSeconds % 60
-        val minutes = (totalSeconds/60)%60
-
-        return Formatter().format("%02d:%02d",minutes,seconds).toString();
+        viewModel.playProgress.postValue(currentDuration)
     }
 }

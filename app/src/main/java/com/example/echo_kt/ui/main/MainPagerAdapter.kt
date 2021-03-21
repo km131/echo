@@ -2,6 +2,7 @@ package com.example.echo_kt.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.echo_kt.ui.douban.DoubanFragment
 import com.example.echo_kt.ui.work.MyFragment
 import java.lang.IndexOutOfBoundsException
 
@@ -12,7 +13,7 @@ const val MY_PAGE_INDEX = 2
 class MainPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         HOME_PAGE_INDEX to { HomeFragment() },
-        VIDEO_PAGE_INDEX to { VideoFragment() },
+        VIDEO_PAGE_INDEX to { DoubanFragment() },
         MY_PAGE_INDEX to { MyFragment.newInstance() }
     )
 
