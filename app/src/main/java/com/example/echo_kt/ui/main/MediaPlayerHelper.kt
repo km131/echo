@@ -37,6 +37,7 @@ class MediaPlayerHelper : IPlayer,
         mediaPlayer.reset()
         //可能会抛FileNotFound异常
         kotlin.runCatching {
+            Log.i("播放地址", "play: $path")
             mediaPlayer.setDataSource(path)
         }.onSuccess {
             mediaPlayer.prepare()

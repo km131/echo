@@ -61,7 +61,7 @@
         tools:layout="@layout/setting_fragment"/>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.echo_kt.ui.SearchFragment"
+        android:name="com.example.echo_kt.ui.search.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/search_fragment"/>
 </navigation>
