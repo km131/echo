@@ -17,6 +17,11 @@ interface KuGouServer {
         hash: String
     ): SearchMusicDetails
 
+    @GET()
+    suspend fun searchMusic2(
+        @Url
+        hash: String
+    ): SearchMusicDetails
     @GET("song")
     suspend fun searchMusicList(
         @Query("format")

@@ -36,7 +36,7 @@ class ErectViewHolder(private val binding :ListItemWork1Binding): RecyclerView.V
     init {
         binding.setClickListener {
             binding.vmWork1?.let { _ ->
-                it.findNavController().navigate(R.id.action_mainFragment_to_productFragment)
+                it.findNavController().navigate(R.id.action_mainFragment_to_localSongFragment)
             }
         }
     }

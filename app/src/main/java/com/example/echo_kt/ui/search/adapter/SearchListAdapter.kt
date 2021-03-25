@@ -63,7 +63,7 @@ class SearchListAdapter internal constructor(private var mList: CustomSearchBean
             name = data.song_name,
             singer = item.singerName,
             size = data.filesize.toLong(),
-            duration = if (data.is_free_part != 1) data.timelength else 60000,
+            duration = if (data.is_free_part != 1) data.timelength else 59000,
             path = data.play_backup_url,
             albumId = data.album_id
         )
@@ -74,13 +74,12 @@ class SearchListAdapter internal constructor(private var mList: CustomSearchBean
         var aid = "0"
         if (item.albumId != "")
             aid = item.albumId
-        val data = withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             KuGouServer.create2().searchMusic(
                 aid = aid,
                 hash = item.hash
             ).data
         }
-        return data
     }
 
 }

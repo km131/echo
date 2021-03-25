@@ -15,33 +15,31 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:onClick="@{clickListener}"
+        android:elevation="2dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:onClick="@{clickListener}"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/imageView3"
+            url="@{vmWork1.imageId}"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@mipmap/n1" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                url="@{vmWork1.imageId}"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                tools:srcCompat="@mipmap/n1" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{vmWork1.text}"
-                tools:text="hhhhhhhhhh"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vmWork1.text}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            tools:text="hhhhhhhhhh" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
