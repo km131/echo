@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.R
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.ListItemSonglistBinding
+import com.example.echo_kt.ui.main.MainFragmentDirections
 
-class SongListAdapter(private var mList: MutableLiveData<List<SongListBean>>) : RecyclerView.Adapter<ViewHolder>() {
+class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -22,21 +23,20 @@ class SongListAdapter(private var mList: MutableLiveData<List<SongListBean>>) : 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        mList.value?.get(position)?.let { holder.bind(it) }
+        mList[position].let { holder.bind(it,position) }
     }
 
-    override fun getItemCount(): Int = mList.value!!.size
+    override fun getItemCount(): Int = mList.size
 }
 class ViewHolder(private val binding : ListItemSonglistBinding): RecyclerView.ViewHolder(binding.root){
-    fun bind(item: SongListBean) {
+    fun bind(item: SongListBean,index: Int) {
         binding.apply {
             binding.bean=item
         }
-    }
-    init {
         binding.setClickListener {
             binding.clickListener?.let { _ ->
-                it.findNavController().navigate(R.id.action_mainFragment_to_localSongFragment)
+                val action = MainFragmentDirections.actionMainFragmentToCustomSongListFragment(index)
+                it.findNavController().navigate(action)
             }
         }
     }

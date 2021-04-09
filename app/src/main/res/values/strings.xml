@@ -19,4 +19,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="mySongList">我的歌单</string>
+    <string name="home">首页</string>
+    <string name="playAll">播放全部</string>
+    <string name="toggle_sort">切换排序方式</string>
 </resources>

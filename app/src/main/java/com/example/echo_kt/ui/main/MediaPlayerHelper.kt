@@ -3,6 +3,10 @@ package com.example.echo_kt.ui.main
 import android.media.MediaPlayer
 import android.media.MediaPlayer.*
 import android.util.Log
+import android.widget.Toast
+import com.example.echo_kt.BaseApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * des 基于MediaPlayer实现的音频播放
@@ -40,9 +44,11 @@ class MediaPlayerHelper : IPlayer,
             Log.i("播放地址", "play: $path")
             mediaPlayer.setDataSource(path)
         }.onSuccess {
-            mediaPlayer.prepare()
+            //异步加载网络音频避免卡顿导致界面挂起
+            mediaPlayer.prepareAsync()
         }.onFailure {
-            Log.i("error","it:${it.printStackTrace()}")
+            Toast.makeText(BaseApplication.getContext(), "MediaPlayHelper LINE:51 ：播放异常", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 

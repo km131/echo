@@ -21,7 +21,8 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: ErectViewHolder, position: Int) {
-       holder.bind(mList[position])
+        holder.bind(mList[position])
+        holder.onClick(position)
     }
 
     override fun getItemCount(): Int = mList.size
@@ -33,10 +34,17 @@ class ErectViewHolder(private val binding :ListItemWork1Binding): RecyclerView.V
             executePendingBindings()
         }
     }
-    init {
+    fun onClick(i:Int){
+        var action:Int=0
         binding.setClickListener {
+            action = when (i){
+                0-> R.id.action_mainFragment_to_localSongFragment
+                //1->R.id.action_mainFragment_to_localSongFragment
+                2-> R.id.action_mainFragment_to_historySongFragment
+                else -> R.id.action_mainFragment_to_localSongFragment
+            }
             binding.vmWork1?.let { _ ->
-                it.findNavController().navigate(R.id.action_mainFragment_to_localSongFragment)
+                it.findNavController().navigate(action)
             }
         }
     }

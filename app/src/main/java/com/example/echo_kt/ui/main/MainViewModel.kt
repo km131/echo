@@ -25,7 +25,7 @@ class MainViewModel : ViewModel() {
     /**
      * 专辑图片
      */
-    val albumPic = ObservableField<Long>()
+    val albumPic = ObservableField<String>()
 
     /**
      * 播放状态
@@ -81,7 +81,7 @@ class MainViewModel : ViewModel() {
     fun reset(){
         songName.set("")
         singer.set("")
-        albumPic.set(-1)
+        albumPic.set("")
         playStatus.set(PlayerManager.RELEASE)
         maxDuration.set("00:00")
         currentDuration.set("00:00")

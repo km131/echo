@@ -46,7 +46,13 @@ interface HistoryAudioBeanDao {
      * 查询一个
      */
     @Query("SELECT * FROM history_audio WHERE id=:id")
-    fun findAudioById(id: Long): HistoryAudioBean?
+    fun findAudioById(id: String): HistoryAudioBean?
+
+    /**
+     * 查询多个
+     */
+    @Query("SELECT * FROM history_audio WHERE pathType=:pathType")
+    fun findAudioByPathType(pathType: Boolean): MutableList<HistoryAudioBean>?
 
     /**
      * 返回所有的数据,结果为LiveData

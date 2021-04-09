@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.data.AcrossBean
+import com.example.echo_kt.databinding.ListItemDoubanMainBindingImpl
 import com.example.echo_kt.databinding.ListItemWork2Binding
 
 class MyAcrossAdapter(private var mList: MutableList<AcrossBean>) : RecyclerView.Adapter<AcrossViewHolder>() {

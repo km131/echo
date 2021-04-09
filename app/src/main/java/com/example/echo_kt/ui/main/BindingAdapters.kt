@@ -28,6 +28,9 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.echo_kt.R
 import com.example.echo_kt.play.PlayerManager
+import java.lang.Exception
+import javax.annotation.Resource
+import javax.annotation.Resources
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -53,15 +56,17 @@ fun imgPlay(view: View,playStatus: Int){
     }
 }
 @BindingAdapter("url")
-fun setImgUrl(view: ImageView, url: Int) {
+fun setImgUrl(view: ImageView,url: Int) {
     Glide.with(view.context).load(url).into(view)
 }
 
 @BindingAdapter("urlAlbum")
-fun setImgUrl(view: ImageView, url: Long) {
+fun setImgUrl(view: ImageView, url: String?) {
     Glide.with(view.context)
-        .load(ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), url))
+        .load(url)
         .apply(RequestOptions.bitmapTransform(CircleCrop()))
-        .error(R.mipmap.album)
+        .error(Uri.parse("content://media/external/audio/albumart/$url"))
+        .fallback(R.mipmap.album)
         .into(view)
+    Log.i("专辑图片", "setImgUrl: $url")
 }

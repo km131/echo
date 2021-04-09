@@ -5,18 +5,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--    android:requestLegacyExternalStorage="true" 取消android10沙盒模式-->
+    <!-- 向SD卡写入数据权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!--    android:requestLegacyExternalStorage="true" 取消android10沙盒模式用于读取音频数据-->
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/echo"
+        android:roundIcon="@mipmap/echo"
         android:supportsRtl="true"
         android:label="echo"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.Sunflower">
-        <service android:name=".PlayService"/>
+<!--        <service android:name=".PlayService"/>-->
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -25,6 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <receiver android:name=".ui.notification.MyBroadcastReceiver" >-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.echo_kt.prev"/>-->
+<!--                <action android:name="com.echo_kt.pause"/>-->
+<!--                <action android:name="com.echo_kt.next"/>-->
+<!--                <action android:name="com.echo_kt.play"/>-->
+<!--                <action android:name="com.echo_kt.close"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

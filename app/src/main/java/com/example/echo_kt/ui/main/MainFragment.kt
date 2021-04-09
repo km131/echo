@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
-import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
+import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.databinding.MainFragmentBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
@@ -35,7 +35,7 @@ class MainFragment : Fragment(),AudioObserver {
         val viewPage = binding.vpHome
         val btnNav = binding.navView
         viewPage.adapter = MainPagerAdapter(this)
-//        禁止滑动
+        //禁止滑动
         viewPage.isUserInputEnabled = false
         btnNav.run {
             setOnNavigationItemSelectedListener { item ->
@@ -64,7 +64,6 @@ class MainFragment : Fragment(),AudioObserver {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.context?.let { PlayerManager.instance.init(it) }
         this.context?.let { PlayerManager.instance.register(this) }
     }
 
@@ -77,8 +76,6 @@ class MainFragment : Fragment(),AudioObserver {
     private fun onClick() {
         binding.playView.setOnClickListener{
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_playFragment)
-            val lise:MutableList<AudioBean> = PlayList.instance.readLocalPlayList(BaseApplication.getContext())
-            //Log.i("hhh", "onClick: " +lise)
         }
         binding.btnMusicList.setOnClickListener{
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_audioListDialogFragment)
@@ -91,7 +88,7 @@ class MainFragment : Fragment(),AudioObserver {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = activity?.let { ViewModelProvider(it).get(MainViewModel::class.java) }!!
-        Log.i("oooo", "1")
+        Log.i("MainFragment：", "onAttach")
     }
 
     override fun onPlayMode(playMode: Int) {
@@ -120,7 +117,7 @@ class MainFragment : Fragment(),AudioObserver {
         viewModel.singer.set(audioBean.singer)
         viewModel.maxDuration.set(stringForTime(audioBean.duration))
         viewModel.maxProgress.set(audioBean.duration)
-        viewModel.albumPic.set(audioBean.albumId)
+        viewModel.albumPic.set(audioBean.albumIdUrl)
 //        //在io线程中查询是否收藏
 //        lifecycleScope.launch {
 //            val bean = withContext(Dispatchers.IO) {

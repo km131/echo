@@ -7,6 +7,12 @@
         <variable
             name="vmHome"
             type="com.example.echo_kt.ui.main.HomeViewModel" />
+        <variable
+            name="jumpSearch"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="newSongList"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="首页"
+                android:text="@string/home"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,17 +45,18 @@
                 android:id="@+id/clSearch"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:background="@drawable/radius_16_theme"
+                android:background="@drawable/radius_10_hollow"
                 android:layout_marginLeft="70dp"
                 android:layout_marginRight="70dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{jumpSearch}">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:scaleType="center"
                     android:src="@mipmap/search"
@@ -59,13 +66,12 @@
                 <TextView
                     android:id="@+id/etSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="42dp"
                     android:layout_marginRight="42dp"
-                    android:background="@null"
                     android:drawablePadding="5dp"
                     android:gravity="center_vertical"
-                    android:text="根据关键字搜索"
+                    android:hint="点此搜索"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -74,7 +80,6 @@
                 android:id="@+id/ibtSetting"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="16dp"
                 android:background="#00000000"
                 android:src="@mipmap/setting"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -84,7 +89,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHome"
-            android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,13 +105,13 @@
             android:id="@+id/rvMySongList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="60dp"
-            android:padding="10dp"
+            android:paddingHorizontal="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvHome"
-            tools:listitem="@layout/list_item_songlist"/>
+            tools:listitem="@layout/list_item_songlist" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -123,15 +127,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:text="我的歌单"
+                android:text="@string/mySongList"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:id="@+id/ibtNewSongList"
+                android:layout_width="20dp"
+                android:layout_height="21dp"
+                android:onClick="@{newSongList}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

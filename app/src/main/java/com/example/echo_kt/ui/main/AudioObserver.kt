@@ -1,5 +1,7 @@
 package com.example.echo_kt.ui.main
 
+import com.example.echo_kt.data.AudioBean
+
 interface AudioObserver {
     /**
      * 歌曲信息

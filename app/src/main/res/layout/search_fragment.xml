@@ -29,40 +29,43 @@
             <ImageView
                 android:id="@+id/search_src"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="10dp"
+                android:layout_height="0dp"
                 android:scaleType="center"
                 android:src="@mipmap/search"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/etSearch"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginLeft="42dp"
-                android:layout_marginRight="42dp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
                 android:background="@null"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:hint="根据关键字搜索"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/search_src"
+                app:layout_constraintTop_toTopOf="@+id/search_src" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFlexBox"
-            android:layout_width="404dp"
-            android:layout_height="108dp"
-            android:layout_marginTop="32dp"
-            android:clipToPadding="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clSearch"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_flex_string" />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rvFlexBox"-->
+<!--            android:layout_width="404dp"-->
+<!--            android:layout_height="108dp"-->
+<!--            android:layout_marginTop="32dp"-->
+<!--            android:clipToPadding="false"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/clSearch"-->
+<!--            app:layout_constraintVertical_bias="0.0"-->
+<!--            tools:listitem="@layout/item_flex_string" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchList"

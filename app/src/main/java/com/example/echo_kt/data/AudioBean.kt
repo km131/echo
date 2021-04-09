@@ -1,4 +1,4 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.data
 
 class AudioBean {
     /**
@@ -27,20 +27,30 @@ class AudioBean {
      var path: String? = null
 
     /**
-     * 图片id
+     * 图片地址
      */
-    var albumId: Long = 0
     var albumIdUrl:String= ""
 
     /**
      * 歌曲id
      */
-     var id: Long = 0
+     var id: String = ""
 
     /**
      * 排序id
      */
      var sortId: Long = 0
+
+    /**
+     * 歌曲地址是否为网络链接
+     */
+    var pathType: Boolean = false
+
+    /**
+     * 若播放地址为网络链接，下面两个为请求地址的参数
+     */
+    var kugouAid: String = ""
+    var kugouHash:String = ""
 
     constructor(
         name: String?,
@@ -48,7 +58,11 @@ class AudioBean {
         size: Long,
         duration: Int,
         path: String?,
-        albumId: String
+        albumId: String,
+        songId:String,
+        pathType:Boolean,
+        kugouAid:String,
+        kugouHash:String
     ) {
         this.name = name
         this.singer = singer
@@ -56,25 +70,16 @@ class AudioBean {
         this.duration = duration
         this.path = path
         this.albumIdUrl = albumId
+        this.id=songId
+        this.pathType=pathType
+        this.kugouAid=kugouAid
+        this.kugouHash=kugouHash
     }
 
     constructor()
 
     override fun toString(): String {
-        return "\nAudioBean(sortId=$sortId,name=$name, singer=$singer, size=$size, duration=$duration, path=$path, albumId=$albumId, id=$id)"
-    }
-
-    fun copy(bean: AudioBean):AudioBean{
-        return AudioBean().apply {
-            sortId = bean.sortId
-            id = bean.id
-            name = bean.name
-            singer = bean.singer
-            size = bean.size
-            duration = bean.duration
-            path = bean.path
-            albumId = bean.albumId
-        }
+        return "\nAudioBean(sortId=$sortId,name=$name, singer=$singer, size=$size, duration=$duration, path=$path, id=$id)"
     }
 
 }

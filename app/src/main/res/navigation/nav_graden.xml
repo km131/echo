@@ -28,6 +28,12 @@
         <action
             android:id="@+id/action_mainFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_historySongFragment"
+            app:destination="@id/historySongFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_customSongListFragment"
+            app:destination="@id/customSongListFragment" />
     </fragment>
     <fragment
         android:id="@+id/playFragment"
@@ -40,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/localSongFragment"
-        android:name="com.example.echo_kt.ui.main.LocalSongFragment"
+        android:name="com.example.echo_kt.ui.main.songListFragment.LocalSongFragment"
         android:label="LocalSongFragment"
         tools:layout="@layout/fragment_local_song"/>
     <dialog
@@ -64,4 +70,31 @@
         android:name="com.example.echo_kt.ui.search.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/search_fragment"/>
+    <fragment
+        android:id="@+id/historySongFragment"
+        android:name="com.example.echo_kt.ui.main.songListFragment.HistorySongFragment"
+        android:label="HistorySongFragment"
+        tools:layout="@layout/fragment_history_song"/>
+    <fragment
+        android:id="@+id/customSongListFragment"
+        android:name="com.example.echo_kt.ui.main.songListFragment.CustomSongListFragment"
+        android:label="custom_song_list_fragment"
+        tools:layout="@layout/custom_song_list_fragment" >
+        <argument
+            android:name="index"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_customSongListFragment_to_songListDialogFragment"
+            app:destination="@id/songListDialogFragment" />
+        <action
+            android:id="@+id/action_customSongListFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <!--  有Fragment和Dialog两种状态，一般使用Dialog，故跳转在父级Fragment中执行  -->
+    <fragment
+        android:id="@+id/songListDialogFragment"
+        android:name="com.example.echo_kt.ui.SongListDialogFragment"
+        android:label="SongListDialogFragment"
+        tools:layout="@layout/fragment_song_list_dialog">
+    </fragment>
 </navigation>

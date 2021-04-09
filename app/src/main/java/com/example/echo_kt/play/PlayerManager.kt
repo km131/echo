@@ -1,7 +1,12 @@
 package com.example.echo_kt.play
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
+import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.PlayService
+import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.ui.main.*
 import com.example.echo_kt.ui.setting.SettingViewModel
 import io.reactivex.Observable
@@ -50,9 +55,6 @@ class PlayerManager private constructor() :
 
     /**
      * 音乐观察者集合
-     * 1.播放界面
-     * 2.悬浮窗
-     * 3.通知栏
      */
     private val observers = mutableListOf<AudioObserver>()
 
@@ -83,6 +85,8 @@ class PlayerManager private constructor() :
         playList = PlayList.instance
         playerHelper.setPlayStatus(this)
         startTimer()
+        val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
+        BaseApplication.getContext().startService(intent)
     }
 
     /**
@@ -114,27 +118,27 @@ class PlayerManager private constructor() :
      * 播放上一首
      */
     fun previous() {
-        play(playList.previousAudio())
+        playNewAudio(playList.previousAudio())
     }
 
     /**
      * 播放下一首
      */
     fun next() {
-        play(playList.nextAudio())
+        playNewAudio(playList.nextAudio())
     }
 
     /**
-     * 第一次进入,播放器未被初始化,默认模仿第一个
+     * 第一次进入,播放器未被初始化,默认播放第一个
      */
-    private fun start() {
-        play(playList.startAudio())
+    fun startAll() {
+        playNewAudio(playList.startAudio())
     }
 
     /**
      * 播放一个新的音频
      */
-    fun play(audioBean: AudioBean?) {
+    fun playNewAudio(audioBean: AudioBean?) {
         if (audioBean == null){
             //重置
             playerHelper.reset()
@@ -142,11 +146,17 @@ class PlayerManager private constructor() :
         }else{
             playStatus = START
             playList.setCurrentAudio(audioBean)
-            audioBean.path?.let { playerHelper.play(it) }
+            audioBean.path.let {
+                if (it != null) {
+                    playerHelper.play(it)
+                } else {
+                    Toast.makeText(BaseApplication.getContext(), "播放地址为空", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
             sendAudioToObserver(audioBean)
             sendPlayStatusToObserver()
         }
-
     }
 
     /**
@@ -294,7 +304,7 @@ class PlayerManager private constructor() :
     }
 
     override fun onComplete() {
-        playList.nextAudio()?.let { play(it) }
+        playList.nextAudio()?.let { playNewAudio(it) }
     }
 
     /**

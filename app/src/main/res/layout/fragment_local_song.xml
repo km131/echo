@@ -5,37 +5,43 @@
 
     <data>
         <variable
-            name="isNull"
-            type="Boolean" />
+            name="vm"
+            type="com.example.echo_kt.ui.main.ListSongViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.LocalSongFragment">
+        tools:context=".ui.main.songListFragment.LocalSongFragment">
 
-
-        <!-- TODO: Update blank fragment layout -->
-
-
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部播放"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_scan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="扫描本地歌曲"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLocalSong"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:isGone="@{!isNull}"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/list_item_music">
+            app:layout_constraintTop_toBottomOf="@+id/btn_scan"
+            tools:listitem="@layout/audio_list_dialog_item">
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>

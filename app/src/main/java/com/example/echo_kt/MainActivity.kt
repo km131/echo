@@ -1,18 +1,17 @@
 package com.example.echo_kt
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.ui.main.AudioBean
+import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.ui.main.AudioObserver
 import com.example.echo_kt.ui.main.MainFragment
 import com.example.echo_kt.ui.main.MainViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+
 
 /**
  * 作为音频播放观察者,接受到通知立即更新viewModel内状态
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() , AudioObserver {
         PlayerManager.instance.init(this)
         setContentView(R.layout.main_activity)
     }
-
     override fun onDestroy() {
         super.onDestroy()
         PlayerManager.instance.clear()
@@ -57,7 +55,7 @@ class MainActivity : AppCompatActivity() , AudioObserver {
         viewModel.singer.set(audioBean.singer)
         viewModel.maxDuration.set(stringForTime(audioBean.duration))
         viewModel.maxProgress.set(audioBean.duration)
-        viewModel.albumPic.set(audioBean.albumId)
+        viewModel.albumPic.set(audioBean.albumIdUrl)
     }
 
     private fun stringForTime(duration: Int): String? {

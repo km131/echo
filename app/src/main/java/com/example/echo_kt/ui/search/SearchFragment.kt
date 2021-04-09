@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         // TODO: Use the ViewModel
-        initData()
+        //initData()
         binding.searchSrc.setOnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 val keyWord= binding.etSearch.text.toString()
@@ -49,28 +49,31 @@ class SearchFragment : Fragment() {
                 binding.rvSearchList.adapter= SearchListAdapter(data)
             }
         }
+//        binding.etSearch.setOnKeyListener(View.OnKeyListener().onKey()
+//
+//        )
     }
 
-    @SuppressLint("WrongConstant")
-    private fun initData() {
-        binding.rvFlexBox.layoutManager = FlexboxLayoutManager(context).apply {
-            flexDirection = FlexDirection.COLUMN
-            justifyContent = JustifyContent.FLEX_END
-            flexDirection = FlexDirection.ROW
-        }
-        binding.rvFlexBox.adapter= FlexBoxAdapter(
-            arrayListOf(
-                "1345",
-                "22",
-                "1",
-                "2gdfhjghkkfhdgsfdgh",
-                "1sxgsdf",
-                "2",
-                "1",
-                "2"
-            )
-        )
-    }
+//    @SuppressLint("WrongConstant")
+//    private fun initData() {
+//        binding.rvFlexBox.layoutManager = FlexboxLayoutManager(context).apply {
+//            flexDirection = FlexDirection.COLUMN
+//            justifyContent = JustifyContent.FLEX_END
+//            flexDirection = FlexDirection.ROW
+//        }
+//        binding.rvFlexBox.adapter= FlexBoxAdapter(
+//            arrayListOf(
+//                "1345",
+//                "22",
+//                "1",
+//                "2gdfhjghkkfhdgsfdgh",
+//                "1sxgsdf",
+//                "2",
+//                "1",
+//                "2"
+//            )
+//        )
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

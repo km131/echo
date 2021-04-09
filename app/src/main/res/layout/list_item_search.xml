@@ -10,12 +10,19 @@
         <variable
             name="onClick"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="downloadOnClick"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:elevation="10dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/radius_10_hollow"
+        android:backgroundTint="@color/sunflower_green_300">
 
         <LinearLayout
             android:onClick="@{onClick}"
@@ -24,7 +31,7 @@
             android:layout_marginStart="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+            app:layout_constraintEnd_toStartOf="@+id/btn_download"
             app:layout_constraintStart_toEndOf="@+id/imageButton2"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -52,13 +59,14 @@
             app:srcCompat="@android:drawable/ic_input_add" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:id="@+id/btn_download"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:drawable/stat_sys_download_done"
+            android:onClick="@{downloadOnClick}"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/more" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

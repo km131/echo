@@ -1,5 +1,10 @@
 package com.example.echo_kt.util
 
+import android.annotation.SuppressLint
+import com.example.echo_kt.api.SearchMusicDetails
+import com.example.echo_kt.data.Info
+import com.example.echo_kt.data.AudioBean
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun stringForTime(duration: Int): String? {
@@ -14,4 +19,31 @@ fun stringForTime(duration: Long): String? {
 }
 fun intForLong(duration: Long):Int{
     return duration.toInt()
+}
+fun dataToAudioBean(
+    data: SearchMusicDetails.Data,
+    item: Info
+): AudioBean {
+    //用请求到的hash值来代表歌曲在数据库中的唯一id
+    return AudioBean(
+        name = data.song_name,
+        singer = item.singerName,
+        size = data.filesize.toLong(),
+        duration = if (data.is_free_part != 1) data.timelength - 1000 else 59000,
+        path = data.play_backup_url,
+        albumId = data.img,
+        songId = "kugou/${data.hash}",
+        pathType = true,
+        kugouAid = data.album_id,
+        kugouHash = data.hash
+    )
+}
+//
+fun getSongListId(name:String,date:String): String {
+    return "id:标题$name,创建日期$date"
+}
+@SuppressLint("SimpleDateFormat")
+fun getDate():String{
+    val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss") // HH:mm:ss
+    return simpleDateFormat.format(Date(System.currentTimeMillis()))
 }
