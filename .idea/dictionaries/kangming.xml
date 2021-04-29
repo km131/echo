@@ -3,7 +3,10 @@
     <words>
       <w>douban</w>
       <w>kugou</w>
+      <w>localmusic</w>
+      <w>qqmusic</w>
       <w>songlist</w>
+      <w>wyymusic</w>
     </words>
   </dictionary>
 </component>

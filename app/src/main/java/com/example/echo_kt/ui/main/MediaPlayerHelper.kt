@@ -89,6 +89,13 @@ class MediaPlayerHelper : IPlayer,
     override fun getProgress(): Int {
         return mediaPlayer.currentPosition
     }
+    /**
+     * 获取歌曲时长
+     */
+    override fun getDuration(): Int {
+        return mediaPlayer.duration
+    }
+
 
     /**
      * 播放完成

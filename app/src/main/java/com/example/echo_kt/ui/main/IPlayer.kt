@@ -66,5 +66,9 @@ interface IPlayer {
      *  获取播放进度
      */
     fun getProgress(): Int
+    /**
+     *  获取歌曲时长
+     */
+    fun getDuration(): Int
 
 }

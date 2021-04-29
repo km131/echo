@@ -17,6 +17,7 @@
             android:layout_height="150dp"
             android:scaleType="fitXY"
             url="@{vmWork2.imageId}"
-            tools:src="@mipmap/a1"/>
+            tools:src="@mipmap/a1"
+            android:contentDescription="TODO" />
     </LinearLayout>
 </layout>

@@ -10,6 +10,9 @@ import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.ListItemSonglistBinding
 import com.example.echo_kt.ui.main.MainFragmentDirections
 
+/**
+ * 歌单列表，在HomeFragment中
+ */
 class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,14 +31,16 @@ class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adap
 
     override fun getItemCount(): Int = mList.size
 }
-class ViewHolder(private val binding : ListItemSonglistBinding): RecyclerView.ViewHolder(binding.root){
-    fun bind(item: SongListBean,index: Int) {
+class ViewHolder(private val binding: ListItemSonglistBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: SongListBean, index: Int) {
         binding.apply {
-            binding.bean=item
+            binding.bean = item
         }
         binding.setClickListener {
             binding.clickListener?.let { _ ->
-                val action = MainFragmentDirections.actionMainFragmentToCustomSongListFragment(index)
+                val action =
+                    MainFragmentDirections.actionMainFragmentToCustomSongListFragment(index)
                 it.findNavController().navigate(action)
             }
         }

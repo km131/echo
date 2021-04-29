@@ -43,10 +43,10 @@ class Converters {
     fun fromTimestamp(value: String?): MutableList<AudioBean>? {
         // 使用Gson方法把json格式的string转成List
         try {
-            Gson().fromJson<List<AudioBean?>?>(
+            return Gson().fromJson<List<AudioBean>?>(
                 value,
                 object : TypeToken<List<AudioBean?>?>() {}.type
-            )
+            )?.toMutableList()
         } catch (e: JSONException) {
             e.printStackTrace();
         }

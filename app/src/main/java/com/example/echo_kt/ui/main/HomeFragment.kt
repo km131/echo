@@ -1,15 +1,14 @@
 package com.example.echo_kt.ui.main
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.MyErectAdapter
@@ -20,9 +19,9 @@ import com.example.echo_kt.databinding.HomeFragmentBinding
 import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.util.getDate
 import com.example.echo_kt.util.getSongListId
+import com.example.echo_kt.util.readCustomPlayList
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -31,7 +30,7 @@ class HomeFragment : Fragment() {
         fun newInstance() = HomeFragment()
     }
 
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by activityViewModels()
     private var _binding:HomeFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter= MyErectAdapter(initErectAdapter())
@@ -55,13 +54,15 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         binding.vmHome=viewModel
         binding.rvHome.adapter=adapter
-        if (viewModel.songList.value!=null){
-            adapterSongList=SongListAdapter(viewModel.songList.value!!)
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        viewModel.songList.observe(this.viewLifecycleOwner, Observer<List<SongListBean>>{ data ->
+            // update UI
+            adapterSongList=SongListAdapter(data)
             binding.rvMySongList.adapter=adapterSongList
-        }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,9 +103,11 @@ class HomeFragment : Fragment() {
                     list = mutableListOf(),
                     coverImage = "https://images6.alphacoders.com/735/thumb-350-735055.jpg"
                 )
-                //存入数据库
                 GlobalScope.launch {
+                    //存入数据库
                     AppDataBase.getInstance().customSongListDao().insertSongList(songListBean)
+                    //重新读取数据
+                    viewModel.songList.postValue(readCustomPlayList())
                 }
             }
         }.show()

@@ -1,6 +1,7 @@
 package com.example.echo_kt.room
 
 import androidx.room.*
+import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.data.SongListBean
 
 @Dao
@@ -28,6 +29,12 @@ interface CustomSongListDao {
      */
     @Update
     fun updateSongList(audioBean: SongListBean)
+
+//    /**
+//     * 更新一个歌单中的歌曲
+//     */
+//    @Update(entity = SongListBean::class)
+//    fun updateSongListToList(songList: String)
 
     /**
      * 查询一个

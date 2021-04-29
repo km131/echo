@@ -15,8 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ADA9A9"
-        tools:context=".play.PlayFragment">
+        android:background="#ADA9A9">
 
 
         <ImageView
@@ -29,7 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.25"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/tvName"
@@ -86,7 +86,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+            app:layout_constraintTop_toBottomOf="@+id/seekBar"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imgPrevious"
@@ -97,7 +98,8 @@
             android:src="@android:drawable/ic_media_previous"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imgNext"
@@ -108,7 +110,8 @@
             android:src="@android:drawable/ic_media_next"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imgAudioList"
@@ -119,7 +122,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
             app:layout_constraintStart_toEndOf="@+id/imgNext"
             app:layout_constraintTop_toTopOf="@+id/imgNext"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imgListMode"
@@ -130,7 +134,8 @@
             url="@{pvm.playModePic}"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"
             app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
-            app:layout_constraintTop_toTopOf="@+id/imgPrevious" />
+            app:layout_constraintTop_toTopOf="@+id/imgPrevious"
+            android:contentDescription="TODO" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="data"
-            type="com.example.echo_kt.data.Info" />
+            name="bean"
+            type="com.example.echo_kt.data.ShowSearchBean" />
         <variable
             name="onClick"
             type="android.view.View.OnClickListener" />
@@ -25,39 +25,31 @@
         android:backgroundTint="@color/sunflower_green_300">
 
         <LinearLayout
-            android:onClick="@{onClick}"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
+            android:onClick="@{onClick}"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_download"
-            app:layout_constraintStart_toEndOf="@+id/imageButton2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tv_songName"
+                android:text="@{bean.songName}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.songName}"
                 android:textSize="18sp"
                 tools:text="TextView" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tv_singerName"
+                android:text="@{bean.singer}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.singerName}"
                 tools:text="TextView" />
         </LinearLayout>
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_input_add" />
-
         <ImageButton
             android:id="@+id/btn_download"
             android:layout_width="50dp"
@@ -67,6 +59,7 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="TODO" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -27,7 +27,8 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars"
             url="@{doubanMinorVM.imgPath}"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/textView"

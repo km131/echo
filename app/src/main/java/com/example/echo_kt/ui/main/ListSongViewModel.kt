@@ -21,7 +21,7 @@ class ListSongViewModel : ViewModel() {
 
     fun scanHistorySong() {
         if (listSongData == null) listSongData =
-            PlayList.instance.historyList.toMutableList().apply {
+            PlayList.instance.getHistoryList().toMutableList().apply {
                 reverse()
             }
     }

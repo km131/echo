@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import com.example.echo_kt.api.SearchMusicDetails
 import com.example.echo_kt.data.Info
 import com.example.echo_kt.data.AudioBean
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,4 +48,10 @@ fun getSongListId(name:String,date:String): String {
 fun getDate():String{
     val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss") // HH:mm:ss
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
+}
+
+//用MD5算法加密（在获取qq音乐参数sign中用到）
+fun getMD5(input:String): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
 }

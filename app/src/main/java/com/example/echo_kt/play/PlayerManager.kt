@@ -149,13 +149,14 @@ class PlayerManager private constructor() :
             audioBean.path.let {
                 if (it != null) {
                     playerHelper.play(it)
+                    audioBean.duration=playerHelper.getDuration()
+                    sendAudioToObserver(audioBean)
+                    sendPlayStatusToObserver()
                 } else {
                     Toast.makeText(BaseApplication.getContext(), "播放地址为空", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
-            sendAudioToObserver(audioBean)
-            sendPlayStatusToObserver()
         }
     }
 

@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_customSongListFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_customSongListFragment_to_addSongsToListFragment"
+            app:destination="@id/addSongsToListFragment" />
     </fragment>
     <!--  有Fragment和Dialog两种状态，一般使用Dialog，故跳转在父级Fragment中执行  -->
     <fragment
@@ -96,5 +99,23 @@
         android:name="com.example.echo_kt.ui.SongListDialogFragment"
         android:label="SongListDialogFragment"
         tools:layout="@layout/fragment_song_list_dialog">
+    </fragment>
+    <fragment
+        android:id="@+id/addSongsToListFragment"
+        android:name="com.example.echo_kt.ui.main.songListFragment.AddSongsToListFragment"
+        android:label="AddSongsToListFragment"
+        tools:layout="@layout/add_songs_to_list_fragment">
+        <action
+            android:id="@+id/action_addSongsToListFragment_to_addSongsFragment"
+            app:destination="@id/addSongsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addSongsFragment"
+        android:name="com.example.echo_kt.ui.main.songListFragment.AddSongsFragment"
+        android:label="AddSongsFragment"
+        tools:layout="@layout/fragment_add_songs">
+        <argument
+            android:name="songListType"
+            app:argType="com.example.echo_kt.ui.main.songListFragment.SongListType" />
     </fragment>
 </navigation>

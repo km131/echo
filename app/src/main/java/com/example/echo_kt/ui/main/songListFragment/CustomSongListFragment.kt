@@ -1,7 +1,5 @@
 package com.example.echo_kt.ui.main.songListFragment
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.echo_kt.ItemAdapter
@@ -29,7 +26,6 @@ class CustomSongListFragment : Fragment() {
     private val args: CustomSongListFragmentArgs by navArgs()
     private var _binding: CustomSongListFragmentBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +63,8 @@ class CustomSongListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //设置目前的自定义列表索引（修改时要用到）
+        viewModel.songlistIndex=args.index
         val songList:SongListBean?=viewModel.readCustomList(args.index)
         binding.songListBean = songList
         binding.rvSongList.adapter = songList?.list?.let { ItemAdapter(it) }

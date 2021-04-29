@@ -1,34 +1,37 @@
 package com.example.echo_kt.ui.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.R
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.util.readCustomPlayList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
     /**
      * 全部的自定义歌曲列表
      */
-    var songList: MutableLiveData<List<SongListBean>> = MutableLiveData()
+    val songList: MutableLiveData<List<SongListBean>> by lazy {
+        MutableLiveData<List<SongListBean>>()
+    }
 
-    fun readCustomList(index:Int): SongListBean {
-        //此循环的目的时等待value的值在io流中读取到，写法错误有待改进
-        while (songList.value==null){
-            if (songList.value!=null)
-                break
-        }
+    /**
+     * 选中的歌曲索引
+     */
+    var songlistIndex:Int = 0
+
+    /**
+     *  获取将要显示的歌单数据
+     *  @param index 该歌单在所有自定义歌单中的索引
+     */
+    fun readCustomList(index: Int): SongListBean {
         return songList.value!![index]
     }
+
     init {
         GlobalScope.launch(Dispatchers.IO) {
-            songList = MutableLiveData(readCustomPlayList())
+            songList.postValue(readCustomPlayList())
         }
     }
 }

@@ -27,9 +27,12 @@ class SongListDialogFragment: DialogFragment() {
         _binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_song_list_dialog, null, false)
         binding.setOnClick {
             when(it.id){
-                R.id.ll_sort -> Toast.makeText(this.context,"功能待添加",Toast.LENGTH_SHORT).show()
-                R.id.ll_add -> NavHostFragment.findNavController(this).navigate(R.id.action_customSongListFragment_to_searchFragment)
-                R.id.ll_edit -> Toast.makeText(this.context,"功能待添加",Toast.LENGTH_SHORT).show()
+                R.id.tv_sort -> Toast.makeText(this.context,"功能待添加",Toast.LENGTH_SHORT).show()
+                R.id.tv_add -> {
+                    NavHostFragment.findNavController(this).navigate(R.id.action_customSongListFragment_to_addSongsToListFragment)
+                    this.dismiss()
+                }
+                R.id.tv_edit -> Toast.makeText(this.context,"功能待添加",Toast.LENGTH_SHORT).show()
                 R.id.btn_cancel -> dismiss()
             }
         }
@@ -43,6 +46,7 @@ class SongListDialogFragment: DialogFragment() {
         // title by default, but your custom layout might not need it. So here you can
         // remove the dialog title, but you must call the superclass to get the Dialog.
         val dialog = super.onCreateDialog(savedInstanceState)
+        //去掉标题栏
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         //点击返回键关闭对话框
         isCancelable = true

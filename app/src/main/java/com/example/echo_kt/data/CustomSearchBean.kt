@@ -10,7 +10,7 @@ data class CustomSearchBean(
     val data: Data,
     @SerializedName("errcode")
     val errorCode: Int
-)
+):SearchBean
 data class Data(
     @SerializedName("info")
     val info: List<Info>,

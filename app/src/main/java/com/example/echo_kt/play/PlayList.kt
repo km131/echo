@@ -43,11 +43,17 @@ class PlayList private constructor() {
      */
     private var localList: MutableList<AudioBean> = _localList
 
+    fun getLocalList():MutableList<AudioBean>{
+        return localList
+    }
     /**
      * 默认播放列表,历史
      */
     private var _historyList = mutableListOf<AudioBean>()
-    var historyList: List<AudioBean> = _historyList
+    private var historyList: List<AudioBean> = _historyList
+    fun getHistoryList():List<AudioBean>{
+        return historyList
+    }
 
     /**
      * 播放模式，默认为顺序播放
