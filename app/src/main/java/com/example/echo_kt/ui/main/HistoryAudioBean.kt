@@ -58,14 +58,15 @@ class HistoryAudioBean {
      */
     @ColumnInfo(name = "kugouAid")
     var kugouAid: String = ""
+
     @ColumnInfo(name = "kugouHash")
-    var kugouHash:String = ""
+    var kugouHash: String = ""
 
     /**
      * 图片地址
      */
     @ColumnInfo(name = "albumUrl")
-     var albumId: String = ""
+    var albumId: String = ""
 
     companion object{
         /**

@@ -7,31 +7,24 @@
         <variable
             name="bean"
             type="com.example.echo_kt.data.ShowSearchBean" />
-        <variable
-            name="onClick"
-            type="android.view.View.OnClickListener" />
-        <variable
-            name="downloadOnClick"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="5dp"
         android:elevation="10dp"
         android:layout_margin="5dp"
-        android:background="@drawable/radius_10_hollow"
-        android:backgroundTint="@color/sunflower_green_300">
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/radius_10_hollow">
 
         <LinearLayout
+            android:id="@+id/ll_play"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:onClick="@{onClick}"
-            android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_download"
+            app:layout_constraintEnd_toStartOf="@+id/btn_other"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -40,26 +33,26 @@
                 android:text="@{bean.songName}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                style="@style/text_oneLine_18"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/tv_singerName"
                 android:text="@{bean.singer}"
+                style="@style/text_oneLine_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="TextView" />
         </LinearLayout>
+
         <ImageButton
-            android:id="@+id/btn_download"
+            android:id="@+id/btn_other"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@android:drawable/stat_sys_download_done"
-            android:onClick="@{downloadOnClick}"
+            android:background="@mipmap/aca"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/ll_play"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="TODO" />
+            app:layout_constraintTop_toTopOf="@+id/ll_play" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

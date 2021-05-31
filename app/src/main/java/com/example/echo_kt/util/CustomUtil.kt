@@ -1,6 +1,9 @@
 package com.example.echo_kt.util
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.net.Uri
+import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.api.SearchMusicDetails
 import com.example.echo_kt.data.Info
 import com.example.echo_kt.data.AudioBean
@@ -48,6 +51,16 @@ fun getSongListId(name:String,date:String): String {
 fun getDate():String{
     val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss") // HH:mm:ss
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
+}
+//将mipmap转化位uri
+fun getMipmapToUri(resId:Int):String {
+    val r = BaseApplication.getContext().resources
+    val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+            + r.getResourcePackageName(resId) + "/"
+            + r.getResourceTypeName(resId) + "/"
+            + r.getResourceEntryName(resId));
+
+    return uri.toString();
 }
 
 //用MD5算法加密（在获取qq音乐参数sign中用到）

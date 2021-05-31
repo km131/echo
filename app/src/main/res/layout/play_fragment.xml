@@ -15,44 +15,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ADA9A9">
+        android:background="#FFFFFF">
 
 
         <ImageView
             android:id="@+id/imgAlbumPic"
-            urlAlbum="@{pvm.albumPic}"
+            urlAlbum2="@{pvm.albumPic}"
             android:layout_width="315dp"
             android:layout_height="315dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25"
-            tools:src="@tools:sample/avatars"
-            android:contentDescription="TODO" />
+            app:layout_constraintVertical_bias="0.14999998"
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:textSize="30sp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="32dp"
             android:ellipsize="end"
             android:maxEms="6"
             android:maxLines="1"
             android:text="@{pvm.songName}"
+            android:textSize="26sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/imgAlbumPic"
             app:layout_constraintTop_toBottomOf="@+id/imgAlbumPic" />
 
         <TextView
             android:id="@+id/tvProgress"
-            android:text="@{pvm.currentDuration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="@+id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            android:layout_marginTop="32dp"
+            android:text="@{pvm.currentDuration}"
+            app:layout_constraintStart_toStartOf="@+id/tv_singer"
+            app:layout_constraintTop_toBottomOf="@+id/tv_singer" />
 
         <TextView
             android:id="@+id/tvMaxDuration"
@@ -87,7 +90,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            android:contentDescription="TODO" />
+            app:layout_constraintVertical_bias="0.25" />
 
         <ImageView
             android:id="@+id/imgPrevious"
@@ -95,11 +98,10 @@
             android:layout_height="50dp"
             android:onClick="@{onClick}"
             android:layout_marginEnd="16dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:src="@mipmap/media_previous"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
-            android:contentDescription="TODO" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
 
         <ImageView
             android:id="@+id/imgNext"
@@ -107,7 +109,7 @@
             android:layout_height="50dp"
             android:onClick="@{onClick}"
             android:layout_marginStart="16dp"
-            android:src="@android:drawable/ic_media_next"
+            android:src="@mipmap/media_next"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
             app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
@@ -122,20 +124,32 @@
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
             app:layout_constraintStart_toEndOf="@+id/imgNext"
             app:layout_constraintTop_toTopOf="@+id/imgNext"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            android:contentDescription="TODO" />
+            app:srcCompat="@mipmap/list" />
 
         <ImageView
             android:id="@+id/imgListMode"
+            url="@{pvm.playModePic}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{onClick}"
-            url="@{pvm.playModePic}"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"
             app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
-            app:layout_constraintTop_toTopOf="@+id/imgPrevious"
-            android:contentDescription="TODO" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgPrevious" />
+
+        <TextView
+            android:id="@+id/tv_singer"
+            style="@style/text_oneLine_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{pvm.singer}"
+            app:layout_constraintEnd_toEndOf="@+id/tvName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

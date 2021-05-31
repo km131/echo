@@ -1,14 +1,12 @@
 package com.example.echo_kt.ui.main
 
-import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.databinding.MainFragmentBinding
@@ -22,7 +20,7 @@ class MainFragment : Fragment(),AudioObserver {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
@@ -75,22 +73,15 @@ class MainFragment : Fragment(),AudioObserver {
 
     private fun onClick() {
         binding.playView.setOnClickListener{
-            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_playFragment)
+            findNavController().navigate(R.id.action_mainFragment_to_playFragment)
         }
         binding.btnMusicList.setOnClickListener{
-            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_audioListDialogFragment)
+            findNavController().navigate(R.id.action_mainFragment_to_audioListDialogFragment)
         }
         binding.btnPlay.setOnClickListener{
             PlayerManager.instance.controlPlay()
         }
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = activity?.let { ViewModelProvider(it).get(MainViewModel::class.java) }!!
-        Log.i("MainFragment：", "onAttach")
-    }
-
     override fun onPlayMode(playMode: Int) {
        when (playMode){
            PlayList.PlayMode.ORDER_PLAY_MODE ->{
@@ -115,7 +106,6 @@ class MainFragment : Fragment(),AudioObserver {
     override fun onAudioBean(audioBean: AudioBean) {
         viewModel.songName.set(audioBean.name)
         viewModel.singer.set(audioBean.singer)
-        viewModel.maxDuration.set(stringForTime(audioBean.duration))
         viewModel.maxProgress.set(audioBean.duration)
         viewModel.albumPic.set(audioBean.albumIdUrl)
 //        //在io线程中查询是否收藏

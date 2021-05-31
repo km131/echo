@@ -62,7 +62,7 @@ class PlayList private constructor() {
 
 
     init {
-        //通过io线程读取播放列表
+        //读取播放列表
         GlobalScope.launch(Dispatchers.IO) {
             _localList = readLocalPlayList(BaseApplication.getContext())
             localList = _localList
@@ -163,7 +163,7 @@ class PlayList private constructor() {
             when (playMode) {
                 //顺序
                 PlayMode.ORDER_PLAY_MODE -> {
-                    currentIndex = if (currentIndex > 0) {
+                    currentIndex = if (currentIndex > 1) {
                         currentIndex - 1
                     } else {
                         currentAudioList.size - 1
@@ -246,6 +246,15 @@ class PlayList private constructor() {
      */
     fun getPlayListSize(): Int {
         return currentAudioList.size
+    }
+
+    /**
+     * 设置下一首播放歌曲
+     */
+    fun setNextPlay(audioBean: AudioBean) {
+        if (currentAudioList.size>0){
+            currentAudioList.add(currentIndex+1,audioBean)
+        }
     }
 
     /**

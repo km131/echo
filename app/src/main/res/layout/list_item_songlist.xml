@@ -7,15 +7,11 @@
         <variable
             name="bean"
             type="com.example.echo_kt.data.SongListBean" />
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener}"
         android:paddingVertical="5dp"
         android:elevation="10dp"
         android:layout_margin="5dp"
@@ -24,9 +20,9 @@
 
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            urlAlbum="@{bean.coverImage}"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            urlAlbum2="@{bean.coverImage}"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,22 +31,25 @@
 
         <TextView
             android:id="@+id/textView7"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
             android:text="@{bean.name}"
-            tools:text="收藏"
-            android:textSize="24sp"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            tools:text="收藏" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@{String.valueOf(bean.list!=null?bean.list.size():0)}"
+            android:text='@{(bean.list!=null?bean.list.size():0)+"首"}'
             app:layout_constraintEnd_toEndOf="@+id/textView7"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView7"

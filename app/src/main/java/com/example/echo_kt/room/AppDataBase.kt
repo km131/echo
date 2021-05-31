@@ -15,12 +15,12 @@ import com.example.echo_kt.ui.main.HistoryAudioBean
 @Database( entities = [HistoryAudioBean::class,SongListBean::class],version = 5 ,exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun historyAudioDao():HistoryAudioBeanDao
+    abstract fun historyAudioDao(): HistoryAudioBeanDao
     abstract fun customSongListDao(): CustomSongListDao
 
-    companion object{
+    companion object {
         @Volatile
-        private var instance: AppDataBase?=null
+        private var instance: AppDataBase? = null
 
         fun getInstance(): AppDataBase {
             return instance ?: synchronized(this){

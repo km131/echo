@@ -8,9 +8,6 @@
             name="isNull"
             type="Boolean" />
         <variable
-            name="vm"
-            type="com.example.echo_kt.ui.main.ListSongViewModel" />
-        <variable
             name="onClickPlayAll"
             type="android.view.View.OnClickListener" />
         <variable
@@ -27,13 +24,14 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLocalSong"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/audio_list_dialog_item">
+            tools:listitem="@layout/list_item_search">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -53,9 +51,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="24dp"
             android:padding="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -67,9 +64,9 @@
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="1dp"
-                android:text="全部播放"
-                android:onClick="@{onClickPlayAll}"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{onClickPlayAll}"
+                android:text="全部播放"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -82,9 +79,9 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="2dp"
-                android:text="更新播放地址"
-                android:onClick="@{onClickUpdate}"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
+                android:onClick="@{onClickUpdate}"
+                android:text="更新播放地址"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -81,7 +81,7 @@
                     android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:max="@{600000}"
+                    android:max="@{6000000}"
                     android:progress="@{CustomUtilKt.intForLong(vmHome.countdownBean.countdown)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

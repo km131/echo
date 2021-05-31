@@ -1,7 +1,5 @@
 package com.example.echo_kt.api
 
-import com.google.gson.annotations.SerializedName
-
 /**
  * 请求歌曲详情，带歌词
  * https://www.kugou.com/yy/index.php?r=play/getdata&hash= hash

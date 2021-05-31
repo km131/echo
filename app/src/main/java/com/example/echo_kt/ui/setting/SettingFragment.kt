@@ -60,7 +60,7 @@ class SettingFragment : Fragment() {
             binding.switchTimeOff.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
                 if (b) {
                     viewModel.countdownBean.postValue(
-                        SettingViewModel.CountdownBean(60000, true)
+                        SettingViewModel.CountdownBean(600000, true)
                     )
                     PlayerManager.instance.startTimer(viewModel)
                     Log.i("lll", "onClick: 开关开")

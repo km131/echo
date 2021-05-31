@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() , AudioObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        PlayerManager.instance.init(this)
+        PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
     }
     override fun onDestroy() {
@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() , AudioObserver {
     override fun onAudioBean(audioBean: AudioBean) {
         viewModel.songName.set(audioBean.name)
         viewModel.singer.set(audioBean.singer)
-        viewModel.maxDuration.set(stringForTime(audioBean.duration))
-        viewModel.maxProgress.set(audioBean.duration)
+        //viewModel.maxDuration.set(stringForTime(audioBean.duration))
+        //viewModel.maxProgress.set(audioBean.duration)
         viewModel.albumPic.set(audioBean.albumIdUrl)
     }
 

@@ -19,8 +19,6 @@
             android:id="@+id/vpHome"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:overScrollMode="never"
             app:layout_constraintBottom_toTopOf="@+id/playView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,45 +40,45 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/playView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="#00BCD4"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/radius_10_hollow"
             android:padding="5dp"
             app:layout_constraintBottom_toTopOf="@+id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
             <ImageView
                 android:id="@+id/imageView"
                 urlAlbum="@{mainVM.albumPic}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="TODO" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_music"
+                style="@style/text_oneLine_18"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:text="@{mainVM.songName}"
-                android:textColor="#ffffff"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_play"
                 app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
                 android:id="@+id/btn_play"
@@ -88,24 +86,37 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:background="#00000000"
+                android:contentDescription="TODO"
                 android:scaleType="fitXY"
                 android:src="@drawable/selector_play_pic"
                 app:imgPlay="@{mainVM.playStatus}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_musicList"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="TODO" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/btn_musicList"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="8dp"
+                android:background="@null"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-                android:contentDescription="TODO" />
+                app:srcCompat="@mipmap/list" />
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/text_oneLine_16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{mainVM.singer}"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintEnd_toEndOf="@+id/tv_music"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_music"
+                app:layout_constraintTop_toBottomOf="@+id/tv_music" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

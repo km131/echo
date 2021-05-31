@@ -22,7 +22,7 @@ interface IPlayer {
 
     /**
      * 播放新的音频
-     * @param path 本地路径
+     * @return 歌曲时长
      */
     fun play(path: String)
 

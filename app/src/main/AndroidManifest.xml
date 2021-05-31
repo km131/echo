@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 向SD卡写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <!--    android:requestLegacyExternalStorage="true" 取消android10沙盒模式用于读取音频数据-->
     <application
         android:name=".BaseApplication"

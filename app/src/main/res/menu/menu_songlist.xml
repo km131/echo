@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
         <item
             android:id="@+id/action_rest"
-            android:icon="@android:drawable/ic_input_add"
+            android:icon="@mipmap/add_song_list"
             android:title="更多"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_playAll"
+            android:icon="@mipmap/play_list"
+            android:title="播放全部"
             app:showAsAction="ifRoom" />
 
 </menu>

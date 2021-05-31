@@ -1,14 +1,11 @@
 package com.example.echo_kt.api
 
-import com.example.echo_kt.api.wyymusic.WyySearchListBean
 import com.example.echo_kt.data.CustomSearchBean
-import com.example.echo_kt.data.WyyParameter
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 

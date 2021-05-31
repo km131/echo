@@ -24,7 +24,7 @@ class PlayService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        PlayerManager.instance.init(BaseApplication.getContext())
+        PlayerManager.instance.init()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -45,7 +45,7 @@ class PlayService : Service() {
 
         val noti = NotificationCompat.Builder(this.baseContext, CHANNEL_ID)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setSmallIcon(R.mipmap.a12)
+            .setSmallIcon(R.mipmap.echo)
             .setContentTitle("ECHO")
             .setContent(expandedView)
             .setOngoing(true)

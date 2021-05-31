@@ -89,22 +89,22 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHome"
-            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:spanCount="3"
+            android:layout_marginStart="24dp"
+            android:paddingVertical="10dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clTitle"
-            tools:listitem="@layout/list_item_work1"
-            tools:itemCount="3" />
+            app:spanCount="3"
+            tools:itemCount="3"
+            tools:listitem="@layout/list_item_work1" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginEnd="9dp"
             android:orientation="horizontal"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -126,10 +126,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:onClick="@{newSongList}"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                app:srcCompat="@mipmap/add" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView

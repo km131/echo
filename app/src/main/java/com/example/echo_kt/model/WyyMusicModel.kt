@@ -1,22 +1,16 @@
 package com.example.echo_kt.model
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import com.example.echo_kt.api.qqmusic.ListSearchResponse
-import com.example.echo_kt.api.qqmusic.QQMusicServer
 import com.example.echo_kt.api.wyymusic.WyyMusicServer
 import com.example.echo_kt.api.wyymusic.WyyPathBean
 import com.example.echo_kt.api.wyymusic.WyySearchListBean
 import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.data.WyyParameter
-import okhttp3.ResponseBody
-import okio.ByteString.Companion.decodeBase64
-import retrofit2.Call
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.X509EncodedKeySpec
-import java.util.*
+import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -26,18 +20,26 @@ class WyyMusicModel {
 
     private var wyyMusicServer: WyyMusicServer = WyyMusicServer.create()
 
-    suspend fun getSearchList(keyword: String): WyySearchListBean {
+    suspend fun getSearchList(keyword: String): WyySearchListBean? {
         val key =
             "{\"hlpretag\":\"<span class=\\\"s-fc7\\\">\",\"hlposttag\":\"</span>\",\"s\":\"$keyword\",\"type\":\"1\",\"offset\":\"0\",\"total\":\"true\",\"limit\":\"30\",\"csrf_token\":\"\"}"
         val params = getBody(key)
-        return wyyMusicServer.searchList(params.params, params.encSecKey)
+        return try {
+            wyyMusicServer.searchList(params.params, params.encSecKey)
+        }catch (e:Exception){
+            null
+        }
     }
 
-    suspend fun getSongPath(keyword: String): WyyPathBean {
+    suspend fun getSongPath(keyword: String): WyyPathBean? {
         val key =
             "{\"ids\":\"[$keyword]\",\"level\":\"standard\",\"encodeType\":\"aac\",\"csrf_token\":\"\"}"
         val params = getBody(key)
-        return wyyMusicServer.searchPath(params.params, params.encSecKey)
+        return try {
+            wyyMusicServer.searchPath(params.params, params.encSecKey)
+        }catch (e:Exception){
+            null
+        }
     }
 
     fun convertAudioBean(pathBean:WyyPathBean.Data,listBean:WyySearchListBean.Result.Song):AudioBean{

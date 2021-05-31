@@ -1,36 +1,17 @@
-/*
- * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.echo_kt.ui.main
 
-import android.content.ContentUris
 import android.net.Uri
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.echo_kt.R
 import com.example.echo_kt.play.PlayerManager
-import java.lang.Exception
-import javax.annotation.Resource
-import javax.annotation.Resources
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean) {
@@ -70,3 +51,17 @@ fun setImgUrl(view: ImageView, url: String?) {
         .into(view)
     Log.i("专辑图片", "setImgUrl: $url")
 }
+@BindingAdapter("urlAlbum2")
+fun setImgUrl2(view: ImageView, url: String?) {
+    Glide.with(view.context)
+        .load(url)
+        .apply(RequestOptions.bitmapTransform(
+            MultiTransformation(
+                RoundedCorners(20) //设置图片圆角角度
+            )
+        ))
+        .error(R.mipmap.album)
+        .into(view)
+    Log.i("专辑图片", "setImgUrl: $url")
+}
+

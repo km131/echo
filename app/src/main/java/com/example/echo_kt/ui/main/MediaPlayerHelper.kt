@@ -5,6 +5,7 @@ import android.media.MediaPlayer.*
 import android.util.Log
 import android.widget.Toast
 import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.api.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -41,14 +42,13 @@ class MediaPlayerHelper : IPlayer,
         mediaPlayer.reset()
         //可能会抛FileNotFound异常
         kotlin.runCatching {
-            Log.i("播放地址", "play: $path")
+            Log.i("MediaPlayHelper LINE:45", "播放地址: $path")
             mediaPlayer.setDataSource(path)
         }.onSuccess {
             //异步加载网络音频避免卡顿导致界面挂起
             mediaPlayer.prepareAsync()
         }.onFailure {
-            Toast.makeText(BaseApplication.getContext(), "MediaPlayHelper LINE:51 ：播放异常", Toast.LENGTH_SHORT)
-                .show()
+            showToast("MediaPlayHelper LINE:52 ：播放异常")
         }
     }
 

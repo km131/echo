@@ -48,7 +48,11 @@
         android:id="@+id/localSongFragment"
         android:name="com.example.echo_kt.ui.main.songListFragment.LocalSongFragment"
         android:label="LocalSongFragment"
-        tools:layout="@layout/fragment_local_song"/>
+        tools:layout="@layout/fragment_local_song">
+        <action
+            android:id="@+id/action_localSongFragment_to_bottomDialogFragment"
+            app:destination="@id/bottomDialogFragment" />
+    </fragment>
     <dialog
         android:id="@+id/audioListDialogFragment"
         android:name="com.example.echo_kt.AudioListDialogFragment"
@@ -69,12 +73,20 @@
         android:id="@+id/searchFragment"
         android:name="com.example.echo_kt.ui.search.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/search_fragment"/>
+        tools:layout="@layout/search_fragment">
+        <action
+            android:id="@+id/action_searchFragment_to_bottomDialogFragment"
+            app:destination="@id/bottomDialogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/historySongFragment"
         android:name="com.example.echo_kt.ui.main.songListFragment.HistorySongFragment"
         android:label="HistorySongFragment"
-        tools:layout="@layout/fragment_history_song"/>
+        tools:layout="@layout/fragment_history_song">
+        <action
+            android:id="@+id/action_historySongFragment_to_bottomDialogFragment"
+            app:destination="@id/bottomDialogFragment" />
+    </fragment>
     <fragment
         android:id="@+id/customSongListFragment"
         android:name="com.example.echo_kt.ui.main.songListFragment.CustomSongListFragment"
@@ -92,6 +104,9 @@
         <action
             android:id="@+id/action_customSongListFragment_to_addSongsToListFragment"
             app:destination="@id/addSongsToListFragment" />
+        <action
+            android:id="@+id/action_customSongListFragment_to_bottomDialogFragment"
+            app:destination="@id/bottomDialogFragment" />
     </fragment>
     <!--  有Fragment和Dialog两种状态，一般使用Dialog，故跳转在父级Fragment中执行  -->
     <fragment
@@ -118,4 +133,18 @@
             android:name="songListType"
             app:argType="com.example.echo_kt.ui.main.songListFragment.SongListType" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomDialogFragment"
+        android:name="com.example.echo_kt.adapter.BottomDialogFragment"
+        android:label="BottomDialogFragment"
+        tools:layout="@layout/bottom_dialog_song">
+        <action
+            android:id="@+id/action_bottomDialogFragment_to_addToPlayListDialog"
+            app:destination="@id/addToPlayListDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/addToPlayListDialog"
+        android:name="com.example.echo_kt.ui.main.songListFragment.AddToPlayListDialog"
+        android:label="AddToPlayListDialog"
+        tools:layout="@layout/add_to_playlist_dialog"/>
 </navigation>

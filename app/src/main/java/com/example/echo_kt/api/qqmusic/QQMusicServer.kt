@@ -28,7 +28,7 @@ interface QQMusicServer {
         loginUin: String,
         @Query("format")
         format:String
-    ): ListSearchResponse
+    ):ListSearchResponse
 
     /**
      * 请求vk（精简版 https://u.y.qq.com/cgi-bin/musics.fcg?sign=zzakcwbo8108njf8f400a95b3bc8c447ce4113a3373804&loginUin=2602241712&data=%7B%22req%22%3A%7B%22module%22%3A%22CDN.SrfCdnDispatchServer%22%2C%22method%22%3A%22GetCdnDispatch%22%2C%22param%22%3A%7B%22guid%22%3A%22596611375%22%2C%22calltype%22%3A0%2C%22userip%22%3A%22%22%7D%7D%2C%22req_0%22%3A%7B%22module%22%3A%22vkey.GetVkeyServer%22%2C%22method%22%3A%22CgiGetVkey%22%2C%22param%22%3A%7B%22guid%22%3A%22596611375%22%2C%22songmid%22%3A%5B%22004CbNym3R18Z7%22%5D%2C%22songtype%22%3A%5B0%5D%2C%22uin%22%3A%222602241712%22%2C%22loginflag%22%3A1%2C%22platform%22%3A%2220%22%7D%7D%2C%22comm%22%3A%7B%22uin%22%3A2602241712%2C%22format%22%3A%22json%22%2C%22ct%22%3A24%2C%22cv%22%3A0%7D%7D）

@@ -14,16 +14,13 @@ class ListSongViewModel : ViewModel() {
     var listSongData: MutableList<AudioBean>? = null
 
     fun scanLocalSong() {
-        if (listSongData == null) {
-            listSongData = readLocalPlayList(BaseApplication.getContext())
-        }
+        listSongData = readLocalPlayList(BaseApplication.getContext())
     }
 
     fun scanHistorySong() {
-        if (listSongData == null) listSongData =
-            PlayList.instance.getHistoryList().toMutableList().apply {
-                reverse()
-            }
+        listSongData = PlayList.instance.getHistoryList().toMutableList().apply {
+            reverse()
+        }
     }
 
     private fun toAudioList(list: MutableList<HistoryAudioBean>?): MutableList<AudioBean>? {

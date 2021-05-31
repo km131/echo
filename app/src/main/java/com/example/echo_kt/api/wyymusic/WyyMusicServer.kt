@@ -1,8 +1,6 @@
 package com.example.echo_kt.api.wyymusic
 
-import com.example.echo_kt.data.WyyParameter
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -28,7 +26,6 @@ interface WyyMusicServer {
     ): WyyPathBean
 
     companion object {
-        //只用了一个BaseUrl，赞！
         private const val BASE_URL = "https://music.163.com/"
 
         /**

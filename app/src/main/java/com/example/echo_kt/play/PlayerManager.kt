@@ -1,14 +1,14 @@
 package com.example.echo_kt.play
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.PlayService
+import com.example.echo_kt.api.showToast
 import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.ui.main.*
 import com.example.echo_kt.ui.setting.SettingViewModel
+import com.youth.banner.util.LogUtils.TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -31,7 +31,6 @@ class PlayerManager private constructor() :
             PlayerManager()
         }
 
-        //播放器状态
         /**
          * 重置
          */
@@ -52,6 +51,7 @@ class PlayerManager private constructor() :
          */
         const val PAUSE = 400
     }
+    //private val TAG = "PlayerManager"
 
     /**
      * 音乐观察者集合
@@ -81,7 +81,7 @@ class PlayerManager private constructor() :
      */
     private lateinit var playList: PlayList
 
-    fun init(context: Context) {
+    fun init() {
         playList = PlayList.instance
         playerHelper.setPlayStatus(this)
         startTimer()
@@ -139,24 +139,18 @@ class PlayerManager private constructor() :
      * 播放一个新的音频
      */
     fun playNewAudio(audioBean: AudioBean?) {
-        if (audioBean == null){
+        if (audioBean == null) {
             //重置
             playerHelper.reset()
             sendResetToObserver()
-        }else{
+        } else {
             playStatus = START
             playList.setCurrentAudio(audioBean)
-            audioBean.path.let {
-                if (it != null) {
-                    playerHelper.play(it)
-                    audioBean.duration=playerHelper.getDuration()
-                    sendAudioToObserver(audioBean)
-                    sendPlayStatusToObserver()
-                } else {
-                    Toast.makeText(BaseApplication.getContext(), "播放地址为空", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
+            audioBean.path?.let {
+                playerHelper.play(it)
+                sendAudioToObserver(audioBean)
+                sendPlayStatusToObserver()
+            } ?: showToast("播放地址为空")
         }
     }
 
@@ -200,7 +194,7 @@ class PlayerManager private constructor() :
     }
 
     /**
-     * 获取当前正在播放的音频信息
+     * 获取当前正在播放的音频大小
      */
     fun getPlayListSize(): Int? {
         return playList.getPlayListSize()
@@ -278,7 +272,8 @@ class PlayerManager private constructor() :
      */
     private fun sendProgressToObserver(duration: Int) {
         observers.forEach {
-            playList.currentAudio()?.duration?.let { it1 -> it.onProgress(duration, it1) }
+//            Log.i(TAG, "sendProgressToObserver: 播放进度：$duration")
+            playerHelper.getDuration().let { it1 -> it.onProgress(duration, it1) }
         }
     }
 
@@ -305,7 +300,11 @@ class PlayerManager private constructor() :
     }
 
     override fun onComplete() {
-        playList.nextAudio()?.let { playNewAudio(it) }
+        playList.nextAudio()?.let {
+            Log.i("播放结束", "onComplete:下一首：$it ")
+            playNewAudio(it)
+        }
+
     }
 
     /**
@@ -316,9 +315,13 @@ class PlayerManager private constructor() :
         disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                //仅在播放状态下通知观察者
-                if (playerHelper.isPlaying()) {
-                    sendProgressToObserver(playerHelper.getProgress())
+                try {
+                    //仅在播放状态下通知观察者
+                    if (playerHelper.isPlaying()) {
+                        sendProgressToObserver(playerHelper.getProgress())
+                    }
+                }catch (e:IllegalStateException){
+                    showToast("出错了，请重进应用")
                 }
             }
     }
@@ -340,11 +343,9 @@ class PlayerManager private constructor() :
                 if (vm.countdownBean.value!!.countdown <= 0L) {
                     //如果正在播放，则停止播放
                     if (playerHelper.isPlaying()){controlPlay()}
-                    //关闭定时关闭按钮（暂时无法关闭按钮）
+                    //关闭定时关闭按钮
                     vm.countdownBean.value=(SettingViewModel.CountdownBean(0, false))
-                    Log.i("TAG", "关闭按钮值:"+ vm.countdownBean.value!!.countdownState)
                     cleanCountdown()
-                    Log.i("TAG", "关闭按钮值2:"+ vm.countdownBean.value!!.countdownState)
                 }
             }
     }

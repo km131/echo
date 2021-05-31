@@ -47,7 +47,7 @@ class AudioBean {
     var pathType: Boolean = false
 
     /**
-     * 若播放地址为网络链接，下面两个为请求地址的参数
+     * 若播放地址为网络链接，下面两个为请求地址的参数(当时写时只考虑酷狗设计的数据库表，有待优化)
      */
     var kugouAid: String = ""
     var kugouHash:String = ""

@@ -6,19 +6,16 @@
         <variable
             name="pvm"
             type="com.example.echo_kt.data.AudioBean" />
-        <variable
-            name="onClick"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/list_item_spacing"
         android:paddingTop="@dimen/list_item_spacing_half"
         android:paddingRight="@dimen/list_item_spacing"
         android:paddingBottom="@dimen/list_item_spacing_half"
-        android:onClick="@{onClick}"
         android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
         <TextView
@@ -51,17 +48,15 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/image_remove"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="#00000000"
             android:src="@mipmap/back"
-            android:onClick="@{onClick}"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            android:contentDescription="TODO" />
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

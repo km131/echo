@@ -1,19 +1,25 @@
 package com.example.echo_kt.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.R
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.ListItemSonglistBinding
-import com.example.echo_kt.ui.main.MainFragmentDirections
 
 /**
  * 歌单列表，在HomeFragment中
  */
 class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adapter<ViewHolder>() {
+    private lateinit var onItemClickListener: OnItemClickListener
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+    interface OnItemClickListener{
+        fun onItemClick(view: View, position: Int)
+        fun onItemLongClick(view: View, position: Int)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -24,25 +30,23 @@ class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adap
             )
         )
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        mList[position].let { holder.bind(it,position) }
+        mList[position].let { holder.bind(it) }
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(holder.itemView, position)
+        }
+        holder.itemView.setOnLongClickListener {
+            onItemClickListener.onItemLongClick(holder.itemView, position)
+            true
+        }
     }
-
     override fun getItemCount(): Int = mList.size
 }
 class ViewHolder(private val binding: ListItemSonglistBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: SongListBean, index: Int) {
+    fun bind(item: SongListBean) {
         binding.apply {
             binding.bean = item
-        }
-        binding.setClickListener {
-            binding.clickListener?.let { _ ->
-                val action =
-                    MainFragmentDirections.actionMainFragmentToCustomSongListFragment(index)
-                it.findNavController().navigate(action)
-            }
         }
     }
 }

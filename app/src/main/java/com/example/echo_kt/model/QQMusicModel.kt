@@ -2,10 +2,9 @@ package com.example.echo_kt.model
 
 import com.example.echo_kt.api.qqmusic.*
 import com.example.echo_kt.data.AudioBean
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
+
 
 class QQMusicModel {
     private var qqMusicServer1: QQMusicServer  = QQMusicServer.create()
@@ -13,17 +12,25 @@ class QQMusicModel {
     private var qqMusicServer2: QQMusicServer = QQMusicServer.create2()
     private var qqMusicParameter: QQMusicParameter = QQMusicParameter()
 
-    suspend fun getSearchList(keyword: String): ListSearchResponse {
-        return qqMusicServer1.searchList(
-            n = "10",
-            w = keyword,
-            loginUin = "2602241712",
-            format = "json"
-        )
+    suspend fun getSearchList(keyword: String): ListSearchResponse? {
+        return try {
+            qqMusicServer1.searchList(
+                n = "10",
+                w = keyword,
+                loginUin = "2602241712",
+                format = "json"
+            )
+        }catch (e:Exception){
+            null
+        }
     }
-    suspend fun getVKey(mid:String): GetVKeyResponse {
+    suspend fun getVKey(mid:String): GetVKeyResponse? {
         val data = qqMusicParameter.getData(mid)
-        return qqMusicServerVKey.searchVKey(sign = qqMusicParameter.getSign(data),loginUin = "2602241712",data = data)
+        return try {
+            qqMusicServerVKey.searchVKey(sign = qqMusicParameter.getSign(data),loginUin = "2602241712",data = data)
+        }catch (e:Exception){
+            null
+        }
     }
     fun getAudioFile(url:String): Call<ResponseBody> {
         return qqMusicServer2.getAudioFile(url = url)

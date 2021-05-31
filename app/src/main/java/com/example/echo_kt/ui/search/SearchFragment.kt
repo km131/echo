@@ -1,8 +1,6 @@
 package com.example.echo_kt.ui.search
 
 import android.content.Context
-import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -11,13 +9,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebView
 import android.widget.ImageButton
-import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.example.echo_kt.R
+import com.example.echo_kt.adapter.SongViewModel
+import com.example.echo_kt.api.migu.MiguSearchListBean
+import com.example.echo_kt.api.qqmusic.ListSearchResponse
+import com.example.echo_kt.api.showToast
+import com.example.echo_kt.api.wyymusic.WyySearchListBean
+import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.CustomSearchBean
+import com.example.echo_kt.data.SearchBean
 import com.example.echo_kt.databinding.SearchFragmentBinding
+import com.example.echo_kt.model.KUGOUModel
+import com.example.echo_kt.model.MiGuMusicModel
+import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
+import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.search.adapter.SearchListAdapter
+import com.example.echo_kt.util.dataToAudioBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,7 +40,7 @@ class SearchFragment : Fragment() {
         fun newInstance() = SearchFragment()
     }
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by activityViewModels()
     private var _binding:SearchFragmentBinding? = null
     private val binding get() = _binding!!
     private var source= "KUGOU"
@@ -44,8 +55,6 @@ class SearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        // TODO: Use the ViewModel
         binding.apply {
             searchSrc.setOnClickListener {
                 sendRequest()
@@ -75,6 +84,10 @@ class SearchFragment : Fragment() {
                         source = "WYYMUSIC"
                     }
                     "WYYMUSIC" -> {
+                        (it as ImageButton).setImageResource(R.mipmap.migu)
+                        source = "MIGUMUSIC"
+                    }
+                    "MIGUMUSIC" -> {
                         (it as ImageButton).setImageResource(R.mipmap.kugou)
                         source = "KUGOU"
                     }
@@ -85,11 +98,70 @@ class SearchFragment : Fragment() {
     private fun sendRequest() {
         GlobalScope.launch(Dispatchers.Main) {
             val keyWord = binding.etSearch.text.toString()
-            val data = withContext(Dispatchers.IO) {
-                viewModel.sendRequestMessage(keyWord, source)
-            }
-            binding.rvSearchList.adapter = SearchListAdapter(data, source)
+            if (keyWord.trim().isNotEmpty()){
+                val data = viewModel.sendRequestMessage(keyWord, source)
+                data?.let {
+                    binding.rvSearchList.adapter = SearchListAdapter(data, source).apply {
+                        setOnItemClickListener(object : SearchListAdapter.OnItemClickListener{
+                            override fun onItemClick(view: View, position: Int) {
+                                val vm: SongViewModel by activityViewModels()
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val audioBean = withContext(Dispatchers.Main) {
+                                        convertToAudioBean(data, source, position)
+                                    }
+                                    audioBean?.let {
+                                        vm.audioBean.set(audioBean)
+                                        view.findNavController().navigate(R.id.action_searchFragment_to_bottomDialogFragment)
+                                    }?: showToast("未拿到歌曲信息，请返回上个页面")
+
+                                }
+                            }
+                        })
+                    }
+                } ?: showToast("网络出问题了，也可能是接口挂了")
+            } else showToast("此BUG已被处理")
         }
+    }
+
+    private suspend fun convertToAudioBean(
+        data: SearchBean,
+        course: String,
+        position: Int
+    ): AudioBean? {
+        when (course) {
+            "KUGOU" -> {
+                val s = (data as CustomSearchBean).data.info[position]
+                val dat = withContext(Dispatchers.IO) {
+                    KUGOUModel().getMusicBean(s)
+                }
+                return dat?.let { dataToAudioBean(it, s) }
+            }
+            "QQMUSIC" -> {
+                val s =(data as ListSearchResponse).data.songList.data[position]
+                val vk = QQMusicModel().getVKey(s.mediaMid)
+                vk?.let {
+                    val url =
+                        "https://ws.stream.qqmusic.qq.com/${vk.req.midurlinfo.reqData[0].purl}"
+                    return QQMusicModel().convertAudioBean(s,url)
+                }
+            }
+            "WYYMUSIC" -> {
+                val s= (data as WyySearchListBean).result.songs[position]
+                val response = WyyMusicModel().getSongPath(s.id)
+                response?.let {
+                    return WyyMusicModel().convertAudioBean(response.data[0], s)
+                }
+            }
+            "MIGUMUSIC" ->{
+                val s=(data as MiguSearchListBean).songResultData.result[position]
+                val toneFlag = "HQ"
+                val response = MiGuMusicModel().getMusicBean(s.albumId ,s.songId,toneFlag)
+                response?.let {
+                   return MiGuMusicModel().convertAudioBean(response)
+                }
+            }
+        }
+        return null
     }
 
 //    @SuppressLint("WrongConstant")
