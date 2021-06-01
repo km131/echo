@@ -1,39 +1,38 @@
 package com.example.echo_kt
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.echo_kt.play.PlayerManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.NotificationTarget
 import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.play.PlayerManager
 
 /**
- *
+ * 每播放一个新的音频或者播放状态改变，发送一个新的通知
  */
 class PlayService : Service() {
 
     private val CHANNEL_ID="echo_1024"
 
-    override fun onCreate() {
-        super.onCreate()
-        PlayerManager.instance.init()
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val results = PlayerManager.instance.getCurrentAudioBean()
-        createNotification(results)
+        val mode = PlayerManager.instance.getPlayState()
+        createNotification(results,mode)
         return START_NOT_STICKY
     }
 
-    private fun createNotification(results: AudioBean?) {
+    private fun createNotification(results: AudioBean?,mode:Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
@@ -42,16 +41,51 @@ class PlayService : Service() {
         )
 
         setListeners(expandedView)
-
-        val noti = NotificationCompat.Builder(this.baseContext, CHANNEL_ID)
+        val noti: Notification = NotificationCompat.Builder(this.baseContext, CHANNEL_ID)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSmallIcon(R.mipmap.echo)
             .setContentTitle("ECHO")
             .setContent(expandedView)
             .setOngoing(true)
             .build()
+        when (mode) {
+            PlayerManager.RESUME ,PlayerManager.START -> noti.contentView.setImageViewResource(
+                R.id.player_play,
+                R.mipmap.play_resume_gray
+            )
+            PlayerManager.PAUSE-> noti.contentView.setImageViewResource(
+                R.id.player_play,
+                R.mipmap.play_pause_gray
+            )
+        }
+
+        results?.let {
+            //加载通知栏专辑图片
+            Glide.with(BaseApplication.getContext().applicationContext)
+                .asBitmap()
+                .load(results.albumIdUrl)
+                .apply(
+                    RequestOptions.bitmapTransform(
+                        MultiTransformation(
+                            RoundedCorners(30) //设置图片圆角角度
+                        )
+                    )
+                )
+                .into(
+                    NotificationTarget(
+                        BaseApplication.getContext(),
+                        R.id.player_album_art,
+                        noti.contentView,
+                        noti,
+                        1024
+                    )
+                )
+            noti.contentView.setTextViewText(R.id.player_song_name, results.name)
+            noti.contentView.setTextViewText(R.id.player_author_name, results.singer)
+        } ?: noti.contentView.setImageViewResource(R.id.player_album_art, R.mipmap.album)
         with(NotificationManagerCompat.from(this)) {
-            notify(1024,noti)
+            notify(1024, noti)
+            startForeground(1024,noti)
         }
     }
 
@@ -59,14 +93,10 @@ class PlayService : Service() {
         return null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        PlayerManager.instance.clear()
-    }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name ="echo"
+            val name = "echo"
             val descriptionText = "播放通知"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
@@ -78,7 +108,7 @@ class PlayService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-    fun setListeners(view: RemoteViews) {
+    private fun setListeners(view: RemoteViews) {
         try {
             var pendingIntent = PendingIntent.getBroadcast(
                 applicationContext,
@@ -89,15 +119,7 @@ class PlayService : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
             view.setOnClickPendingIntent(R.id.player_previous, pendingIntent)
-//            pendingIntent = PendingIntent.getBroadcast(
-//                applicationContext,
-//                0,
-//                Intent("com.echo_kt.prev").setPackage(
-//                    packageName
-//                ),
-//                PendingIntent.FLAG_UPDATE_CURRENT
-//            )
-//            view.setOnClickPendingIntent(R.id.player_close, pendingIntent)
+            //暂停和播放共用一个事件
             pendingIntent = PendingIntent.getBroadcast(
                 applicationContext,
                 0,
@@ -116,6 +138,15 @@ class PlayService : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
             view.setOnClickPendingIntent(R.id.player_next, pendingIntent)
+            pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                0,
+                Intent("com.echo_kt.close").setPackage(
+                    packageName
+                ),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            view.setOnClickPendingIntent(R.id.player_close, pendingIntent)
         } catch (e: Exception) {
             e.printStackTrace()
         }

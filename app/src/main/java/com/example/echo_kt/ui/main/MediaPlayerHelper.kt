@@ -101,7 +101,7 @@ class MediaPlayerHelper : IPlayer,
      * 播放完成
      */
     override fun onCompletion(mp: MediaPlayer?) {
-        Log.i("MPH", "onCompletion: 播放完成")
+        Log.i("MediaPlayHelper", "onCompletion: 播放完成")
         iPlayStatus?.onComplete()
     }
 

@@ -75,9 +75,12 @@ class HistorySongFragment : Fragment() {
                 AppDataBase.getInstance().historyAudioDao()
                     .deleteAudio(HistoryAudioBean.audio2History(songList[position]))
                 withContext(Dispatchers.Main){
-                    viewModel.listSongData!!.removeAt(position)
-                    binding.rvLocalSong.adapter!!.notifyDataSetChanged()
-                    Toast.makeText(binding.root.context, "删除成功", Toast.LENGTH_SHORT).show()
+                    val s =PlayList.instance.setHistoryList(songList[position])
+                    if (s){
+                        viewModel.listSongData!!.removeAt(position)
+                        binding.rvLocalSong.adapter!!.notifyDataSetChanged()
+                        Toast.makeText(binding.root.context, "删除成功", Toast.LENGTH_SHORT).show()
+                    } else Toast.makeText(binding.root.context, "删除失败，有bug", Toast.LENGTH_SHORT).show()
                 }
             }
         }

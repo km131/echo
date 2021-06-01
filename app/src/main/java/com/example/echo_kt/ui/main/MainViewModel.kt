@@ -1,5 +1,6 @@
 package com.example.echo_kt.ui.main
 
+import android.content.res.Resources
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +37,7 @@ class MainViewModel : ViewModel() {
      * 图片播放模式
      */
     val playModePic = ObservableField<Int>().apply {
-        set(R.mipmap.play_order)
+        set(R.mipmap.order)
     }
 
     /**

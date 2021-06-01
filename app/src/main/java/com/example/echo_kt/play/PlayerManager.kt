@@ -1,14 +1,17 @@
 package com.example.echo_kt.play
 
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.PlayService
 import com.example.echo_kt.api.showToast
 import com.example.echo_kt.data.AudioBean
-import com.example.echo_kt.ui.main.*
+import com.example.echo_kt.ui.main.AudioObserver
+import com.example.echo_kt.ui.main.IPlayer
+import com.example.echo_kt.ui.main.IPlayerStatus
+import com.example.echo_kt.ui.main.MediaPlayerHelper
 import com.example.echo_kt.ui.setting.SettingViewModel
-import com.youth.banner.util.LogUtils.TAG
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -51,7 +54,6 @@ class PlayerManager private constructor() :
          */
         const val PAUSE = 400
     }
-    //private val TAG = "PlayerManager"
 
     /**
      * 音乐观察者集合
@@ -85,8 +87,6 @@ class PlayerManager private constructor() :
         playList = PlayList.instance
         playerHelper.setPlayStatus(this)
         startTimer()
-        val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
-        BaseApplication.getContext().startService(intent)
     }
 
     /**
@@ -94,8 +94,6 @@ class PlayerManager private constructor() :
      * 1.播放器还未被初始化,列表为空，点击无用
      * 2.暂停状态: 切换为播放状态,与resume()对应
      * 3.播放状态: 切换为暂停状态,与pause()对应
-     *
-     * 此方法意图是将所有播放逻辑全部控制在内部,视图层不做任何逻辑处理,只专注于事件监听与ui渲染
      */
     fun controlPlay() {
         //对应场景1
@@ -112,6 +110,9 @@ class PlayerManager private constructor() :
                 resume()
             }
         }
+    }
+    fun getPlayState():Int{
+       return playStatus
     }
 
     /**
@@ -152,6 +153,10 @@ class PlayerManager private constructor() :
                 sendPlayStatusToObserver()
             } ?: showToast("播放地址为空")
         }
+        val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            BaseApplication.getContext().startForegroundService(intent)
+        } else BaseApplication.getContext().startService(intent)
     }
 
     /**
@@ -161,6 +166,8 @@ class PlayerManager private constructor() :
         playStatus = RESUME
         playerHelper.resume()
         sendPlayStatusToObserver()
+        val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
+        BaseApplication.getContext().startService(intent)
     }
 
     /**
@@ -170,6 +177,8 @@ class PlayerManager private constructor() :
         playStatus = PAUSE
         playerHelper.pause()
         sendPlayStatusToObserver()
+        val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
+        BaseApplication.getContext().startService(intent)
     }
 
     /**
@@ -315,14 +324,14 @@ class PlayerManager private constructor() :
         disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                try {
+               // try {
                     //仅在播放状态下通知观察者
                     if (playerHelper.isPlaying()) {
                         sendProgressToObserver(playerHelper.getProgress())
                     }
-                }catch (e:IllegalStateException){
-                    showToast("出错了，请重进应用")
-                }
+//                }catch (e:IllegalStateException){
+//                    showToast("出错了，请重进应用")
+//                }
             }
     }
 

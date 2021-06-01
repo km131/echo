@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.echo_kt">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,7 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 向SD卡写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--  后台刷新服务和通知栏要用  -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!--    android:requestLegacyExternalStorage="true" 取消android10沙盒模式用于读取音频数据-->
+    <!--    android:exported="false" 禁止其他应用访问应用的内容提供程序-->
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
@@ -17,8 +21,8 @@
         android:label="echo"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
+        android:exported="false"
         android:theme="@style/Theme.Sunflower">
-<!--        <service android:name=".PlayService"/>-->
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -27,15 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <receiver android:name=".ui.notification.MyBroadcastReceiver" >-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.echo_kt.prev"/>-->
-<!--                <action android:name="com.echo_kt.pause"/>-->
-<!--                <action android:name="com.echo_kt.next"/>-->
-<!--                <action android:name="com.echo_kt.play"/>-->
-<!--                <action android:name="com.echo_kt.close"/>-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+
+        <service android:name=".PlayService"/>
+
+        <receiver android:name=".ui.notification.MyBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.echo_kt.prev"/>
+                <action android:name="com.echo_kt.pause"/>
+                <action android:name="com.echo_kt.next"/>
+                <action android:name="com.echo_kt.close"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

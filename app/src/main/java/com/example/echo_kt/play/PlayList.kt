@@ -54,6 +54,9 @@ class PlayList private constructor() {
     fun getHistoryList():List<AudioBean>{
         return historyList
     }
+    fun setHistoryList(bean:AudioBean):Boolean{
+        return _historyList.remove(bean)
+    }
 
     /**
      * 播放模式，默认为顺序播放

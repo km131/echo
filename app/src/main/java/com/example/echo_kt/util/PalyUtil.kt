@@ -13,7 +13,7 @@ fun initAudioData(context: Context): MutableList<AudioBean>? {
         Log.i("", "initAudioData: 播放列表长度为0")
         PlayerManager.instance.getPlayList()
     } else {
-        Log.i("", "initAudioData: 播放列表长度为0${PlayerManager.instance.getPlayList().size}")
+        Log.i("", "initAudioData: 播放列表长度为${PlayerManager.instance.getPlayList().size}")
         PlayerManager.instance.getPlayList()
     }
 }

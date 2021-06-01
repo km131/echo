@@ -86,15 +86,15 @@ class AudioListDialogFragment : BottomSheetDialogFragment(), AudioObserver {
     override fun onPlayMode(playMode: Int) {
         when (playMode) {
             PlayList.PlayMode.ORDER_PLAY_MODE -> {
-                viewModel.playModePic.set(R.mipmap.play_order)
+                viewModel.playModePic.set(R.mipmap.order)
                 viewModel.playModeText.set("顺序播放")
             }
             PlayList.PlayMode.RANDOM_PLAY_MODE ->{
-                viewModel.playModePic.set(R.mipmap.play_random)
+                viewModel.playModePic.set(R.mipmap.random)
                 viewModel.playModeText.set("随机播放")
             }
             PlayList.PlayMode.SINGLE_PLAY_MODE ->{
-                viewModel.playModePic.set(R.mipmap.play_single)
+                viewModel.playModePic.set(R.mipmap.single)
                 viewModel.playModeText.set("单曲循环")
             }
         }
