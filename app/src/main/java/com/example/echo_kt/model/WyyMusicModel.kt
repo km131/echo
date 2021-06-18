@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.echo_kt.api.wyymusic.WyyMusicServer
 import com.example.echo_kt.api.wyymusic.WyyPathBean
 import com.example.echo_kt.api.wyymusic.WyySearchListBean
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.data.WyyParameter
 import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
@@ -31,9 +31,9 @@ class WyyMusicModel {
         }
     }
 
-    suspend fun getSongPath(keyword: String): WyyPathBean? {
+    suspend fun getSongPath(musicId: String): WyyPathBean? {
         val key =
-            "{\"ids\":\"[$keyword]\",\"level\":\"standard\",\"encodeType\":\"aac\",\"csrf_token\":\"\"}"
+            "{\"ids\":\"[$musicId]\",\"level\":\"standard\",\"encodeType\":\"aac\",\"csrf_token\":\"\"}"
         val params = getBody(key)
         return try {
             wyyMusicServer.searchPath(params.params, params.encSecKey)
@@ -42,14 +42,18 @@ class WyyMusicModel {
         }
     }
 
-    fun convertAudioBean(pathBean:WyyPathBean.Data,listBean:WyySearchListBean.Result.Song):AudioBean{
-        return AudioBean().apply {
-            name = listBean.name
-            singer = listBean.author[0].name
-            albumIdUrl = listBean.album.picUrl
-            path = pathBean.url
-            id = "WyyMusic/${pathBean.id}"
-            pathType = true
+    fun convertSongBean(pathBean:WyyPathBean.Data, listBean:WyySearchListBean.Result.Song):SongBean{
+        return SongBean(
+            songName = listBean.name,
+            author = listBean.author[0].name,
+            albumUrl = listBean.album.picUrl,
+            audioUrl = pathBean.url,
+            id = "WyyMusic/${listBean.id}",
+            source = "wyy"
+        ).apply {
+            val parameterMap = HashMap<String,String>()
+            parameterMap["musicId"]=listBean.id
+            requestParameter = parameterMap
         }
     }
 

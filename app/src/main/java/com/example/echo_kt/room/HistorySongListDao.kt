@@ -1,10 +1,10 @@
-package com.example.echo_kt.data
+package com.example.echo_kt.room
 
 import androidx.room.*
 import com.example.echo_kt.ui.main.HistoryAudioBean
 
 @Dao
-interface HistoryAudioBeanDao {
+interface HistorySongListDao {
     /**
      * 增加一条音频
      */
@@ -41,22 +41,16 @@ interface HistoryAudioBeanDao {
     @Update
     fun updateAudios(audioBean: MutableList<HistoryAudioBean>)
 
-
     /**
      * 查询一个
      */
-    @Query("SELECT * FROM history_audio WHERE id=:id")
+    @Query("SELECT * FROM history_audio WHERE songId=:id")
     fun findAudioById(id: String): HistoryAudioBean?
 
     /**
-     * 查询多个
+     * 查询该歌单的所有歌曲
      */
-    @Query("SELECT * FROM history_audio WHERE pathType=:pathType")
-    fun findAudioByPathType(pathType: Boolean): MutableList<HistoryAudioBean>?
-
-    /**
-     * 返回所有的数据,结果为LiveData
-     */
+    @Transaction
     @Query("SELECT * FROM history_audio")
-    fun getAllAudios(): MutableList<HistoryAudioBean>?
+    fun getAllSongs(): List<HistoryListAndSongs>?
 }

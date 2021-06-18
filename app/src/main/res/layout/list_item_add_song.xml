@@ -6,7 +6,7 @@
     <data>
         <variable
             name="bean"
-            type="com.example.echo_kt.data.AudioBean" />
+            type="com.example.echo_kt.data.SongBean" />
         <variable
             name="onClick"
             type="android.view.View.OnClickListener" />
@@ -33,7 +33,7 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{bean.name}"
+            android:text="@{bean.songName}"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/checkBox"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{bean.singer}"
+            android:text="@{bean.author}"
             app:layout_constraintEnd_toEndOf="@+id/textView12"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView12"

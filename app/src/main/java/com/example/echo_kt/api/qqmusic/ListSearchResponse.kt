@@ -16,14 +16,10 @@ data class PageList (
     @field:SerializedName("list") val data: List<AudioList>
 )
 data class AudioList (
-    @field:SerializedName("songmid") val mediaMid: String,
+    @field:SerializedName("songmid") val songmid: String,
     @field:SerializedName("songname") val songName: String,
     @field:SerializedName("singer") val singer: List<Singer>,
     @field:SerializedName("albummid") val album: String
-)
-data class Album(
-    @field:SerializedName("mid") val mid: String,
-    @field:SerializedName("name") val name: String
 )
 data class Singer(
     @field:SerializedName("id") val id :String,

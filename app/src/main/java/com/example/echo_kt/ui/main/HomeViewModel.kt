@@ -17,7 +17,7 @@ class HomeViewModel : ViewModel() {
     }
 
     /**
-     * 选中的歌曲索引
+     * 选中的歌单索引
      */
     var songlistIndex:Int = 0
 

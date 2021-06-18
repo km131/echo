@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.echo_kt.api.showToast
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.AudioListDialogBinding
 import com.example.echo_kt.databinding.AudioListDialogItemBinding
-import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.AudioObserver
 import com.example.echo_kt.ui.main.MainViewModel
-import com.example.echo_kt.util.initAudioData
 
 const val ARG_ITEM_COUNT = "item_count"
 
@@ -32,7 +31,7 @@ class AudioListDialogFragment : BottomSheetDialogFragment(), AudioObserver {
     ): View? {
         this.context?.let { PlayerManager.instance.register(this) }
         _binding = AudioListDialogBinding.inflate(inflater, container, false)
-        binding.bottomList.adapter = initAudioData(this.requireContext())?.let {
+        binding.bottomList.adapter = PlayerManager.instance.getPlayList().let {
             ItemAdapter(it).apply {
                 setOnItemClickListener(object :ItemAdapter.OnItemClickListener{
                     override fun onItemClickPlay(view: View, position: Int) {
@@ -63,7 +62,7 @@ class AudioListDialogFragment : BottomSheetDialogFragment(), AudioObserver {
         return binding.root
     }
 
-    override fun onAudioBean(audioBean: AudioBean) {
+    override fun onAudioBean(audioBean: SongBean) {
         if (_binding != null)
             binding.bottomList.adapter?.notifyDataSetChanged()
     }
@@ -104,7 +103,7 @@ class AudioListDialogFragment : BottomSheetDialogFragment(), AudioObserver {
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        fun bind(item: AudioBean) {
+        fun bind(item: SongBean) {
             binding.apply {
                 binding.pvm = item
                 executePendingBindings()
@@ -116,7 +115,7 @@ class AudioListDialogFragment : BottomSheetDialogFragment(), AudioObserver {
     }
 
 }
-class ItemAdapter internal constructor(private var mList: MutableList<AudioBean>) :
+class ItemAdapter internal constructor(private var mList: MutableList<SongBean>) :
     RecyclerView.Adapter<AudioListDialogFragment.ViewHolder>() {
 
     private lateinit var onItemClickListener: OnItemClickListener

@@ -1,7 +1,6 @@
 package com.example.echo_kt.ui.main.songListFragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,12 @@ import androidx.core.util.forEach
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.echo_kt.adapter.MultipleChoiceListAdapter
-import com.example.echo_kt.data.AudioBean
-import com.example.echo_kt.data.SongListBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.FragmentAddSongsBinding
 import com.example.echo_kt.play.PlayList
-import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
+import com.example.echo_kt.room.PlaylistSongCrossRef
 import com.example.echo_kt.ui.main.HomeViewModel
-import com.example.echo_kt.util.readCustomPlayList
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -30,7 +27,7 @@ class AddSongsFragment : Fragment() {
     private val args: AddSongsFragmentArgs by navArgs()
     private val viewModel: HomeViewModel by activityViewModels()
     private val binding get() = _binding!!
-    private var audioList : MutableList<AudioBean> = mutableListOf()
+    private var audioList : MutableList<SongBean> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,20 +53,16 @@ class AddSongsFragment : Fragment() {
         binding.apply {
             setAddSongs {
                 GlobalScope.launch {
-                    val songList:MutableList<AudioBean> = mutableListOf()
-                    val list = (rvSongs.adapter as MultipleChoiceListAdapter).mSelectedPositions
-                    list.forEach { i: Int, b: Boolean ->
+                    val isCheckedList = (rvSongs.adapter as MultipleChoiceListAdapter).mSelectedPositions
+                    val playList = viewModel.songList.value!![viewModel.songlistIndex]
+                    val playlistWithSongs= mutableListOf<PlaylistSongCrossRef>()
+                    isCheckedList.forEach { i: Int, b: Boolean ->
                         if (b){
-                            songList.add(audioList[i])
+                            playlistWithSongs.add(PlaylistSongCrossRef(playlistId = playList.playlistId,id = audioList[i].id))
                         }
                     }
-                    val songListBean:SongListBean = viewModel.songList.value!![viewModel.songlistIndex]
-                    if (songListBean.list==null){
-                        songListBean.list=songList
-                    }else{
-                        songListBean.list!!.addAll(songList)
-                    }
-                    AppDataBase.getInstance().customSongListDao().updateSongList(songListBean)
+                    AppDataBase.getInstance().customSongListDao().insertPlaylistsWithSongs(playlistWithSongs)
+                    AppDataBase.getInstance().customSongListDao().updateSongList(playList.apply { number+=playlistWithSongs.size })
                 }
             }
         }

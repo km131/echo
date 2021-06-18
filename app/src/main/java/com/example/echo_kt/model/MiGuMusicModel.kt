@@ -5,12 +5,12 @@ import com.example.echo_kt.api.migu.MiguMusicParameter
 import com.example.echo_kt.api.migu.MiguMusicServer
 import com.example.echo_kt.api.migu.MiguSearchListBean
 import com.example.echo_kt.api.migu.MiguSearchMusicBean
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 
 class MiGuMusicModel {
     suspend fun getSearchList(keyWord: String):MiguSearchListBean?{
         val feature = "1011000000"
-        val pageSize = "20"
+        val pageSize = "30"
         val searchSwitch =
             "{\"song\":1,\"album\":0,\"singer\":0,\"tagSong\":1,\"mvSong\":0,\"bestShow\":1,\"songlist\":0,\"lyricSong\":0}"
         val r = MiguMusicParameter().getSearchListHeaders(keyWord)
@@ -40,14 +40,14 @@ class MiGuMusicModel {
             null
         }
     }
-    fun convertAudioBean(bean: MiguSearchMusicBean): AudioBean {
-        return AudioBean().apply {
-            name = bean.data.songItem.songName
-            singer = bean.data.songItem.singer
-            albumIdUrl = bean.data.songItem.albumImgs[1].img
-            path = bean.data.url
-            id = "miguMusic/${bean.data.songItem.songId}"
-            pathType = true
-        }
+    fun convertSongBean(bean: MiguSearchMusicBean): SongBean {
+        return SongBean(
+            songName = bean.data.songItem.songName,
+            author = bean.data.songItem.singer,
+            albumUrl = bean.data.songItem.albumImgs[1].img,
+            audioUrl = bean.data.url,
+            id = "miguMusic/${bean.data.songItem.songId}",
+            source = "migu"
+        )
     }
 }

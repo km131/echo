@@ -1,6 +1,5 @@
-package com.example.echo_kt.api
+package com.example.echo_kt.api.kugou
 
-import com.example.echo_kt.data.CustomSearchBean
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,17 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 interface KuGouServer {
-
-    //新接口，绝对可用
-    //https://wwwapi.kugou.com/yy/index.php?
-    // r=play/getdata
-    // &hash=961157033a37141d3a8fe2252878839a
-    // &dfid=1sPRQZ2yVlKu3ZPfvR2YQ7a0
-    // &mid=ecee1d740874d2126b4409d392d2f276
-    // &platid=4
-    // &album_id=40345263
-    // &_=1616722266418
-
     @GET("/v1/kugou/song")
     suspend fun searchMusic(
         @Query("aid")
@@ -41,7 +29,7 @@ interface KuGouServer {
         paceSize: Int,
         @Query("showtype")
         showtype: Int
-    ): CustomSearchBean
+    ): KuGouSearchBean
 
     /**
      * 用 suspend 修饰会导致报错，具体原因未知

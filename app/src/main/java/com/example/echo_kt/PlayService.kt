@@ -15,7 +15,7 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.NotificationTarget
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.play.PlayerManager
 
 /**
@@ -32,7 +32,7 @@ class PlayService : Service() {
         return START_NOT_STICKY
     }
 
-    private fun createNotification(results: AudioBean?,mode:Int) {
+    private fun createNotification(results: SongBean?,mode:Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
@@ -63,7 +63,7 @@ class PlayService : Service() {
             //加载通知栏专辑图片
             Glide.with(BaseApplication.getContext().applicationContext)
                 .asBitmap()
-                .load(results.albumIdUrl)
+                .load(results.albumUrl)
                 .apply(
                     RequestOptions.bitmapTransform(
                         MultiTransformation(
@@ -80,8 +80,8 @@ class PlayService : Service() {
                         1024
                     )
                 )
-            noti.contentView.setTextViewText(R.id.player_song_name, results.name)
-            noti.contentView.setTextViewText(R.id.player_author_name, results.singer)
+            noti.contentView.setTextViewText(R.id.player_song_name, results.songName)
+            noti.contentView.setTextViewText(R.id.player_author_name, results.author)
         } ?: noti.contentView.setImageViewResource(R.id.player_album_art, R.mipmap.album)
         with(NotificationManagerCompat.from(this)) {
             notify(1024, noti)

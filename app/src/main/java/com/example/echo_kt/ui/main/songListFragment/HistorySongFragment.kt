@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.SongListItemAdapter
 import com.example.echo_kt.adapter.SongViewModel
-import com.example.echo_kt.data.AudioBean
-import com.example.echo_kt.data.SongListBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.FragmentHistorySongBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
@@ -64,16 +62,16 @@ class HistorySongFragment : Fragment() {
             binding.isNull = true
         }
     }
-    private fun showDeleteDialog(position: Int,songList: MutableList<AudioBean>?) {
-        val normalDialog: AlertDialog.Builder = AlertDialog.Builder(binding.root.context)
+    private fun showDeleteDialog(position: Int,songList: MutableList<SongBean>?) {
+        val normalDialog: AlertDialog.Builder = AlertDialog.Builder(context)
         normalDialog.setTitle("确定删除该歌曲？")
-        normalDialog.setMessage(songList!![position].name!!)
+        normalDialog.setMessage(songList!![position].songName)
         normalDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
             GlobalScope.launch {
                 AppDataBase.getInstance().historyAudioDao()
-                    .deleteAudio(HistoryAudioBean.audio2History(songList[position]))
+                    .deleteAudio(HistoryAudioBean(songList[position].id))
                 withContext(Dispatchers.Main){
                     val s =PlayList.instance.setHistoryList(songList[position])
                     if (s){
@@ -99,18 +97,12 @@ class HistorySongFragment : Fragment() {
     }
 
     fun onClick() {
-
+        //播放全部
         binding.setOnClickPlayAll {
-            /**
-             * TODO：待完善（非空检查）
-             */
             viewModel.listSongData?.let { it1 ->
                 PlayList.instance.switchAudioList(it1)
             }
             PlayerManager.instance.startAll()
-        }
-        binding.setOnClickUpdate {
-            PlayList.instance.updatePath()
         }
     }
 }

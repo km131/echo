@@ -7,12 +7,21 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.core.view.isGone
 import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.api.kugou.KuGouServer
+import com.example.echo_kt.api.showToast
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.room.AppDataBase
-import com.example.echo_kt.data.AudioBean
-import com.example.echo_kt.ui.main.HistoryAudioBean
+import com.example.echo_kt.data.SongBean
+import com.example.echo_kt.model.QQMusicModel
+import com.example.echo_kt.model.WyyMusicModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.IOException
@@ -22,33 +31,26 @@ import java.io.OutputStream
 /**
  * 读取本地音频列表
  */
-fun readLocalPlayList(context: Context): MutableList<AudioBean> {
-    val audioList = mutableListOf<AudioBean>()
+fun readLocalPlayList(context: Context): MutableList<SongBean> {
+    val audioList = mutableListOf<SongBean>()
     val cursor: Cursor? = context.contentResolver.query(
         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-        null,null,null,
+        null, null, null,
         MediaStore.Audio.Media.DEFAULT_SORT_ORDER
     )
     if (cursor != null) {
         while (cursor.moveToNext()) {
-            val audioBean = AudioBean()
-            audioBean.name =
-                cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE))
-            audioBean.id ="local/"+ cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID))
-            audioBean.singer =
-                cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-            audioBean.path =
-                cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
-            audioBean.duration =
-                cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-            audioBean.size =
-                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
-            audioBean.albumIdUrl =
-                cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()
-            if (audioBean.duration > 60000) {
+            if (cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) > 60000) {
+                val audioBean = SongBean(
+                    songName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                    id = "local/" + cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
+                    author = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                    audioUrl = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
+                    albumUrl = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
+                    source = "local"
+                )
                 audioList.add(audioBean)
             }
-            Log.i("TAG", "readLocalPlayList: ${audioBean.path}")
         }
         cursor.close()
     }
@@ -58,31 +60,48 @@ fun readLocalPlayList(context: Context): MutableList<AudioBean> {
 /**
  * 读取历史列表
  */
-fun readHistoryPlayList(): MutableList<AudioBean> {
-    AppDataBase.getInstance().historyAudioDao().getAllAudios()?.let {
-        return HistoryAudioBean.historyList2AudioList(it)
-    }?: return mutableListOf()
+fun readHistoryPlayList(): MutableList<SongBean> {
+    val list = mutableListOf<SongBean>()
+    val s = AppDataBase.getInstance().historyAudioDao().getAllSongs()
+        if (!s.isNullOrEmpty()) {
+            for (element in s)
+                list.add(element.playlists)
+        }
+        return list
 }
+/**
+ * 读取收藏列表
+ */
+fun readLikePlayList(): MutableList<SongBean> {
+    val list = mutableListOf<SongBean>()
+    val s = AppDataBase.getInstance().songDao().findSongByIsLike(true)
+    if (!s.isNullOrEmpty()) {
+        for (element in s)
+            list.add(element)
+    }
+    return list
+}
+
 /**
  * 读取所有自定义列表
  */
 fun readCustomPlayList(): MutableList<SongListBean> {
     AppDataBase.getInstance().customSongListDao().getAllAudioLists()?.let {
         return it
-    }?: return mutableListOf()
+    } ?: return mutableListOf()
 }
 
 /**
  * 写入音频文件
  */
-fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String) :Boolean {
+fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
     try {
-        val uri=getAudioUrl("$fileName.mp3")
+        val uri = getAudioUrl("$fileName.mp3")
         Log.i("文件路径", "writeResponseBodyToDisk: $uri")
         //初始化输入流
-        var inputStream : InputStream? = null
+        var inputStream: InputStream? = null
         //初始化输出流
-        var outputStream : OutputStream? = null
+        var outputStream: OutputStream? = null
 
         try {
             //设置每次读写的字节
@@ -92,7 +111,7 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String) :Boolean {
             //请求返回的字节流
             inputStream = body!!.byteStream()
             //创建输出流
-            outputStream =  BaseApplication.getContext().contentResolver.openOutputStream(uri!!)
+            outputStream = BaseApplication.getContext().contentResolver.openOutputStream(uri!!)
             //进行读取操作
             while (true) {
                 val read = inputStream.read(fileReader)
@@ -108,17 +127,19 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String) :Boolean {
             //刷新
             outputStream!!.flush();
             return true
-        } catch ( e: IOException) {
+        } catch (e: IOException) {
             return false
         } finally {
             inputStream?.close()
             outputStream?.close()
         }
-    } catch ( e: IOException) {
-        Toast.makeText(BaseApplication.getContext(),"此功能暂未适配android10以下机型", Toast.LENGTH_SHORT).show()
+    } catch (e: IOException) {
+        Toast.makeText(BaseApplication.getContext(), "此功能暂未适配android10以下机型", Toast.LENGTH_SHORT)
+            .show()
         return true
     }
 }
+
 /**
  * 获取公共存储空间
  */
@@ -129,6 +150,7 @@ private fun getAudioUrl(fileName: String): Uri? {
     return BaseApplication.getContext().contentResolver
         .insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, contentValues)
 }
+
 /**
  * 获取存储路径(包名下的file文件夹)
  */
@@ -147,6 +169,55 @@ private fun getPublicDiskFileDir(context: Context, fileName: String): String {
         file.mkdirs()
     }
     return file.absolutePath
+}
+fun updateUrl(vararg views:View?){
+    GlobalScope.launch {
+        AppDataBase.getInstance()
+            .songDao()
+            //查询列表中所有网络音频
+            .findSongBySource("kugou")
+            ?.apply {
+                AppDataBase.getInstance()
+                    .songDao()
+                    .updateSongs(this.onEach {
+                        val map = it.requestParameter!!
+                        it.audioUrl = KuGouServer.create2()
+                            .searchMusic(map["id"]!!, map["hash"]!!).data.play_url
+                    })
+            }
+        AppDataBase.getInstance()
+            .songDao()
+            //查询列表中所有网络音频
+            .findSongBySource("wyy")
+            ?.apply {
+                AppDataBase.getInstance()
+                    .songDao()
+                    .updateSongs(this.onEach {
+                        val map = it.requestParameter!!
+                        it.audioUrl = WyyMusicModel().getSongPath(map["musicId"]!!)!!.data[0].url
+                    })
+            }
+        AppDataBase.getInstance()
+            .songDao()
+            //查询列表中所有网络音频
+            .findSongBySource("qq")
+            ?.apply {
+                AppDataBase.getInstance()
+                    .songDao()
+                    .updateSongs(this.onEach {
+                        val map = it.requestParameter!!
+                        it.audioUrl = QQMusicModel().getPath(map["mid"]!!)
+                    })
+            }
+        if (!views.isNullOrEmpty()){
+            withContext(Dispatchers.Main){
+                showToast("更新完成")
+                views[0]!!.isGone = true
+                views[1]!!.isGone = false
+            }
+        }
+    }
+
 }
 
 

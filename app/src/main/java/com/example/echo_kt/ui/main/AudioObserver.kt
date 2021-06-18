@@ -1,13 +1,13 @@
 package com.example.echo_kt.ui.main
 
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 
 interface AudioObserver {
     /**
      * 歌曲信息
      * 空实现,部分界面可不用实现
      */
-    fun onAudioBean(audioBean: AudioBean){}
+    fun onAudioBean(audioBean: SongBean){}
 
     /**
      * 播放状态,目前有四种。可根据类型进行扩展

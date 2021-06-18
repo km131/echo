@@ -1,11 +1,10 @@
 package com.example.echo_kt.play
 
-import android.util.Log
 import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.api.KuGouServer
 import com.example.echo_kt.room.AppDataBase
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.ui.main.HistoryAudioBean
+import com.example.echo_kt.util.getDate
 import com.example.echo_kt.util.readHistoryPlayList
 import com.example.echo_kt.util.readLocalPlayList
 import kotlinx.coroutines.Dispatchers
@@ -31,30 +30,30 @@ class PlayList private constructor() {
     /**
      * 当前播放列表
      */
-    private var currentAudioList = mutableListOf<AudioBean>()
+    private var currentAudioList = mutableListOf<SongBean>()
 
     /**
      * 本地播放列表,本地资源
      */
-    private var _localList = mutableListOf<AudioBean>()
+    private var _localList = mutableListOf<SongBean>()
 
     /**
      * 只读，下同
      */
-    private var localList: MutableList<AudioBean> = _localList
+    private var localList: MutableList<SongBean> = _localList
 
-    fun getLocalList():MutableList<AudioBean>{
+    fun getLocalList():MutableList<SongBean>{
         return localList
     }
     /**
      * 默认播放列表,历史
      */
-    private var _historyList = mutableListOf<AudioBean>()
-    private var historyList: List<AudioBean> = _historyList
-    fun getHistoryList():List<AudioBean>{
+    private var _historyList = mutableListOf<SongBean>()
+    private var historyList: List<SongBean> = _historyList
+    fun getHistoryList():List<SongBean>{
         return historyList
     }
-    fun setHistoryList(bean:AudioBean):Boolean{
+    fun setHistoryList(bean:SongBean):Boolean{
         return _historyList.remove(bean)
     }
 
@@ -69,7 +68,10 @@ class PlayList private constructor() {
         GlobalScope.launch(Dispatchers.IO) {
             _localList = readLocalPlayList(BaseApplication.getContext())
             localList = _localList
-            _historyList = readHistoryPlayList()
+            val s = readHistoryPlayList()
+            _historyList = if (s.isNullOrEmpty()){
+                mutableListOf()
+            }else s
             historyList = _historyList
         }
         initPlayList()
@@ -86,7 +88,7 @@ class PlayList private constructor() {
     /**
      * 当前正在播放的音频 默认为null
      */
-    private var currentAudio: AudioBean? = null
+    private var currentAudio: SongBean? = null
 
     /**
      * 当前播放音频对象在对应播放列表的索引
@@ -96,14 +98,14 @@ class PlayList private constructor() {
     /**
      * 当前正在播放的音频
      */
-    fun currentAudio(): AudioBean? {
+    fun currentAudio(): SongBean? {
         return currentAudio
     }
 
     /**
      * 设置当前播放列表和currentIndex
      */
-    fun setCurrentAudio(audioBean: AudioBean) {
+    fun setCurrentAudio(audioBean: SongBean) {
         addRecord(audioBean)
         initPlayList()
         //重置当前角标
@@ -113,7 +115,7 @@ class PlayList private constructor() {
     /**
      * 第一次进入播放的音频，默认为播放列表的第一个
      */
-    fun startAudio(): AudioBean? {
+    fun startAudio(): SongBean? {
         currentAudio = currentAudioList[0]
         return currentAudio
     }
@@ -121,7 +123,7 @@ class PlayList private constructor() {
     /**
      * 替换播放列表
      */
-    fun switchAudioList(list:MutableList<AudioBean>){
+    fun switchAudioList(list:MutableList<SongBean>){
         currentAudioList.apply {
             clear()
             addAll(list)
@@ -131,7 +133,7 @@ class PlayList private constructor() {
     /**
      * 下一个音频
      */
-    fun nextAudio(): AudioBean? {
+    fun nextAudio(): SongBean? {
         if (currentAudioList.size>0) {
             when (playMode) {
                 //顺序播放
@@ -147,7 +149,7 @@ class PlayList private constructor() {
                 }
                 //随机播放
                 PlayMode.RANDOM_PLAY_MODE -> {
-                    currentIndex = getRandom(0, currentAudioList.size - 1)
+                    currentIndex = getRandom(currentAudioList.size - 1)
                 }
             }
             currentAudio = currentAudioList[currentIndex]
@@ -161,7 +163,7 @@ class PlayList private constructor() {
     /**
      * 上一个音频
      */
-    fun previousAudio(): AudioBean? {
+    fun previousAudio(): SongBean? {
         if (currentAudioList.size>0) {
             when (playMode) {
                 //顺序
@@ -177,7 +179,7 @@ class PlayList private constructor() {
                 }
                 //随机
                 PlayMode.RANDOM_PLAY_MODE -> {
-                    currentIndex = getRandom(0, currentAudioList.size - 1)
+                    currentIndex = getRandom(currentAudioList.size - 1)
                 }
             }
             currentAudio = currentAudioList[currentIndex]
@@ -229,7 +231,7 @@ class PlayList private constructor() {
     /**
      * 通过currentAudio获取所在的index
      */
-    private fun getIndexByAudio(audioBean: AudioBean): Int {
+    private fun getIndexByAudio(audioBean: SongBean): Int {
         //设置当前正在播放的对象
         currentAudio = audioBean
         for (index in 0 until currentAudioList.size) {
@@ -254,7 +256,7 @@ class PlayList private constructor() {
     /**
      * 设置下一首播放歌曲
      */
-    fun setNextPlay(audioBean: AudioBean) {
+    fun setNextPlay(audioBean: SongBean) {
         if (currentAudioList.size>0){
             currentAudioList.add(currentIndex+1,audioBean)
         }
@@ -263,7 +265,7 @@ class PlayList private constructor() {
     /**
      * 获取播放列表
      */
-    fun getPlayList(): MutableList<AudioBean> {
+    fun getPlayList(): MutableList<SongBean> {
         return currentAudioList
     }
 
@@ -289,7 +291,7 @@ class PlayList private constructor() {
     /**
      * 增加历史记录
      */
-    private fun addRecord(audioBean: AudioBean) {
+    private fun addRecord(audioBean: SongBean) {
         //加入历史
         GlobalScope.launch(Dispatchers.IO) {
             //由于audioBean可能不包含主键,故通过id查询到sortId然后再删除
@@ -300,60 +302,41 @@ class PlayList private constructor() {
                     AppDataBase.getInstance()
                         .historyAudioDao()
                         .deleteAudio(this)
-                }
-            //插入数据
-            AppDataBase.getInstance()
-                .historyAudioDao()
-                .insertAudio(HistoryAudioBean.audio2History(audioBean))
-        }
+                    //插入数据
+                    AppDataBase.getInstance()
+                        .historyAudioDao()
+                        .insertAudio(this)
+                } ?: (
+                    AppDataBase.getInstance()
+                        .historyAudioDao()
+                        .insertAudio(HistoryAudioBean(audioBean.id))
+                    )
 
-        //同步内存中列表，先将原纪录移除
-        for (index in 0 until _historyList.size) {
-            if (_historyList[index].id == audioBean.id) {
-                _historyList.remove(_historyList[index])
-                break
-            }
+            AppDataBase.getInstance()
+                .songDao()
+                .findSongById(audioBean.id)
+                ?.apply {
+                    //插入数据
+                    AppDataBase.getInstance()
+                        .songDao()
+                        .updateSong(this.apply {audioUrl = audioBean.audioUrl ; date = getDate() ; playCount += 1 })
+                } ?: (
+                    AppDataBase.getInstance()
+                        .songDao()
+                        .insertSong(audioBean.apply { date = getDate() ; playCount = 1 })
+                    )
+
         }
+        if (!_historyList.isNullOrEmpty()) _historyList.remove(audioBean)
         //将新记录加入到末尾
         _historyList.add(audioBean)
     }
 
     /**
-     * 更新网络音频播放地址
-     */
-    fun updatePath() {
-        GlobalScope.launch {
-            AppDataBase.getInstance()
-                .historyAudioDao()
-                //查询列表中所有网络音频
-                .findAudioByPathType(true)
-                ?.apply {
-                    AppDataBase.getInstance()
-                        .historyAudioDao()
-                        .updateAudios(this.onEach {
-                            it.path = KuGouServer.create2()
-                                .searchMusic(it.kugouAid, it.kugouHash).data.play_url
-                        })
-                }
-            //同步内存中列表播放地址
-            for (index in 0 until _historyList.size) {
-                if (_historyList[index].pathType) {
-                    _historyList[index].path =
-                        KuGouServer.create2().searchMusic(
-                            _historyList[index].kugouAid,
-                            _historyList[index].kugouHash
-                        ).data.play_url
-                }
-                Log.i("更新后播放地址", "updatePath: ${_historyList[index].path}")
-            }
-        }
-    }
-
-    /**
      * 获取指定范围内的随机数
      */
-    private fun getRandom(start:Int,end:Int):Int{
-        return ((start+Math.random()*(end-start+1)).toInt())
+    private fun getRandom(end:Int):Int{
+        return ((Math.random()*(end+1)).toInt())
     }
 
 }

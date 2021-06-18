@@ -8,15 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.echo_kt.R
-import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.databinding.PlayFragmentBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.util.stringForTime
-import java.math.BigDecimal
 
 class PlayFragment : Fragment(),AudioObserver {
 

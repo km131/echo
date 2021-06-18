@@ -2,15 +2,11 @@ package com.example.echo_kt.ui.search.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.api.KuGouServer
-import com.example.echo_kt.api.SearchMusicDetails
+import com.example.echo_kt.api.kugou.Info
+import com.example.echo_kt.api.kugou.KuGouSearchBean
 import com.example.echo_kt.api.migu.MiguSearchListBean
-import com.example.echo_kt.api.migu.MiguSearchMusicBean
 import com.example.echo_kt.api.qqmusic.AudioList
 import com.example.echo_kt.api.qqmusic.ListSearchResponse
 import com.example.echo_kt.api.showToast
@@ -22,8 +18,6 @@ import com.example.echo_kt.model.MiGuMusicModel
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.util.dataToAudioBean
-import com.example.echo_kt.util.writeResponseBodyToDisk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,11 +36,11 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
         this.onItemClickListener = listener
     }
     interface OnItemClickListener{
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(binding: ListItemSearchBinding, position: Int)
     }
 
     val list = when(cource){
-        "KUGOU" -> mList as CustomSearchBean
+        "KUGOU" -> mList as KuGouSearchBean
         "QQMUSIC" -> mList as ListSearchResponse
         "WYYMUSIC" -> mList as WyySearchListBean
         "MIGUMUSIC" -> mList as MiguSearchListBean
@@ -64,7 +58,7 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
 
     override fun getItemCount(): Int{
         return when(cource){
-            "KUGOU" -> (mList as CustomSearchBean).data.info.size
+            "KUGOU" -> (mList as KuGouSearchBean).data.info.size
             "QQMUSIC" -> (mList as ListSearchResponse).data.songList.data.size
             "WYYMUSIC" -> (mList as WyySearchListBean).result.songs.size
             "MIGUMUSIC" -> (mList as MiguSearchListBean).songResultData.result.size
@@ -74,14 +68,15 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.getBind().btnOther.setOnClickListener {
-            onItemClickListener.onItemClick(holder.itemView, position)
+            holder.getBind().btnOther.isClickable = false
+            onItemClickListener.onItemClick(holder.getBind(), position)
         }
         return when(cource){
-            "KUGOU" -> holder.bind((mList as CustomSearchBean).data.info[position])
+            "KUGOU" -> holder.bind((mList as KuGouSearchBean).data.info[position])
             "QQMUSIC" -> holder.bind((mList as ListSearchResponse).data.songList.data[position])
             "WYYMUSIC" -> holder.bind((mList as WyySearchListBean).result.songs[position])
             "MIGUMUSIC" -> holder.bind((mList as MiguSearchListBean).songResultData.result[position])
-            else -> holder.bind((mList as CustomSearchBean).data.info[position])
+            else -> holder.bind((mList as KuGouSearchBean).data.info[position])
         }
     }
 
@@ -99,13 +94,11 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
             binding.llPlay.setOnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
                     val data = withContext(Dispatchers.IO) {
-                        KUGOUModel().getMusicBean(item)
+                        KUGOUModel().getMusicBean(item.albumId,item.hash)
                     }
                     data?.let {
-                        Log.i("data=", ":$data")
-                        val audioBean = dataToAudioBean(data, item)
+                        val audioBean = KUGOUModel().convertSongBean(item,it.img,it.play_url)
                         PlayerManager.instance.playNewAudio(audioBean)
-                        Log.i("合成", "audioBean: $audioBean")
                     } ?: showToast("网络出问题了，也可能是接口挂了")
                 }
             }
@@ -144,27 +137,30 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
                 val model = QQMusicModel()
                 binding.llPlay.setOnClickListener {
                     GlobalScope.launch(Dispatchers.Main) {
-                        val vk = model.getVKey(item.mediaMid)
+                        val vk = model.getVKey(item.songmid)
                         vk?.let {
                             val url =
                                 "https://ws.stream.qqmusic.qq.com/${vk.req.midurlinfo.reqData[0].purl}"
                             val data = model.getAudioFile(url)
                             data.enqueue(object : Callback<ResponseBody> {
                                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                    Log.e("SearchLIstAdapter:153", "onFailure: 请求失败")
+                                    Log.e("SearchLIstAdapter:147", "onFailure: 请求失败")
                                 }
 
                                 override fun onResponse(
                                     call: Call<ResponseBody>,
                                     response: Response<ResponseBody>
                                 ) {
+                                    val parameterMap = HashMap<String,String>()
+                                    parameterMap["mid"]=item.songmid
                                     PlayerManager.instance.playNewAudio(
-                                        model.convertAudioBean(
+                                        model.convertSongBean(
                                             item,
-                                            url
+                                            url,
+                                            parameterMap
                                         )
                                     )
-                                    Log.i("SearchLIstAdapter:153", "onResponse: 请求成功，")
+                                    Log.i("SearchLIstAdapter:163", "onResponse: 请求成功，")
                                 }
 
                             })
@@ -183,8 +179,8 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
                     GlobalScope.launch(Dispatchers.Main) {
                         val response = viewModel.getSongPath(item.id)
                         response?.let {
-                            val audioBean: AudioBean =
-                                viewModel.convertAudioBean(response.data[0], item)
+                            val audioBean: SongBean =
+                                viewModel.convertSongBean(response.data[0], item)
                             PlayerManager.instance.playNewAudio(audioBean)
                         } ?: showToast("网络出问题了，也可能是接口挂了")
                     }
@@ -201,8 +197,8 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
                         val toneFlag = "HQ"
                         val response = viewModel.getMusicBean(albumId = item.albumId ,songId=item.songId,toneFlag=toneFlag)
                         response?.let {
-                            val audioBean: AudioBean =
-                                viewModel.convertAudioBean(response)
+                            val audioBean: SongBean =
+                                viewModel.convertSongBean(response)
                             PlayerManager.instance.playNewAudio(audioBean)
                         } ?: showToast("网络出问题了，也可能是接口挂了")
                     }

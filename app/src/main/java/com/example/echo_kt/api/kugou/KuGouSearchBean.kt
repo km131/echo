@@ -1,7 +1,8 @@
-package com.example.echo_kt.data
+package com.example.echo_kt.api.kugou
+import com.example.echo_kt.data.SearchBean
 import com.google.gson.annotations.SerializedName
 
-data class CustomSearchBean(
+data class KuGouSearchBean(
     @SerializedName("status")
     val status: Int,
     @SerializedName("error")
@@ -10,7 +11,7 @@ data class CustomSearchBean(
     val data: Data,
     @SerializedName("errcode")
     val errorCode: Int
-):SearchBean
+): SearchBean
 data class Data(
     @SerializedName("info")
     val info: List<Info>,
@@ -59,7 +60,7 @@ data class Info(
     @SerializedName("hash")
     val hash: String,
     /**
-     * 1=原创（猜测）
+     * 1=原唱（猜测）
      */
     @SerializedName("isoriginal")
     val isOriginal: Int,
@@ -67,11 +68,6 @@ data class Info(
     val m4aFileSize: Int,
     @SerializedName("mvhash")
     val mvHash: String,
-    /**
-     * 下面两个和你想到一样，
-     * 似乎没有空值，
-     * 必用
-     */
     @SerializedName("singername")
     val singerName: String,
     @SerializedName("songname")

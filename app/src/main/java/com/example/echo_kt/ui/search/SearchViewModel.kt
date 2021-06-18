@@ -1,7 +1,6 @@
 package com.example.echo_kt.ui.search
 
 import androidx.lifecycle.ViewModel
-import com.example.echo_kt.api.KuGouServer
 import com.example.echo_kt.data.SearchBean
 import com.example.echo_kt.model.KUGOUModel
 import com.example.echo_kt.model.MiGuMusicModel

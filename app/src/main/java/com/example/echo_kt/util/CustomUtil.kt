@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.net.Uri
 import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.api.SearchMusicDetails
-import com.example.echo_kt.data.Info
-import com.example.echo_kt.data.AudioBean
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -24,24 +21,6 @@ fun stringForTime(duration: Long): String? {
 }
 fun intForLong(duration: Long):Int{
     return duration.toInt()
-}
-fun dataToAudioBean(
-    data: SearchMusicDetails.Data,
-    item: Info
-): AudioBean {
-    //用请求到的hash值来代表歌曲在数据库中的唯一id
-    return AudioBean(
-        name = data.song_name,
-        singer = item.singerName,
-        size = data.filesize.toLong(),
-        duration = if (data.is_free_part != 1) data.timelength - 1000 else 59000,
-        path = data.play_backup_url,
-        albumId = data.img,
-        songId = "kugou/${data.hash}",
-        pathType = true,
-        kugouAid = data.album_id,
-        kugouHash = data.hash
-    )
 }
 //
 fun getSongListId(name:String,date:String): String {

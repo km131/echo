@@ -6,10 +6,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.ui.main.AudioObserver
 import com.example.echo_kt.ui.main.MainFragment
 import com.example.echo_kt.ui.main.MainViewModel
+import com.example.echo_kt.util.updateUrl
 import java.util.*
 
 
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() , AudioObserver {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
     }
@@ -50,12 +52,12 @@ class MainActivity : AppCompatActivity() , AudioObserver {
         viewModel.reset()
     }
 
-    override fun onAudioBean(audioBean: AudioBean) {
-        viewModel.songName.set(audioBean.name)
-        viewModel.singer.set(audioBean.singer)
+    override fun onAudioBean(audioBean: SongBean) {
+        viewModel.songName.set(audioBean.songName)
+        viewModel.singer.set(audioBean.author)
         //viewModel.maxDuration.set(stringForTime(audioBean.duration))
         //viewModel.maxProgress.set(audioBean.duration)
-        viewModel.albumPic.set(audioBean.albumIdUrl)
+        viewModel.albumPic.set(audioBean.albumUrl)
     }
 
     private fun stringForTime(duration: Int): String? {

@@ -58,13 +58,16 @@ class HomeFragment : Fragment() {
         binding.rvHome.adapter = MyErectAdapter(initErectAdapter()).apply {
             setOnItemClickListener(object : MyErectAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
-                    val action: Int = when (position) {
-                            0 -> R.id.action_mainFragment_to_localSongFragment
-                            //1->R.id.action_mainFragment_to_localSongFragment
-                            2 -> R.id.action_mainFragment_to_historySongFragment
+                    when (position) {
+                            0 -> view.findNavController().navigate(R.id.action_mainFragment_to_localSongFragment)
+                            1 -> {
+                                val action =
+                                    MainFragmentDirections.actionMainFragmentToCustomSongListFragment(-1)
+                                findNavController().navigate(action)
+                            }
+                            2 -> view.findNavController().navigate(R.id.action_mainFragment_to_historySongFragment)
                             else -> R.id.action_mainFragment_to_localSongFragment
                         }
-                    view.findNavController().navigate(action)
                 }
 
                 override fun onItemLongClick(view: View, position: Int) {
@@ -150,7 +153,6 @@ class HomeFragment : Fragment() {
                     id = getSongListId(editText.text.toString(),date),
                     name = editText.text.toString(),
                     date = date,
-                    list = mutableListOf(),
                     coverImage = getMipmapToUri(R.mipmap.album2)
                 )
                 GlobalScope.launch {

@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.adapter.SongListAdapter
 import com.example.echo_kt.adapter.SongViewModel
 import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.databinding.AddToPlaylistDialogBinding
-import com.example.echo_kt.databinding.AudioListDialogItemBinding
-import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
+import com.example.echo_kt.room.PlaylistSongCrossRef
 import com.example.echo_kt.ui.main.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.GlobalScope
@@ -39,11 +36,11 @@ class AddToPlayListDialog: BottomSheetDialogFragment() {
         binding.rvItemList.adapter = SongListAdapter(hViewModel.songList.value!!).apply {
             setOnItemClickListener(object : SongListAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
-                    val songList = hViewModel.songList.value!![position].apply {
-                        list!!.add(sViewModel.audioBean.get()!!)
-                    }
+                    val playlistId = hViewModel.songList.value!![position].playlistId
                     GlobalScope.launch {
-                        AppDataBase.getInstance().customSongListDao().updateSongList(songList)
+                        AppDataBase.getInstance().songDao().insertSong( sViewModel.audioBean.get()!! )
+                        AppDataBase.getInstance().customSongListDao().insertPlaylistsWithSong(PlaylistSongCrossRef(id = sViewModel.audioBean.get()!!.id,playlistId = playlistId))
+                        AppDataBase.getInstance().customSongListDao().updateSongList(hViewModel.songList.value!![position].apply { number += 1 })
                     }
                     showToast("添加成功")
                     findNavController().navigateUp()

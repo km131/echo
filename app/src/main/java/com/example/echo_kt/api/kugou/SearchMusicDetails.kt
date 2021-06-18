@@ -1,4 +1,4 @@
-package com.example.echo_kt.api
+package com.example.echo_kt.api.kugou
 
 data class SearchMusicDetails(
     val `data`: Data,

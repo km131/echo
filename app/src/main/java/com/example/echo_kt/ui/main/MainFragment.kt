@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
-import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.MainFragmentBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import java.util.*
+import java.util.Formatter
 
 class MainFragment : Fragment(),AudioObserver {
 
@@ -104,20 +103,11 @@ class MainFragment : Fragment(),AudioObserver {
         viewModel.reset()
     }
 
-    override fun onAudioBean(audioBean: AudioBean) {
-        viewModel.songName.set(audioBean.name)
-        viewModel.singer.set(audioBean.singer)
-        viewModel.maxProgress.set(audioBean.duration)
-        viewModel.albumPic.set(audioBean.albumIdUrl)
-//        //在io线程中查询是否收藏
-//        lifecycleScope.launch {
-//            val bean = withContext(Dispatchers.IO) {
-//                AppDataBase.getInstance()
-//                    .XXXDao()
-//                    .findAudioById(audioBean.id)
-//            }
-//            viewModel.collect.set(bean != null)
-//        }
+    override fun onAudioBean(audioBean: SongBean) {
+        viewModel.songName.set(audioBean.songName)
+        viewModel.singer.set(audioBean.author)
+        viewModel.maxProgress.set(100000)
+        viewModel.albumPic.set(audioBean.albumUrl)
     }
 
     override fun onPlayStatus(playStatus: Int) {

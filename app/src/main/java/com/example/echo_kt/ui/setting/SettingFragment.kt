@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.SeekBar
+import androidx.core.view.isGone
 import com.example.echo_kt.databinding.SettingFragmentBinding
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.util.stringForTime
+import com.example.echo_kt.util.updateUrl
 import java.util.*
 
 class SettingFragment : Fragment() {
@@ -54,7 +56,6 @@ class SettingFragment : Fragment() {
     }
 
     private fun onClick() {
-        Log.i("lll", "onClick: 执行绑定")
         if (viewModel.countdownBean.value == null) {
             //设置定时关闭开关键，开启时打开定时任务，目前默认值为60秒
             binding.switchTimeOff.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
@@ -63,13 +64,11 @@ class SettingFragment : Fragment() {
                         SettingViewModel.CountdownBean(600000, true)
                     )
                     PlayerManager.instance.startTimer(viewModel)
-                    Log.i("lll", "onClick: 开关开")
                 } else {
                     PlayerManager.instance.cleanCountdown()
                     viewModel.countdownBean.value=(
                             SettingViewModel.CountdownBean(0, false)
                             )
-                    Log.i("lll", "onClick: 开关关")
                 }
             }
         }
@@ -88,5 +87,13 @@ class SettingFragment : Fragment() {
             }
         }
         )
+
+        binding.apply {
+            btnUpdate.setOnClickListener {
+                progressBar.isGone = false
+                updateState.isGone = true
+                updateUrl(progressBar,updateState)
+            }
+        }
     }
 }

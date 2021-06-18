@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.ListItemAddSongBinding
 
 /**
  * 多项选择列表，向歌单添加歌曲时用到
  */
-class MultipleChoiceListAdapter(private var mList: MutableList<AudioBean>) : RecyclerView.Adapter<MultipleChoiceListAdapter.ViewHolder>() {
+class MultipleChoiceListAdapter(private var mList: MutableList<SongBean>) : RecyclerView.Adapter<MultipleChoiceListAdapter.ViewHolder>() {
 
     var mSelectedPositions = SparseBooleanArray()
 
@@ -32,7 +32,7 @@ class MultipleChoiceListAdapter(private var mList: MutableList<AudioBean>) : Rec
     override fun getItemCount(): Int = mList.size
 
     inner class ViewHolder(private val binding : ListItemAddSongBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: AudioBean,i:Int) {
+        fun bind(item: SongBean,i:Int) {
             //设置数据
             binding.apply {
                 binding.bean=item

@@ -1,6 +1,5 @@
 package com.example.echo_kt.ui.main
 
-import android.content.res.Resources
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

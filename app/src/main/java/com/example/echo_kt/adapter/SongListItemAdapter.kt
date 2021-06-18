@@ -12,17 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.R
 import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.data.ErectBean
 import com.example.echo_kt.data.ShowSearchBean
-import com.example.echo_kt.databinding.AudioListDialogItemBinding
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.BottomDialogSongBinding
 import com.example.echo_kt.databinding.ListItemSearchBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.room.AppDataBase
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class SongListItemAdapter(private var mList:  MutableList<AudioBean>) : RecyclerView.Adapter<SongListItemAdapter.ViewHolder>() {
+class SongListItemAdapter(private var mList:  MutableList<SongBean>) : RecyclerView.Adapter<SongListItemAdapter.ViewHolder>() {
 
     private lateinit var onItemClickListener: OnItemClickListener
 
@@ -64,9 +66,9 @@ class SongListItemAdapter(private var mList:  MutableList<AudioBean>) : Recycler
 
     inner class ViewHolder(private val binding: ListItemSearchBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: AudioBean) {
+        fun bind(item: SongBean) {
             binding.apply {
-                bean = ShowSearchBean(item.name!!,item.singer!!)
+                bean = ShowSearchBean(item.songName,item.author)
             }
         }
         fun getBinding():ListItemSearchBinding{
@@ -89,8 +91,8 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
     }
 
     private fun initOptionList() {
-        binding.tvSongName.text = viewModel.audioBean.get()!!.name
-        binding.tvSingerName.text = viewModel.audioBean.get()!!.singer
+        binding.tvSongName.text = viewModel.audioBean.get()!!.songName
+        binding.tvSingerName.text = viewModel.audioBean.get()!!.author
         binding.rvItemList.adapter = MyErectAdapter(initErectAdapter()).apply {
             setOnItemClickListener(object : MyErectAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
@@ -109,11 +111,17 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
                         }
                         2 -> {
                             //下载
-                            showToast("暂时未写")
+                            showToast("考虑到版权问题，暂时未写")
                         }
                         3 -> {
                             //收藏
-                            showToast("暂时未写")
+                            GlobalScope.launch {
+                                AppDataBase.getInstance().songDao().updateSong(viewModel.audioBean.get()!!.apply {
+                                    isLike = true
+                                })
+                            }
+                            view.isClickable=false
+                            showToast("收藏成功")
                         }
                     }
                 }
@@ -138,5 +146,5 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
 }
 //放置当前操作的歌曲
 class SongViewModel: ViewModel(){
-    val audioBean = ObservableField<AudioBean>()
+    val audioBean = ObservableField<SongBean>()
 }

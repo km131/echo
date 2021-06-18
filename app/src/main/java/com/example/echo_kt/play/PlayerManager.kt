@@ -6,7 +6,7 @@ import android.util.Log
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.PlayService
 import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.AudioBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.ui.main.AudioObserver
 import com.example.echo_kt.ui.main.IPlayer
 import com.example.echo_kt.ui.main.IPlayerStatus
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  *  音频管理
- *  通过单例模式实现,托管音频状态与信息,并且作为唯一的可信源
+ *  通过单例模式实现,托管音频状态与信息
  *  通过观察者模式统一对状态进行分发
  *  实则是一个代理,将目标对象Player与调用者隔离,并且在内部实现了对观察者的注册与通知
  */
@@ -139,7 +139,7 @@ class PlayerManager private constructor() :
     /**
      * 播放一个新的音频
      */
-    fun playNewAudio(audioBean: AudioBean?) {
+    fun playNewAudio(audioBean: SongBean?) {
         if (audioBean == null) {
             //重置
             playerHelper.reset()
@@ -147,11 +147,11 @@ class PlayerManager private constructor() :
         } else {
             playStatus = START
             playList.setCurrentAudio(audioBean)
-            audioBean.path?.let {
+            audioBean.audioUrl.let {
                 playerHelper.play(it)
                 sendAudioToObserver(audioBean)
                 sendPlayStatusToObserver()
-            } ?: showToast("播放地址为空")
+            }
         }
         val intent = Intent(BaseApplication.getContext(), PlayService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -198,7 +198,7 @@ class PlayerManager private constructor() :
     /**
      * 获取当前正在播放的音频信息
      */
-    fun getCurrentAudioBean(): AudioBean? {
+    fun getCurrentAudioBean(): SongBean? {
         return playList.currentAudio()
     }
 
@@ -212,7 +212,7 @@ class PlayerManager private constructor() :
     /**
      * 获取播放列表
      */
-    fun getPlayList(): MutableList<AudioBean> {
+    fun getPlayList(): MutableList<SongBean> {
         return playList.getPlayList()
     }
 
@@ -251,17 +251,13 @@ class PlayerManager private constructor() :
         audioObserver.onPlayMode(playList.getCurrentMode())
         audioObserver.onPlayStatus(playStatus)
         //更新播放进度
-        playList.currentAudio()?.duration?.let {
-            audioObserver.onProgress(
-                playerHelper.getProgress(), it
-            )
-        }
+        //audioObserver.onProgress(playerHelper.getProgress(), it)
     }
 
     /**
      * 给观察者发送音乐信息
      */
-    private fun sendAudioToObserver(audioBean: AudioBean) {
+    private fun sendAudioToObserver(audioBean: SongBean) {
         observers.forEach {
             it.onAudioBean(audioBean)
         }

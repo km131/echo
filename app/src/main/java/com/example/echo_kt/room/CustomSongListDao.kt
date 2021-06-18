@@ -1,7 +1,6 @@
 package com.example.echo_kt.room
 
 import androidx.room.*
-import com.example.echo_kt.data.AudioBean
 import com.example.echo_kt.data.SongListBean
 
 @Dao
@@ -30,11 +29,39 @@ interface CustomSongListDao {
     @Update
     fun updateSongList(audioBean: SongListBean)
 
-//    /**
-//     * 更新一个歌单中的歌曲
-//     */
-//    @Update(entity = SongListBean::class)
-//    fun updateSongListToList(songList: String)
+    /**
+     * 查询该歌单的基本信息
+     */
+    @Transaction
+    @Query("SELECT * FROM custom_audio_list WHERE playlistId=:playlistId")
+    fun getPlaylistInfo(playlistId:Long): SongListBean
+
+    /**
+     * 查询该歌单的所有歌曲
+     */
+    @Transaction
+    @Query("SELECT * FROM custom_audio_list WHERE playlistId=:playlistId")
+    fun getPlaylistsWithSongs(playlistId:Long): PlaylistWithSongs
+
+    /**
+     * 向歌单增加歌曲
+     */
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPlaylistsWithSong(playlistSongCrossRef: PlaylistSongCrossRef)
+    /**
+     * 删除歌曲
+     */
+    @Transaction
+    @Delete
+    fun deletePlaylistsWithSong(playlistSongCrossRef: PlaylistSongCrossRef)
+
+    /**
+     * 向歌单增加多个歌曲
+     */
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPlaylistsWithSongs(playlistSongCrossRef: List<PlaylistSongCrossRef>)
 
     /**
      * 查询一个
@@ -43,7 +70,7 @@ interface CustomSongListDao {
     fun findAudioById(id: String): SongListBean?
 
     /**
-     * 返回所有的数据,结果为LiveData
+     * 返回所有的数据
      */
     @Query("SELECT * FROM custom_audio_list")
     fun getAllAudioLists(): MutableList<SongListBean>?
