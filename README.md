@@ -5,11 +5,8 @@
 可以从多个网站搜索和下载音乐，方便寻找音乐，解决不知道哪个网站有版权的问题。
 工具的本意是聚合搜索，API 是从公开的网络中获得，不是破解版，听不了付费歌曲。
 
-部分界面截图如下
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/101003_ab04b96e_8318407.jpeg "echo1.JPG")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/101044_ab064074_8318407.jpeg "echo2.JPG")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/101055_3f7854dd_8318407.jpeg "echo3.JPG")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/101112_ae9ac73f_8318407.jpeg "echo4.JPG")
+部分界面截图如下：
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/102847_d6d31567_8318407.png "16239832751918.png")
 
 #### 软件架构
 基础框架选用MVVM，选用的Jetpack组件包括Lifecycle、ViewModel、LiveData、DataBinDing、Navigation、Room。
