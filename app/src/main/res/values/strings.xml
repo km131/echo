@@ -27,5 +27,5 @@
     <string name="matter1">1.除咪咕来源外所有音乐的播放地址是变化的，最短的15分钟变一次，每次打开时请先在首页右上角设置更新播放地址。</string>
     <string name="matter2">2.播放本地音频请手动打开权限。</string>
     <string name="matter3">3.歌曲下载功能已被注释，若要使用请手动逆向破解该软件或联系作者。</string>
-    <string name="matter4">4.安装时若显示签名被修改切勿安装，软件下载地址请访问：</string>
+    <string name="matter4">4.安装时若显示签名被修改切勿安装，软件下载地址请访问：https://gitee.com/k__m/echo_kt</string>
 </resources>

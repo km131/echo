@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.SongListItemAdapter
@@ -33,23 +34,20 @@ class LocalSongFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.scanLocalSong()
-        if (viewModel.listSongData.value != null) {
-            binding.vm = viewModel
-            binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value!!).apply {
-                setOnItemClickListener(object :SongListItemAdapter.OnItemClickListener{
-                    override fun onItemClick(view: View, position: Int) {
-                        val vm:SongViewModel by activityViewModels()
-                        vm.audioBean.set(viewModel.listSongData.value!![position])
-                        view.findNavController().navigate(R.id.action_localSongFragment_to_bottomDialogFragment)
-                    }
-
-                    //这里长按不能删
-                    override fun onItemLongClick(view: View, position: Int) {
-
-                    }
-                })
+        binding.vm = viewModel
+        viewModel.listSongData.observe(this.viewLifecycleOwner, Observer{
+            if (viewModel.listSongData.value != null) {
+                binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value ?: mutableListOf()).apply {
+                    setOnItemClickListener(object :SongListItemAdapter.OnItemClickListener{
+                        override fun onItemClick(view: View, position: Int) {
+                            val vm:SongViewModel by activityViewModels()
+                            vm.audioBean.set(viewModel.listSongData.value!![position])
+                            view.findNavController().navigate(R.id.action_localSongFragment_to_bottomDialogFragment)
+                        }
+                    })
+                }
             }
-        }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
