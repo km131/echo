@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.MyErectAdapter
 import com.example.echo_kt.adapter.SongListAdapter
@@ -23,10 +24,11 @@ import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.util.getDate
 import com.example.echo_kt.util.getMipmapToUri
 import com.example.echo_kt.util.getSongListId
-import com.example.echo_kt.util.readCustomPlayList
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     companion object {
@@ -51,7 +53,33 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = HomeFragmentBinding.inflate(inflater,container,false)
         initRvHome()
+        initSongList()
         return binding.root
+    }
+
+    private fun initSongList() {
+        binding.vmHome = viewModel
+        // 观察LiveData，将这个活动作为LifecycleOwner和observer传递进来。
+        viewModel.songList.observe(this.viewLifecycleOwner, Observer<List<SongListBean>> { data ->
+            // update UI
+            adapterSongList = SongListAdapter(data).apply {
+                setOnItemClickListener(object : SongListAdapter.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        val action =
+                            MainFragmentDirections.actionMainFragmentToCustomSongListFragment(
+                                position
+                            )
+                        findNavController().navigate(action)
+
+                    }
+
+                    override fun onItemLongClick(view: View, position: Int) {
+                        showDialog(data[position])
+                    }
+                })
+            }
+            binding.rvMySongList.adapter = adapterSongList
+        })
     }
 
     private fun initRvHome() {
@@ -70,37 +98,12 @@ class HomeFragment : Fragment() {
                         }
                 }
 
-                override fun onItemLongClick(view: View, position: Int) {
-                    TODO("Not yet implemented")
-                }
+                override fun onItemLongClick(view: View, position: Int) {}
             })
         }
+        binding.rvHome.layoutManager = GridLayoutManager(this.context,3)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.vmHome=viewModel
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        viewModel.songList.observe(this.viewLifecycleOwner, Observer<List<SongListBean>>{ data ->
-            // update UI
-            adapterSongList=SongListAdapter(data).apply {
-                setOnItemClickListener(object : SongListAdapter.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        val action =
-                            MainFragmentDirections.actionMainFragmentToCustomSongListFragment(position)
-                        findNavController().navigate(action)
-
-                    }
-
-                    override fun onItemLongClick(view: View, position: Int) {
-                        showDialog(data[position])
-                    }
-                })
-            }
-            binding.rvMySongList.adapter=adapterSongList
-        })
-    }
     private fun showDialog(bean:SongListBean) {
         val normalDialog: AlertDialog.Builder = AlertDialog.Builder(binding.root.context)
         normalDialog.setTitle("确定删除该歌单？")
@@ -110,7 +113,7 @@ class HomeFragment : Fragment() {
         ) { _, _ ->
             GlobalScope.launch {
                 AppDataBase.getInstance().customSongListDao()
-                    .deleteSongList(bean)
+                    .deleteSongList(bean.id)
             }
             Toast.makeText(binding.root.context, "删除成功", Toast.LENGTH_SHORT).show()
         }
@@ -143,7 +146,7 @@ class HomeFragment : Fragment() {
     private fun showDialog() {
         val editText = EditText(this.context)
         val inputDialog: AlertDialog.Builder = AlertDialog.Builder(this.context)
-        inputDialog.setTitle("输入歌单名字,别乱来").setView(editText)
+        inputDialog.setTitle("输入歌单名字").setView(editText)
         inputDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
@@ -153,13 +156,12 @@ class HomeFragment : Fragment() {
                     id = getSongListId(editText.text.toString(),date),
                     name = editText.text.toString(),
                     date = date,
-                    coverImage = getMipmapToUri(R.mipmap.album2)
+                    //暂时如此,可扩展
+                    coverImage = getMipmapToUri(R.mipmap.echo)
                 )
                 GlobalScope.launch {
                     //存入数据库
                     AppDataBase.getInstance().customSongListDao().insertSongList(songListBean)
-                    //重新读取数据
-                    viewModel.songList.postValue(readCustomPlayList())
                 }
             }
         }.show()

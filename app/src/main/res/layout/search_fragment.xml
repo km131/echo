@@ -11,6 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clSearchHistory"
+        android:paddingHorizontal="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.search.SearchFragment">
@@ -19,10 +20,10 @@
             android:id="@+id/clSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/radius_10_hollow"
             app:layout_constraintEnd_toStartOf="@+id/engineLogo"
-
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -82,7 +83,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchList"
-            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

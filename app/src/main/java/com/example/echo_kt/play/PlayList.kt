@@ -65,16 +65,20 @@ class PlayList private constructor() {
 
     init {
         //读取播放列表
+        initHistoryList()
+        initPlayList()
+    }
+
+    fun initHistoryList() {
         GlobalScope.launch(Dispatchers.IO) {
             _localList = readLocalPlayList(BaseApplication.getContext())
             localList = _localList
             val s = readHistoryPlayList()
-            _historyList = if (s.isNullOrEmpty()){
+            _historyList = if (s.isNullOrEmpty()) {
                 mutableListOf()
-            }else s
+            } else s
             historyList = _historyList
         }
-        initPlayList()
     }
 
     /**
@@ -301,7 +305,7 @@ class PlayList private constructor() {
                 ?.apply {
                     AppDataBase.getInstance()
                         .historyAudioDao()
-                        .deleteAudio(this)
+                        .deleteAudio(this.songId)
                     //插入数据
                     AppDataBase.getInstance()
                         .historyAudioDao()

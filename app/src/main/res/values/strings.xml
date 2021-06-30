@@ -1,32 +1,31 @@
 <resources>
     <string name="app_name">echo_kt</string>
+    <string name="name">echo</string>
     <string name="title_home">首页</string>
     <string name="title_video">视频</string>
     <string name="title_my">我的</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="mySongList">我的歌单</string>
     <string name="home">首页</string>
     <string name="playAll">播放全部</string>
     <string name="toggle_sort">切换排序方式</string>
-    <string name="search">点此搜索</string>
     <string name="localMusic">本地音乐</string>
     <string name="historyMusic">历史播放</string>
     <string name="likeMusic">我喜欢的</string>
     <string name="add">立即添加</string>
     <string name="textview">TextView</string>
+    <string name="addsongs">添加歌曲</string>
+    <string name="editsonglist">编辑歌单</string>
+    <string name="cancel">取消</string>
+    <string name="search">点此搜索</string>
+    <string name="title_info">简介</string>
+    <string name="author">2602241712@qq.com</string>
+    <string name="app_info">音乐播放软件</string>
+    <string name="app_function">音乐软件，支持各大平台非vip歌曲播放</string>
+    <string name="app_about">使用kotlin语言开发，基于MVVM模式集成谷歌官方推荐的JetPack组件库大量组件,视频模块因未找到合适网站接口故暂未开发</string>
+    <string name="app_statement">本项目开源部分已删除所有api，仅用于个人学习。</string>
+    <string name="app_else">该项目在不断完善中，有好的建议或者希望添加某功能以及软件bug请通过下方账号联系作者修改，谢谢</string>
+    <string name="matter1">1.除咪咕来源外所有音乐的播放地址是变化的，最短的15分钟变一次，每次打开时请先在首页右上角设置更新播放地址。</string>
+    <string name="matter2">2.播放本地音频请手动打开权限。</string>
+    <string name="matter3">3.歌曲下载功能已被注释，若要使用请手动逆向破解该软件或联系作者。</string>
+    <string name="matter4">4.安装时若显示签名被修改切勿安装，软件下载地址请访问：</string>
 </resources>

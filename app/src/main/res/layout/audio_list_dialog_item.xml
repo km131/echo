@@ -12,10 +12,9 @@
         android:id="@+id/cl_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/list_item_spacing"
-        android:paddingTop="@dimen/list_item_spacing_half"
-        android:paddingRight="@dimen/list_item_spacing"
-        android:paddingBottom="@dimen/list_item_spacing_half"
+        android:layout_margin="2dp"
+        android:elevation="1dp"
+        android:background="@drawable/radius_10_hollow"
         android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
         <TextView

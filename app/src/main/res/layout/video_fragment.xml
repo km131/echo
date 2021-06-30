@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="doubanVM"
-            type="com.example.echo_kt.ui.douban.DoubanViewModel" />
+            name="videoVM"
+            type="com.example.echo_kt.ui.video.VideoViewModel" />
         <variable
             name="jumpSearch"
             type="android.view.View.OnClickListener" />
@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.douban.DoubanFragment">
+        tools:context=".ui.video.VideoFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTitle"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="豆瓣"
+                android:text="影视"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -79,15 +79,31 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainList_douban"
+            android:id="@+id/mainList_video"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clTitle"
-            tools:listitem="@layout/list_item_douban_main"
+            tools:listitem="@layout/item_video_main"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#B3989898"
+            android:gravity="center"
+            android:enabled="false"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:text="此功能因没有合适的接口,故暂未实现"
+            android:textColor="@color/sunflower_black"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

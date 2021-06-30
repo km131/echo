@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="doubanMainVM"
-            type="com.example.echo_kt.ui.douban.bean.DoubanBean" />
+            name="videoVm"
+            type="com.example.echo_kt.ui.video.bean.VideoBean" />
         <variable
             name="jumpLinkOnClick"
             type="android.view.View.OnClickListener" />
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{doubanMainVM.type}"
+            android:text="@{videoVm.type}"
             style="@style/text_title" />
 
         <TextView

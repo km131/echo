@@ -1,4 +1,4 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.play
 
 
 /**

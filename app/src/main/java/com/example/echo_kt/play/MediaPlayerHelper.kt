@@ -1,13 +1,10 @@
-package com.example.echo_kt.ui.main
+package com.example.echo_kt.play
 
 import android.media.MediaPlayer
 import android.media.MediaPlayer.*
 import android.util.Log
 import android.widget.Toast
-import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.api.showToast
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * des 基于MediaPlayer实现的音频播放
@@ -20,7 +17,9 @@ class MediaPlayerHelper : IPlayer,
     OnErrorListener,
     OnPreparedListener{
 
-    private val mediaPlayer by lazy { MediaPlayer() }
+    private val mediaPlayer by lazy {
+        MediaPlayer()
+    }
     private var iPlayStatus: IPlayerStatus? = null
 
     init {
@@ -29,7 +28,11 @@ class MediaPlayerHelper : IPlayer,
         //缓冲更新监听
         mediaPlayer.setOnBufferingUpdateListener(this)
         //错误监听
-        mediaPlayer.setOnErrorListener(this)
+        mediaPlayer.setOnErrorListener { _, _, _ ->
+            showToast("播放地址已过时，请手动更新,自动切换下一首")
+            onCompletion(mediaPlayer)
+            true
+        }
         //播放器准备完成监听
         mediaPlayer.setOnPreparedListener(this)
     }
@@ -47,8 +50,10 @@ class MediaPlayerHelper : IPlayer,
         }.onSuccess {
             //异步加载网络音频避免卡顿导致界面挂起
             mediaPlayer.prepareAsync()
+            Log.i("MediaPlayHelper LINE:45", "加载中播放地址: $path")
         }.onFailure {
             showToast("MediaPlayHelper LINE:52 ：播放异常")
+            Log.i("MediaPlayHelper LINE:45", "播放异常: $path")
         }
     }
 

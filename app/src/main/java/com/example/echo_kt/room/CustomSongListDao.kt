@@ -2,6 +2,7 @@ package com.example.echo_kt.room
 
 import androidx.room.*
 import com.example.echo_kt.data.SongListBean
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CustomSongListDao {
@@ -14,8 +15,8 @@ interface CustomSongListDao {
     /**
      * 删除一个歌单
      */
-    @Delete
-    fun deleteSongList(audioBean: SongListBean)
+    @Query("DELETE FROM custom_audio_list WHERE id = :listId")
+    fun deleteSongList(listId: String)
 
     /**
      * 删除多个歌单
@@ -41,7 +42,7 @@ interface CustomSongListDao {
      */
     @Transaction
     @Query("SELECT * FROM custom_audio_list WHERE playlistId=:playlistId")
-    fun getPlaylistsWithSongs(playlistId:Long): PlaylistWithSongs
+    fun getPlaylistsWithSongs(playlistId:Long): Flow<PlaylistWithSongs>
 
     /**
      * 向歌单增加歌曲
@@ -73,5 +74,5 @@ interface CustomSongListDao {
      * 返回所有的数据
      */
     @Query("SELECT * FROM custom_audio_list")
-    fun getAllAudioLists(): MutableList<SongListBean>?
+    fun getAllAudioLists(): Flow<List<SongListBean>>
 }

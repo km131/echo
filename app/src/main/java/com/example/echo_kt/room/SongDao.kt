@@ -7,6 +7,7 @@ import androidx.room.Update
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.echo_kt.data.SongBean
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SongDao {
@@ -57,7 +58,7 @@ interface SongDao {
      * 根据是否为收藏查询
      */
     @Query("SELECT * FROM all_song_list WHERE isLike = :isLike")
-    fun findSongByIsLike(isLike: Boolean): MutableList<SongBean>?
+    fun findSongByIsLike(isLike: Boolean): Flow<MutableList<SongBean>>
     /**
      * 根据来源查询
      */

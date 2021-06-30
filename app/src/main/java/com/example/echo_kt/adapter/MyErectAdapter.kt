@@ -5,7 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.data.ErectBean
-import com.example.echo_kt.databinding.ListItemWork1Binding
+import com.example.echo_kt.databinding.ItemTextImageBinding
+
 
 class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.Adapter<ErectViewHolder>() {
 
@@ -21,7 +22,7 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ErectViewHolder {
         return ErectViewHolder(
-            ListItemWork1Binding.inflate(
+            ItemTextImageBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -37,10 +38,10 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
     }
     override fun getItemCount(): Int = mList.size
 }
-class ErectViewHolder(private val binding :ListItemWork1Binding): RecyclerView.ViewHolder(binding.root){
+class ErectViewHolder(private val binding :ItemTextImageBinding): RecyclerView.ViewHolder(binding.root){
     fun bind(item: ErectBean) {
         binding.apply {
-            binding.vmWork1=item
+            binding.erectBean=item
             executePendingBindings()
         }
     }

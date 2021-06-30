@@ -1,5 +1,7 @@
 package com.example.echo_kt
 
+import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -7,10 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.data.SongBean
-import com.example.echo_kt.ui.main.AudioObserver
+import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.ui.main.MainFragment
 import com.example.echo_kt.ui.main.MainViewModel
+import com.example.echo_kt.ui.notification.MyBroadcastReceiver
 import com.example.echo_kt.util.updateUrl
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 
@@ -18,9 +22,12 @@ import java.util.*
  * 作为音频播放观察者,接受到通知立即更新viewModel内状态
  *  间接通过DataBinding更新View
  */
-class MainActivity : AppCompatActivity() , AudioObserver {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() ,
+    AudioObserver {
 
     private lateinit var viewModel: MainViewModel
+    private val myBroadcastReceiver = MyBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +35,26 @@ class MainActivity : AppCompatActivity() , AudioObserver {
         //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
+        registerReceiver(myBroadcastReceiver, IntentFilter().apply {
+            //音频输出切回到内置扬声器广播
+            addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+            //来电广播
+            addAction("android.intent.action.PHONE_STATE")
+            addAction("com.echo_kt.prev")
+            addAction("com.echo_kt.pause")
+            addAction("com.echo_kt.next")
+            addAction("com.echo_kt.close")
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //设置按音量键调节音乐音量，此调用会将音量控件连接到 STREAM_MUSIC，确保音量控件能够调节正确音频流的音量
+        volumeControlStream = AudioManager.STREAM_MUSIC
     }
     override fun onDestroy() {
         super.onDestroy()
+        unregisterReceiver(myBroadcastReceiver)
         PlayerManager.instance.clear()
         PlayerManager.instance.unregister(this)
     }

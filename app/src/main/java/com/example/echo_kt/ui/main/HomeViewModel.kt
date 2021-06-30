@@ -1,20 +1,24 @@
 package com.example.echo_kt.ui.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.data.SongListBean
-import com.example.echo_kt.util.readCustomPlayList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.example.echo_kt.data.SongListRepository
+import com.example.echo_kt.data.SongsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject internal constructor(
+    songListRepository: SongListRepository,
+    songsRepository: SongsRepository
+): ViewModel() {
     /**
      * 全部的自定义歌曲列表
      */
-    val songList: MutableLiveData<List<SongListBean>> by lazy {
-        MutableLiveData<List<SongListBean>>()
-    }
+    val songList: LiveData<List<SongListBean>> = songListRepository.getAllAudioList().asLiveData()
 
     /**
      * 选中的歌单索引
@@ -29,9 +33,5 @@ class HomeViewModel : ViewModel() {
         return songList.value!![index]
     }
 
-    init {
-        GlobalScope.launch(Dispatchers.IO) {
-            songList.postValue(readCustomPlayList())
-        }
-    }
+    val likeSongs: LiveData<List<SongBean>> = songsRepository.findSongByIsLike(true).asLiveData()
 }

@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="vmWork1"
+            name="erectBean"
             type="com.example.echo_kt.data.ErectBean" />
 
         <variable
@@ -17,32 +17,34 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:padding="3dp"
         android:onClick="@{clickListener}"
         android:elevation="5dp"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:background="@drawable/radius_10_hollow">
 
         <ImageView
             android:id="@+id/imageView3"
-            url="@{vmWork1.imageId}"
+            app:url="@{erectBean.imageId}"
             android:layout_width="65dp"
             android:layout_height="65dp"
             app:layout_constraintBottom_toTopOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@mipmap/album2"/>
+            tools:srcCompat="@mipmap/echo" />
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{vmWork1.text}"
+            android:text="@{erectBean.text}"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            tools:text="hhhhhhhhhh" />
+            tools:text="hhhhh" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

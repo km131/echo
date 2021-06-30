@@ -47,3 +47,11 @@ fun getMD5(input:String): String {
     val md = MessageDigest.getInstance("MD5")
     return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
 }
+//获取随机颜色RGB数组
+ fun getRandomColor():Array<Float>{
+    val random =  Random()
+    val r = random.nextInt(256).toFloat()
+    val g = random.nextInt(256).toFloat()
+    val b = random.nextInt(256).toFloat()
+    return  arrayOf(r,g,b)
+}

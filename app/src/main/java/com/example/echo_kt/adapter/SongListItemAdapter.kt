@@ -103,7 +103,7 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
                                 PlayList.instance.setNextPlay(it)
                                 showToast("添加成功")
                                 findNavController().navigateUp()
-                            }?:showToast("SongListAdapter：104。添加失败,可能接口或网络出问题了")
+                            }?:showToast("SongListAdapter：106。添加失败,可能接口或网络出问题了")
                         }
                         1 -> {
                             //加到歌单
@@ -111,7 +111,7 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
                         }
                         2 -> {
                             //下载
-                            showToast("考虑到版权问题，暂时未写")
+                            showToast("考虑到版权问题，该功能被注释掉了")
                         }
                         3 -> {
                             //收藏

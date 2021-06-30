@@ -33,19 +33,19 @@
 
         <TextView
             android:id="@+id/tvName"
+            style="@style/text_oneLine_18"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="44dp"
-            android:layout_marginEnd="32dp"
-            android:ellipsize="end"
-            android:maxEms="6"
+            android:layout_marginEnd="16dp"
+            android:maxEms="8"
             android:maxLines="1"
             android:text="@{pvm.songName}"
-            android:textSize="26sp"
-            android:textStyle="bold"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/imgAlbumPic"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgAlbumPic" />
 
         <TextView
@@ -55,7 +55,8 @@
             android:layout_marginTop="32dp"
             android:text="@{pvm.currentDuration}"
             app:layout_constraintStart_toStartOf="@+id/tv_singer"
-            app:layout_constraintTop_toBottomOf="@+id/tv_singer" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_singer"
+            tools:text ="00:00"/>
 
         <TextView
             android:id="@+id/tvMaxDuration"
@@ -66,7 +67,8 @@
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/seekBar"
-            app:layout_constraintTop_toTopOf="@+id/tvProgress" />
+            app:layout_constraintTop_toTopOf="@+id/tvProgress"
+            tools:text="00:00" />
 
         <SeekBar
             android:id="@+id/seekBar"
@@ -75,8 +77,8 @@
             android:layout_marginTop="28dp"
             android:max="@{pvm.maxProgress}"
             android:progress="@{pvm.playProgress}"
-            app:layout_constraintEnd_toEndOf="@+id/imgAudioList"
-            app:layout_constraintStart_toStartOf="@+id/imgListMode"
+            app:layout_constraintEnd_toEndOf="@+id/tvName"
+            app:layout_constraintStart_toStartOf="@+id/tvProgress"
             app:layout_constraintTop_toBottomOf="@+id/tvProgress" />
 
         <ImageView
@@ -87,17 +89,17 @@
             android:src="@drawable/selector_play_pic"
             app:imgPlay="@{pvm.playStatus}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/seekBar"
+            app:layout_constraintStart_toStartOf="@+id/seekBar"
             app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.53" />
 
         <ImageView
             android:id="@+id/imgPrevious"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginEnd="24dp"
             android:onClick="@{onClick}"
-            android:layout_marginEnd="16dp"
             android:src="@mipmap/media_previous"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
@@ -107,21 +109,22 @@
             android:id="@+id/imgNext"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:contentDescription="TODO"
             android:onClick="@{onClick}"
-            android:layout_marginStart="16dp"
             android:src="@mipmap/media_next"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
-            android:contentDescription="TODO" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
 
         <ImageView
             android:id="@+id/imgAudioList"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:onClick="@{onClick}"
             android:layout_marginStart="16dp"
+            android:onClick="@{onClick}"
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
+            app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintStart_toEndOf="@+id/imgNext"
             app:layout_constraintTop_toTopOf="@+id/imgNext"
             app:srcCompat="@mipmap/list" />
@@ -135,17 +138,17 @@
             android:onClick="@{onClick}"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"
             app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/seekBar"
             app:layout_constraintTop_toTopOf="@+id/imgPrevious" />
 
         <TextView
             android:id="@+id/tv_singer"
             style="@style/text_oneLine_16"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:text="@{pvm.singer}"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/tvName"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tvName"

@@ -10,12 +10,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isGone
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.api.kugou.KuGouServer
 import com.example.echo_kt.api.showToast
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.data.SongBean
+import com.example.echo_kt.data.SongsRepository
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
 import kotlinx.coroutines.Dispatchers
@@ -72,23 +75,15 @@ fun readHistoryPlayList(): MutableList<SongBean> {
 /**
  * 读取收藏列表
  */
-fun readLikePlayList(): MutableList<SongBean> {
+fun readLikePlayList(songsRepository:SongsRepository): MutableList<SongBean> {
     val list = mutableListOf<SongBean>()
-    val s = AppDataBase.getInstance().songDao().findSongByIsLike(true)
-    if (!s.isNullOrEmpty()) {
-        for (element in s)
+    val s = songsRepository.findSongByIsLike(true)
+    val ss = s.asLiveData().value
+    if (!ss.isNullOrEmpty()) {
+        for (element in ss)
             list.add(element)
     }
     return list
-}
-
-/**
- * 读取所有自定义列表
- */
-fun readCustomPlayList(): MutableList<SongListBean> {
-    AppDataBase.getInstance().customSongListDao().getAllAudioLists()?.let {
-        return it
-    } ?: return mutableListOf()
 }
 
 /**
@@ -170,8 +165,7 @@ private fun getPublicDiskFileDir(context: Context, fileName: String): String {
     }
     return file.absolutePath
 }
-fun updateUrl(vararg views:View?){
-    GlobalScope.launch {
+suspend fun updateUrl(){
         AppDataBase.getInstance()
             .songDao()
             //查询列表中所有网络音频
@@ -209,15 +203,6 @@ fun updateUrl(vararg views:View?){
                         it.audioUrl = QQMusicModel().getPath(map["mid"]!!)
                     })
             }
-        if (!views.isNullOrEmpty()){
-            withContext(Dispatchers.Main){
-                showToast("更新完成")
-                views[0]!!.isGone = true
-                views[1]!!.isGone = false
-            }
-        }
-    }
-
 }
 
 

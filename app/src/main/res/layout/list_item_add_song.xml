@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{onClick}"
+        android:layout_margin="4dp"
+        android:background="@drawable/radius_10_hollow"
         android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:descendantFocusability="blocksDescendants">
 

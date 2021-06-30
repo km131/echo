@@ -1,11 +1,20 @@
 package com.example.echo_kt.adapter
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.ListItemSonglistBinding
+import com.example.echo_kt.util.getRandomColor
+import java.util.*
 
 /**
  * 歌单列表，在HomeFragment中
@@ -31,7 +40,7 @@ class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adap
         )
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        mList[position].let { holder.bind(it) }
+        mList[position].let { holder.bind(it,position) }
         holder.itemView.setOnClickListener {
             onItemClickListener.onItemClick(holder.itemView, position)
         }
@@ -44,9 +53,15 @@ class SongListAdapter(private var mList: List<SongListBean>) : RecyclerView.Adap
 }
 class ViewHolder(private val binding: ListItemSonglistBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: SongListBean) {
+    fun bind(item: SongListBean,position: Int) {
         binding.apply {
             binding.bean = item
+            binding.albumView.text = (position+1).toString()
+            val rgb = getRandomColor()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                binding.albumView.solid = Color.rgb(rgb[0],rgb[1],rgb[2])
+                binding.albumView.corner=20f
+            }
         }
     }
 }

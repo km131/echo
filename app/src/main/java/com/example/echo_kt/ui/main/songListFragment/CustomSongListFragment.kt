@@ -1,13 +1,16 @@
 package com.example.echo_kt.ui.main.songListFragment
 
 import android.app.AlertDialog
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +29,7 @@ import com.example.echo_kt.ui.SongListDialogFragment
 import com.example.echo_kt.ui.main.HomeViewModel
 import com.example.echo_kt.util.getDate
 import com.example.echo_kt.util.getMipmapToUri
-import com.example.echo_kt.util.readLikePlayList
+import com.example.echo_kt.util.getRandomColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,6 +55,18 @@ class CustomSongListFragment : Fragment() {
         _binding = CustomSongListFragmentBinding.inflate(inflater, container, false)
         initToolBar()
         return binding.root
+    }
+
+    //初始化歌单封面
+    private fun initAlbum() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.albumView.text = songList.name[0].toString()
+            val rgb = getRandomColor()
+            binding.albumView.solid = Color.rgb(rgb[0],rgb[1],rgb[2])
+        }else{
+            binding.albumView.solid=Color.MAGENTA
+        }
+        binding.albumView.corner=20f
     }
 
     private fun initToolBar() {
@@ -97,23 +112,25 @@ class CustomSongListFragment : Fragment() {
                 SongListBean("like", "我的收藏", getDate(), getMipmapToUri(R.mipmap.album_like))
             binding.songListBean = songList
             GlobalScope.launch(Dispatchers.Main) {
-                songs = withContext(Dispatchers.IO) {
-                    readLikePlayList()
-                }
-                initListAdapter()
+                viewModel.likeSongs.observe(viewLifecycleOwner, Observer {
+                    this@CustomSongListFragment.songs=it.toMutableList()
+                    initListAdapter()
+                })
             }
         } else {
             songList = viewModel.readCustomList(args.index)
             binding.songListBean = songList
-            GlobalScope.launch(Dispatchers.Main) {
-                songs = withContext(Dispatchers.IO) {
-                    AppDataBase.getInstance().customSongListDao()
-                        .getPlaylistsWithSongs(songList.playlistId)
-                        .songs.toMutableList()
+            GlobalScope.launch(Dispatchers.IO) {
+                val s=AppDataBase.getInstance().customSongListDao().getPlaylistsWithSongs(songList.playlistId).asLiveData()
+                withContext(Dispatchers.Main) {
+                    s.observe(this@CustomSongListFragment.viewLifecycleOwner, Observer{
+                        this@CustomSongListFragment.songs=it.songs.toMutableList()
+                        initListAdapter()
+                    })
                 }
-                initListAdapter()
             }
         }
+        initAlbum()
     }
 
     private fun initListAdapter() {
@@ -150,11 +167,8 @@ class CustomSongListFragment : Fragment() {
                             id = songs[position].id
                         )
                     )
-                    AppDataBase.getInstance().customSongListDao().updateSongList(
-                        songList.apply { number -= 1 }
-                    )
-                } else AppDataBase.getInstance().songDao()
-                    .updateSong(songs[position].apply { isLike = false })
+                } else AppDataBase.getInstance().historyAudioDao()
+                    .deleteAudio(songs[position].id)
 
             }
             binding.rvSongList.adapter!!.notifyDataSetChanged()

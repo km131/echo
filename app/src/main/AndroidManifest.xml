@@ -22,7 +22,8 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:exported="false"
-        android:theme="@style/Theme.Sunflower">
+        android:theme="@style/Theme.Sunflower"
+        tools:replace="android:label">
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -32,16 +33,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".PlayService"/>
-
-        <receiver android:name=".ui.notification.MyBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="com.echo_kt.prev"/>
-                <action android:name="com.echo_kt.pause"/>
-                <action android:name="com.echo_kt.next"/>
-                <action android:name="com.echo_kt.close"/>
-            </intent-filter>
-        </receiver>
+        <service android:name=".ui.notification.PlayService"/>
     </application>
 
 </manifest>

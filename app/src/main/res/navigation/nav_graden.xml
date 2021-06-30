@@ -12,16 +12,13 @@
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_mainFragment_to_playFragment"
-            app:destination="@id/playFragment" />
+            app:destination="@id/playFragment"/>
         <action
             android:id="@+id/action_mainFragment_to_localSongFragment"
             app:destination="@id/localSongFragment" />
         <action
             android:id="@+id/action_mainFragment_to_audioListDialogFragment"
             app:destination="@id/audioListDialogFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_productFragment"
-            app:destination="@id/productFragment" />
         <action
             android:id="@+id/action_mainFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
@@ -58,12 +55,6 @@
         android:name="com.example.echo_kt.AudioListDialogFragment"
         android:label="fragment_audio_list_dialog_list_dialog"
         tools:layout="@layout/audio_list_dialog" />
-    <fragment
-        android:id="@+id/productFragment"
-        android:name="com.example.echo_kt.ui.work.ProductFragment"
-        android:label="ProductFragment"
-        app:launchSingleTop="false"
-        tools:layout="@layout/fragment_product"/>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.echo_kt.ui.setting.SettingFragment"

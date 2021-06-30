@@ -47,7 +47,6 @@ class MultipleChoiceListAdapter(private var mList: MutableList<SongBean>) : Recy
                     setItemChecked(i, true)
                     binding.checkBox.isChecked = true
                 }
-//                notifyItemChanged(i)
             }
         }
     }

@@ -1,9 +1,8 @@
 package com.example.echo_kt.room
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.echo_kt.BaseApplication
@@ -48,18 +47,15 @@ abstract class AppDataBase : RoomDatabase() {
                     }
                 })
                 //清空数据库中的数据
-                .fallbackToDestructiveMigration()
+                //.fallbackToDestructiveMigration()
                 //迁移数据库数据
-                //.addMigrations(MIGRATION_8_9)
+                //.addMigrations(MIGRATION_9_10)
                 .build()
         }
 
-        private var MIGRATION_8_9: Migration = object : Migration(8, 9) {
+        private var MIGRATION_9_10: Migration = object : Migration(9, 10) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(
-                    "ALTER TABLE custom_audio_list ADD COLUMN number LONG DEFAULT 0"
-                )
-            }
+              }
         }
     }
 

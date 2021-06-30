@@ -1,18 +1,18 @@
-package com.example.echo_kt.ui.douban.listadapter
+package com.example.echo_kt.ui.video.listadapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.databinding.ListItemDoubanMainBinding
-import com.example.echo_kt.ui.douban.bean.DoubanBean
+import com.example.echo_kt.databinding.ItemVideoMainBinding
+import com.example.echo_kt.ui.video.bean.VideoBean
 
-class DoubanMainAdapter internal constructor(private var mList: ArrayList<DoubanBean>) :
-    RecyclerView.Adapter<DoubanMainAdapter.ViewHolder>() {
+class VideoMainAdapter internal constructor(private var mList: ArrayList<VideoBean>) :
+    RecyclerView.Adapter<VideoMainAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ListItemDoubanMainBinding.inflate(
+            ItemVideoMainBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -27,14 +27,14 @@ class DoubanMainAdapter internal constructor(private var mList: ArrayList<Douban
     }
 
     inner class ViewHolder internal constructor(
-        private val binding: ListItemDoubanMainBinding
+        private val binding: ItemVideoMainBinding
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        fun bind(item: DoubanBean) {
+        fun bind(item: VideoBean) {
             binding.apply {
-                binding.doubanMainVM = item
-                binding.videoTypeList.adapter = DoubanMinorAdapter(item.list)
+                binding.videoVm = item
+                binding.videoTypeList.adapter = VideoMinorAdapter(item.list)
                 executePendingBindings()
             }
         }

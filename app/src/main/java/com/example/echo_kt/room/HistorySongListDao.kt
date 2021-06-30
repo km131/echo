@@ -20,8 +20,8 @@ interface HistorySongListDao {
     /**
      * 删除一条音频
      */
-    @Delete
-    fun deleteAudio(audioBean: HistoryAudioBean)
+    @Query("DELETE FROM history_audio WHERE songId = :audioBeanId")
+    fun deleteAudio(audioBeanId: String)
 
     /**
      * 删除多条音频

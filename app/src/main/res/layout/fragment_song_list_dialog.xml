@@ -12,16 +12,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="@dimen/list_item_spacing"
-    android:paddingTop="@dimen/list_item_spacing_half"
+    android:paddingTop="@dimen/list_item_spacing"
     android:paddingRight="@dimen/list_item_spacing"
     android:paddingBottom="@dimen/list_item_spacing_half">
 
     <TextView
         android:id="@+id/tv_sort"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:drawableStart="@android:drawable/ic_menu_gallery"
+        android:layout_height="30dp"
+        android:drawableStart="@mipmap/sort"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
         android:text="@string/toggle_sort" />
@@ -29,30 +28,29 @@
     <TextView
         android:id="@+id/tv_add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:drawableStart="@android:drawable/ic_menu_gallery"
+        android:layout_height="30dp"
+        android:drawableStart="@mipmap/add_black"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
-        android:text="添加歌曲" />
+        android:text="@string/addsongs" />
 
     <TextView
         android:id="@+id/tv_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:drawableStart="@android:drawable/ic_menu_gallery"
+        android:layout_height="30dp"
+        android:drawableStart="@mipmap/edit"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
-        android:text="编辑歌单" />
+        android:text="@string/editsonglist" />
 
     <Button
         android:id="@+id/btn_cancel"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="#00000000"
         android:onClick="@{onClick}"
-        android:text="取消" />
+        android:text="@string/cancel" />
 </LinearLayout>
 </layout>

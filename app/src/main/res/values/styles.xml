@@ -20,12 +20,13 @@
     <style name="Base.Theme.Sunflower" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#A6A6A6</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="colorPrimaryDark">#FF5E91</item>
+        <item name="colorPrimaryDark">#FF5858</item>
         <item name="colorOnSurface">@color/sunflower_black</item>
         <item name="colorAccent">@color/sunflower_green_500</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorSurface">#FCFCFC</item>
         <item name="colorSecondary">@color/sunflower_yellow_300</item>
-        <item name="android:colorBackground">@color/white</item>
+        <!--   背景色     -->
+        <item name="android:colorBackground">#F3F3F3</item>
     </style>
 
     <style name="Theme.Sunflower" parent="Base.Theme.Sunflower"/>

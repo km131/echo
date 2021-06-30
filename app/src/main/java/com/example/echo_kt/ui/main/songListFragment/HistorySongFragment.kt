@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.SongListItemAdapter
@@ -42,25 +43,27 @@ class HistorySongFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.isNull = false
         viewModel.scanHistorySong()
-        if (viewModel.listSongData != null) {
-            binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData!!).apply {
-                setOnItemClickListener(object : SongListItemAdapter.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        val vm: SongViewModel by activityViewModels()
-                        vm.audioBean.set(viewModel.listSongData!![position])
-                        view.findNavController()
-                            .navigate(R.id.action_historySongFragment_to_bottomDialogFragment)
-                    }
+        viewModel.listSongData.observe(this.viewLifecycleOwner, Observer{
+            if (viewModel.listSongData.value != null) {
+                binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value ?: mutableListOf()).apply {
+                    setOnItemClickListener(object : SongListItemAdapter.OnItemClickListener {
+                        override fun onItemClick(view: View, position: Int) {
+                            val vm: SongViewModel by activityViewModels()
+                            vm.audioBean.set(viewModel.listSongData.value!![position])
+                            view.findNavController()
+                                .navigate(R.id.action_historySongFragment_to_bottomDialogFragment)
+                        }
 
-                    //长按从历史列表删除
-                    override fun onItemLongClick(view: View, position: Int) {
-                        showDeleteDialog(position, viewModel.listSongData!!)
-                    }
-                })
+                        //长按从历史列表删除
+                        override fun onItemLongClick(view: View, position: Int) {
+                            showDeleteDialog(position, viewModel.listSongData.value!!)
+                        }
+                    })
+                }
+            } else {
+                binding.isNull = true
             }
-        } else {
-            binding.isNull = true
-        }
+        })
     }
     private fun showDeleteDialog(position: Int,songList: MutableList<SongBean>?) {
         val normalDialog: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -71,11 +74,11 @@ class HistorySongFragment : Fragment() {
         ) { _, _ ->
             GlobalScope.launch {
                 AppDataBase.getInstance().historyAudioDao()
-                    .deleteAudio(HistoryAudioBean(songList[position].id))
+                    .deleteAudio(songList[position].id)
                 withContext(Dispatchers.Main){
                     val s =PlayList.instance.setHistoryList(songList[position])
                     if (s){
-                        viewModel.listSongData!!.removeAt(position)
+                        viewModel.listSongData.value!!.removeAt(position)
                         binding.rvLocalSong.adapter!!.notifyDataSetChanged()
                         Toast.makeText(binding.root.context, "删除成功", Toast.LENGTH_SHORT).show()
                     } else Toast.makeText(binding.root.context, "删除失败，有bug", Toast.LENGTH_SHORT).show()
@@ -99,7 +102,7 @@ class HistorySongFragment : Fragment() {
     fun onClick() {
         //播放全部
         binding.setOnClickPlayAll {
-            viewModel.listSongData?.let { it1 ->
+            viewModel.listSongData.value?.let { it1 ->
                 PlayList.instance.switchAudioList(it1)
             }
             PlayerManager.instance.startAll()

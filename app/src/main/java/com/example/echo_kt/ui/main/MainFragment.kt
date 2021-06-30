@@ -10,11 +10,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.MainFragmentBinding
+import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import java.util.Formatter
 
-class MainFragment : Fragment(),AudioObserver {
+class MainFragment : Fragment(), AudioObserver {
 
     companion object {
         fun newInstance() = MainFragment()
@@ -40,7 +41,7 @@ class MainFragment : Fragment(),AudioObserver {
                 when (item.itemId) {
                     R.id.menu_home -> viewPage.setCurrentItem(0, false)
                     R.id.menu_video -> viewPage.setCurrentItem(1, false)
-                    R.id.menu_my -> viewPage.setCurrentItem(2, false)
+                    R.id.menu_info -> viewPage.setCurrentItem(2, false)
                 }
                 // 这里注意返回true,否则点击失效
                 true

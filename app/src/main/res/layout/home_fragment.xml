@@ -19,13 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.HomeFragment"
-        android:padding="10dp">
+        android:paddingHorizontal="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clTitle"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:elevation="6dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -71,7 +70,7 @@
                     android:layout_marginRight="42dp"
                     android:drawablePadding="5dp"
                     android:gravity="center_vertical"
-                    android:hint="点此搜索"
+                    android:hint="@string/search"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,21 +90,20 @@
             android:id="@+id/rvHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:paddingVertical="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clTitle"
-            app:spanCount="3"
+            tools:spanCount="3"
             tools:itemCount="3"
-            tools:listitem="@layout/list_item_work1" />
+            tools:listitem="@layout/item_text_image" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +135,6 @@
             android:id="@+id/rvMySongList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingHorizontal="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

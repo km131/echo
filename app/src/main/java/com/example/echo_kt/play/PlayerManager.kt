@@ -4,13 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.PlayService
-import com.example.echo_kt.api.showToast
+import com.example.echo_kt.ui.notification.PlayService
 import com.example.echo_kt.data.SongBean
-import com.example.echo_kt.ui.main.AudioObserver
-import com.example.echo_kt.ui.main.IPlayer
-import com.example.echo_kt.ui.main.IPlayerStatus
-import com.example.echo_kt.ui.main.MediaPlayerHelper
 import com.example.echo_kt.ui.setting.SettingViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,7 +55,8 @@ class PlayerManager private constructor() :
      */
     private val observers = mutableListOf<AudioObserver>()
 
-    private val playerHelper: IPlayer = MediaPlayerHelper()
+    private val playerHelper: IPlayer =
+        MediaPlayerHelper()
 
     /**
      * 用于关闭rxJava
@@ -109,6 +105,11 @@ class PlayerManager private constructor() :
             else {
                 resume()
             }
+        }
+    }
+    fun stopPlay() {
+        if (playerHelper.isPlaying()) {
+            pause()
         }
     }
     fun getPlayState():Int{

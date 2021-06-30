@@ -1,11 +1,10 @@
-package com.example.echo_kt
+package com.example.echo_kt.ui.notification
 
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -15,15 +14,16 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.NotificationTarget
+import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.R
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.play.PlayerManager
 
 /**
  * 每播放一个新的音频或者播放状态改变，发送一个新的通知
  */
+const val CHANNEL_ID="echo_1024"
 class PlayService : Service() {
-
-    private val CHANNEL_ID="echo_1024"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val results = PlayerManager.instance.getCurrentAudioBean()
@@ -37,7 +37,8 @@ class PlayService : Service() {
             createNotificationChannel()
         }
         val expandedView = RemoteViews(
-            applicationContext.packageName, R.layout.notify_player_big
+            applicationContext.packageName,
+            R.layout.notify_player_big
         )
 
         setListeners(expandedView)
@@ -82,7 +83,10 @@ class PlayService : Service() {
                 )
             noti.contentView.setTextViewText(R.id.player_song_name, results.songName)
             noti.contentView.setTextViewText(R.id.player_author_name, results.author)
-        } ?: noti.contentView.setImageViewResource(R.id.player_album_art, R.mipmap.album)
+        } ?: noti.contentView.setImageViewResource(
+            R.id.player_album_art,
+            R.mipmap.album
+        )
         with(NotificationManagerCompat.from(this)) {
             notify(1024, noti)
             startForeground(1024,noti)

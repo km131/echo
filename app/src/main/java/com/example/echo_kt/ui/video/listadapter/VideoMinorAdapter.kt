@@ -1,13 +1,13 @@
-package com.example.echo_kt.ui.douban.listadapter
+package com.example.echo_kt.ui.video.listadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.databinding.ListItemDoubanMinorBinding
-import com.example.echo_kt.ui.douban.bean.DoubanBean
+import com.example.echo_kt.ui.video.bean.VideoBean
 
-class DoubanMinorAdapter internal constructor(private var mList: ArrayList<DoubanBean.DoubanMinorBean>) :
-    RecyclerView.Adapter<DoubanMinorAdapter.ViewHolder>() {
+class VideoMinorAdapter internal constructor(private var mList: ArrayList<VideoBean.VideoMinorBean>) :
+    RecyclerView.Adapter<VideoMinorAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -30,9 +30,9 @@ class DoubanMinorAdapter internal constructor(private var mList: ArrayList<Douba
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        fun bind(item: DoubanBean.DoubanMinorBean) {
+        fun bind(item: VideoBean.VideoMinorBean) {
             binding.apply {
-                binding.doubanMinorVM = item
+                binding.videoMinorVM = item
                 executePendingBindings()
             }
         }

@@ -1,4 +1,4 @@
-package com.example.echo_kt.ui.douban
+package com.example.echo_kt.ui.video
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,33 +8,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
 import com.example.echo_kt.R
-import com.example.echo_kt.adapter.MyAcrossAdapter
-import com.example.echo_kt.adapter.MyErectAdapter
-import com.example.echo_kt.databinding.DoubanFragmentBinding
-import com.example.echo_kt.ui.douban.bean.DoubanBean
-import com.example.echo_kt.ui.douban.listadapter.DoubanMainAdapter
+import com.example.echo_kt.databinding.VideoFragmentBinding
+import com.example.echo_kt.ui.video.listadapter.VideoMainAdapter
 
-class DoubanFragment : Fragment() {
+class VideoFragment : Fragment() {
 
     companion object {
-        fun newInstance() = DoubanFragment()
+        fun newInstance() = VideoFragment()
     }
 
-    private lateinit var viewModel: DoubanViewModel
-    private var _binding:DoubanFragmentBinding? = null
+    private lateinit var viewModel: VideoViewModel
+    private var _binding:VideoFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapterMain:DoubanMainAdapter
+    private lateinit var adapterMain:VideoMainAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding= DoubanFragmentBinding.inflate(inflater,container,false)
+        _binding= VideoFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DoubanViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
         // TODO: Use the ViewModel
         initAdapter()
     }
@@ -45,8 +42,8 @@ class DoubanFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapterMain=DoubanMainAdapter(viewModel.getDataList())
-        binding.mainListDouban.adapter=adapterMain
+        adapterMain=VideoMainAdapter(viewModel.getDataList())
+        binding.mainListVideo.adapter=adapterMain
         binding.setJumpSearch {
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_searchFragment)
         }

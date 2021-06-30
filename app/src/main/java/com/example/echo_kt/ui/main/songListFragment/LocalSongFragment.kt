@@ -33,13 +33,13 @@ class LocalSongFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.scanLocalSong()
-        if (viewModel.listSongData != null) {
+        if (viewModel.listSongData.value != null) {
             binding.vm = viewModel
-            binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData!!).apply {
+            binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value!!).apply {
                 setOnItemClickListener(object :SongListItemAdapter.OnItemClickListener{
                     override fun onItemClick(view: View, position: Int) {
                         val vm:SongViewModel by activityViewModels()
-                        vm.audioBean.set(viewModel.listSongData!![position])
+                        vm.audioBean.set(viewModel.listSongData.value!![position])
                         view.findNavController().navigate(R.id.action_localSongFragment_to_bottomDialogFragment)
                     }
 
@@ -65,13 +65,13 @@ class LocalSongFragment : Fragment() {
     private fun onClick(){
         binding.btnScan.setOnClickListener {
             viewModel.scanLocalSong()
-            if (viewModel.listSongData!=null && viewModel.listSongData!!.size>0){
+            if (viewModel.listSongData.value!=null && viewModel.listSongData.value!!.size>0){
                 binding.vm = viewModel
-                binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData!!)
+                binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value!!)
             }
         }
         binding.playAll.setOnClickListener {
-            viewModel.listSongData?.let {
+            viewModel.listSongData.value?.let {
                 PlayList.instance.switchAudioList(it)
             }?: showToast("播放列表暂无歌曲")
             PlayerManager.instance.startAll()

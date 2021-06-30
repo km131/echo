@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.SeekBar
 import androidx.core.view.isGone
+import com.example.echo_kt.api.showToast
 import com.example.echo_kt.databinding.SettingFragmentBinding
+import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.ui.main.ListSongViewModel
 import com.example.echo_kt.util.stringForTime
 import com.example.echo_kt.util.updateUrl
-import java.util.*
+import kotlinx.coroutines.*
 
 class SettingFragment : Fragment() {
 
@@ -37,7 +40,6 @@ class SettingFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val a = ViewModelProvider(this).get(SettingViewModel::class.java)
-        Log.i("TAG", "aaa$a")
         viewModel = if (PlayerManager.instance.getSettingViewModel()!=null){
             PlayerManager.instance.getSettingViewModel()!!
         }else{
@@ -66,24 +68,25 @@ class SettingFragment : Fragment() {
                     PlayerManager.instance.startTimer(viewModel)
                 } else {
                     PlayerManager.instance.cleanCountdown()
-                    viewModel.countdownBean.value=(
+                    viewModel.countdownBean.value = (
                             SettingViewModel.CountdownBean(0, false)
                             )
                 }
             }
         }
 
-        binding.seekBarOff.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+        binding.seekBarOff.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                binding.countdown.text= stringForTime(seekBar!!.progress)
+                binding.countdown.text = stringForTime(seekBar!!.progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                Log.i("TAG", "onStopTrackingTouch:"+seekBar!!.progress.toLong())
-                viewModel.countdownBean.value=(SettingViewModel.CountdownBean(seekBar.progress.toLong(),true))
+                Log.i("TAG", "onStopTrackingTouch:" + seekBar!!.progress.toLong())
+                viewModel.countdownBean.value =
+                    (SettingViewModel.CountdownBean(seekBar.progress.toLong(), true))
             }
         }
         )
@@ -92,7 +95,17 @@ class SettingFragment : Fragment() {
             btnUpdate.setOnClickListener {
                 progressBar.isGone = false
                 updateState.isGone = true
-                updateUrl(progressBar,updateState)
+                GlobalScope.launch(Dispatchers.IO){
+                    updateUrl()
+                    Log.i("TAG", "onClick: 更新内存中地址")
+                    PlayList.instance.initHistoryList()
+                    ListSongViewModel().scanHistorySong()
+                    withContext(Dispatchers.Main) {
+                            showToast("歌曲地址更新完成")
+                            progressBar.isGone = true
+                            updateState.isGone = false
+                    }
+                }
             }
         }
     }

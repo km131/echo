@@ -1,7 +1,8 @@
 package com.example.echo_kt.ui.main
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +12,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.databinding.PlayFragmentBinding
+import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.util.stringForTime
 
-class PlayFragment : Fragment(),AudioObserver {
+class PlayFragment : Fragment(), AudioObserver {
 
     companion object {
         fun newInstance() = PlayFragment()
@@ -44,20 +46,22 @@ class PlayFragment : Fragment(),AudioObserver {
     }
 
     private fun initSeekBar() {
-        binding.seekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                binding.tvProgress.text=stringForTime(seekBar.progress)
-            }
+        binding.seekBar.apply {
+            setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    binding.tvProgress.text=stringForTime(seekBar.progress)
+                }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
 
-            }
+                }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                PlayerManager.instance.seekTo(seekBar!!.progress)
-            }
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    PlayerManager.instance.seekTo(seekBar!!.progress)
+                }
 
-        })
+            })
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

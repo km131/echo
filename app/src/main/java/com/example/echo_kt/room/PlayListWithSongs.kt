@@ -17,6 +17,7 @@ data class PlaylistWithSongs(
 @Entity(primaryKeys = ["playlistId", "id"])
 data class PlaylistSongCrossRef(
     val playlistId: Long,
+    //@ColumnInfo(index = true)
     val id: String
 )
 
