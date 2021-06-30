@@ -6,7 +6,7 @@
 工具的本意是聚合搜索，API 是从公开的网络中获得，不是破解版，听不了付费歌曲。
 
 部分界面截图如下：
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0618/102847_d6d31567_8318407.png "16239832751918.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0630/100254_08933354_8318407.png "16250184101727.png")
 
 #### 软件架构
 基础框架选用MVVM，选用的Jetpack组件包括Lifecycle、ViewModel、LiveData、DataBinDing、Navigation、Room。
