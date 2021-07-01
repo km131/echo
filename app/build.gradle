@@ -26,9 +26,8 @@ android {
 
     buildTypes {
         release {
-            //启用混淆
-            minifyEnabled true
-            shrinkResources true
+            //不启用混淆
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
