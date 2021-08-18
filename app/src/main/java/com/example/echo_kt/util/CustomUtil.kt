@@ -37,9 +37,8 @@ fun getMipmapToUri(resId:Int):String {
     val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
             + r.getResourcePackageName(resId) + "/"
             + r.getResourceTypeName(resId) + "/"
-            + r.getResourceEntryName(resId));
-
-    return uri.toString();
+            + r.getResourceEntryName(resId))
+    return uri.toString()
 }
 
 //用MD5算法加密（在获取qq音乐参数sign中用到）

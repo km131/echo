@@ -17,10 +17,6 @@ import java.util.Formatter
 
 class MainFragment : Fragment(), AudioObserver {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: MainFragmentBinding? = null

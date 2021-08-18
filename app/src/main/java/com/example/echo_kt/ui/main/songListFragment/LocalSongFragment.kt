@@ -75,6 +75,4 @@ class LocalSongFragment : Fragment() {
             PlayerManager.instance.startAll()
         }
     }
-
-
 }
