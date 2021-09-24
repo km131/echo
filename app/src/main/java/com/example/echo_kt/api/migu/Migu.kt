@@ -1,7 +1,6 @@
 package com.example.echo_kt.api.migu
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.SharedPreferences
@@ -41,7 +40,7 @@ class Migu {
     fun b(arg: String): String  {
         var v2:Int
         if(TextUtils.isEmpty(arg)) {
-            return "";
+            return ""
         }
 
         try {
@@ -63,8 +62,8 @@ class Migu {
             }
         }
         catch(v0:Exception) {
-            Log.e("Utils", "md5 error" + v0.localizedMessage);
-            return "";
+            Log.e("Utils", "md5 error" + v0.localizedMessage)
+            return ""
         }
 
     }
@@ -84,7 +83,7 @@ class Migu {
                 b = v3.a("key_device_id")
                 return b
             }
-            val v0_1: String = g
+            val v01: String = g
             val v2 =
                 "35" + Build.BOARD.length % 10 + Build.BRAND.length % 10 +
                         Build.CPU_ABI.length % 10 + Build.DEVICE.length % 10 +
@@ -100,7 +99,7 @@ class Migu {
             val v5: String = l()
             BluetoothAdapter.getDefaultAdapter()
             val v7 = StringBuilder()
-            v7.append(v0_1).append(v2).append(v4).append(v5).append("")
+            v7.append(v01).append(v2).append(v4).append(v5).append("")
             v0_3 = try {
                 MessageDigest.getInstance("MD5")
             } catch (v0_2: NoSuchAlgorithmException) {
@@ -122,19 +121,19 @@ class Migu {
                 v4_1.append(Integer.toHexString(v1))
                 ++v0_4
             }
-            val v0_5 = v4_1.toString().toUpperCase(Locale.getDefault())
-            v3.a("key_device_id", v0_5)
-            return v0_5
-            v0_5
+            val v05 = v4_1.toString().toUpperCase(Locale.getDefault())
+            v3.a("key_device_id", v05)
+            return v05
+            v05
         } catch (v0: java.lang.Exception) {
-            val v1_1: K = K.a(BaseApplication.getContext())
+            val v1: K = K.a(BaseApplication.getContext())
                 ?: return "USSc077ba7087554560ab5d86eade004dd232aeb9e2c2d14a6cb34a4cd18a5070bd"
-            b = v1_1.a("key_device_id")
+            b = v1.a("key_device_id")
             if (!TextUtils.isEmpty(b)) {
                 return b
             }
             b = "USS5a56f017c3584e34b9f2549bc777ec31f5cb89762edc41aa89d49972eb3340d7"
-            v1_1.a(
+            v1.a(
                 "key_device_id",
                 "USS5a56f017c3584e34b9f2549bc777ec31f5cb89762edc41aa89d49972eb3340d7"
             )
@@ -147,14 +146,13 @@ class Migu {
             return g
         }
         try {
-            val v0_1 =
+            val v01 =
                 BaseApplication.getContext().applicationContext
                     .getSystemService("wifi") as WifiManager
-                    ?: return ""
-            if (v0_1.isWifiEnabled) {
-                val v0_2 = v0_1.connectionInfo
-                if (v0_2 != null && !TextUtils.isEmpty(v0_2.macAddress)) {
-                    g = v0_2.macAddress
+            if (v01.isWifiEnabled) {
+                val v02 = v01.connectionInfo
+                if (v02 != null && !TextUtils.isEmpty(v02.macAddress)) {
+                    g = v02.macAddress
                     return g
                 }
             }

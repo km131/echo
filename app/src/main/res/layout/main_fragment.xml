@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
+            android:theme="@style/navigation"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@drawable/radius_16_theme"
-            android:elevation="2dp"
+            android:elevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +61,8 @@
                 android:layout_marginBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/albumPic" />
 
             <TextView
                 android:id="@+id/tv_music"
@@ -85,7 +87,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:background="#00000000"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/play"
                 android:scaleType="fitXY"
                 android:src="@drawable/selector_play_pic"
                 app:imgPlay="@{mainVM.playStatus}"
@@ -103,7 +105,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/list" />
+                app:srcCompat="@mipmap/list"
+                android:contentDescription="@string/currentList" />
 
             <TextView
                 android:id="@+id/textView2"

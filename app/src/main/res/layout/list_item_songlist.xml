@@ -36,23 +36,24 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:text="@{bean.name}"
+            android:text='@{bean.name}'
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/albumView"
             app:layout_constraintTop_toTopOf="@+id/albumView"
-            tools:text="收藏" />
+            tools:text="**********" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text='@{bean.number+"首"}'
+            android:text='@{"共"+bean.number+"首"}'
             app:layout_constraintEnd_toEndOf="@+id/textView7"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            tools:text="******"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

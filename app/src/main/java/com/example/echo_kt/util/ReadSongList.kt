@@ -1,5 +1,6 @@
 package com.example.echo_kt.util
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -7,24 +8,17 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.api.kugou.KuGouServer
-import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.SongListBean
-import com.example.echo_kt.room.AppDataBase
+import com.example.echo_kt.api.qqmusic.QQMusicServer
+import com.example.echo_kt.api.wyymusic.WyyMusicServer
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.data.SongsRepository
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.echo_kt.room.AppDataBase
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.IOException
@@ -34,6 +28,7 @@ import java.io.OutputStream
 /**
  * 读取本地音频列表
  */
+@SuppressLint("Range")
 fun readLocalPlayList(context: Context): MutableList<SongBean> {
     val audioList = mutableListOf<SongBean>()
     val cursor: Cursor? = context.contentResolver.query(
@@ -102,7 +97,7 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
             //设置每次读写的字节
             val fileReader = ByteArray(4096)
 
-            var fileSizeDownloaded = 0;
+            var fileSizeDownloaded = 0
             //请求返回的字节流
             inputStream = body!!.byteStream()
             //创建输出流
@@ -115,12 +110,12 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
                     break
                 }
                 //进行写入操作
-                outputStream!!.write(fileReader, 0, read);
-                fileSizeDownloaded += read;
+                outputStream!!.write(fileReader, 0, read)
+                fileSizeDownloaded += read
 
             }
             //刷新
-            outputStream!!.flush();
+            outputStream!!.flush()
             return true
         } catch (e: IOException) {
             return false
@@ -150,8 +145,7 @@ private fun getAudioUrl(fileName: String): Uri? {
  * 获取存储路径(包名下的file文件夹)
  */
 private fun getPublicDiskFileDir(context: Context, fileName: String): String {
-    var cachePath: String? = ""
-    cachePath = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
+    var cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) { //此目录下的是外部存储下的私有的fileName目录
         context.getExternalFilesDir(fileName)!!.absolutePath
@@ -165,10 +159,10 @@ private fun getPublicDiskFileDir(context: Context, fileName: String): String {
     }
     return file.absolutePath
 }
-suspend fun updateUrl(){
+// 重新获取音频地址
+suspend fun updateUrl(wyyService: WyyMusicServer,qqServer: QQMusicServer){
         AppDataBase.getInstance()
             .songDao()
-            //查询列表中所有网络音频
             .findSongBySource("kugou")
             ?.apply {
                 AppDataBase.getInstance()
@@ -181,26 +175,24 @@ suspend fun updateUrl(){
             }
         AppDataBase.getInstance()
             .songDao()
-            //查询列表中所有网络音频
             .findSongBySource("wyy")
             ?.apply {
                 AppDataBase.getInstance()
                     .songDao()
                     .updateSongs(this.onEach {
                         val map = it.requestParameter!!
-                        it.audioUrl = WyyMusicModel().getSongPath(map["musicId"]!!)!!.data[0].url
+                        it.audioUrl = WyyMusicModel(wyyService).getSongPath(map["musicId"]!!)!!.data[0].url
                     })
             }
         AppDataBase.getInstance()
             .songDao()
-            //查询列表中所有网络音频
             .findSongBySource("qq")
             ?.apply {
                 AppDataBase.getInstance()
                     .songDao()
                     .updateSongs(this.onEach {
                         val map = it.requestParameter!!
-                        it.audioUrl = QQMusicModel().getPath(map["mid"]!!)
+                        it.audioUrl = QQMusicModel(qqServer).getPath(map["mid"]!!)
                     })
             }
 }

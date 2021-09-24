@@ -2,48 +2,54 @@ package com.example.echo_kt.ui.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageButton
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
 import com.example.echo_kt.adapter.SongViewModel
+import com.example.echo_kt.api.kugou.Info
 import com.example.echo_kt.api.migu.MiguSearchListBean
-import com.example.echo_kt.api.qqmusic.ListSearchResponse
+import com.example.echo_kt.api.qqmusic.AudioList
 import com.example.echo_kt.api.showToast
 import com.example.echo_kt.api.wyymusic.WyySearchListBean
-import com.example.echo_kt.api.kugou.KuGouSearchBean
 import com.example.echo_kt.data.SearchBean
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.ListItemSearchBinding
 import com.example.echo_kt.databinding.SearchFragmentBinding
-import com.example.echo_kt.model.KUGOUModel
+import com.example.echo_kt.model.KuGouModel
 import com.example.echo_kt.model.MiGuMusicModel
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
+import com.example.echo_kt.ui.SourceType
 import com.example.echo_kt.ui.search.adapter.SearchListAdapter
+import com.google.android.material.imageview.ShapeableImageView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = SearchFragment()
-    }
-
     private val viewModel: SearchViewModel by activityViewModels()
-    private var _binding:SearchFragmentBinding? = null
+    private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
-    private var source= "KUGOU"
+    private var searchJob: Job? = null
+    private lateinit var adapter: SearchListAdapter
+
+    //当前搜索的数据来源和上次搜索的数据来源，在检测到来源切换时，清空列表中之前的数据
+    private var currentSource = SourceType.KUGOU
+    private var lastSource = SourceType.KUGOU
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,13 +58,15 @@ class SearchFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.apply {
             searchSrc.setOnClickListener {
-                sendRequest()
+                val keyWord = binding.etSearch.text.toString()
+                sendRequest(keyWord)
             }
             etSearch.setOnKeyListener { _, keyCode, event ->
                 //这里注意要作判断处理，ActionDown、ActionUp都会回调到这里，不作处理的话就会调用两次
                 if (KeyEvent.KEYCODE_ENTER == keyCode && KeyEvent.ACTION_DOWN == event.action) {
                     //发送请求
-                    sendRequest()
+                    val keyWord = binding.etSearch.text.toString()
+                    sendRequest(keyWord)
                     //收起软键盘
                     val imm: InputMethodManager =
                         (context?.getSystemService(Context.INPUT_METHOD_SERVICE)) as InputMethodManager
@@ -68,89 +76,83 @@ class SearchFragment : Fragment() {
                 false
 
             }
-            engineLogo.setOnClickListener{
-                when (source) {
-                    "KUGOU" -> {
-                        (it as ImageButton).setImageResource(R.mipmap.qqmusic)
-                        source = "QQMUSIC"
+            resetListAdapter()
+            rvSearchList.adapter = adapter
+            engineLogo.setOnClickListener {
+                when (currentSource) {
+                    SourceType.KUGOU -> {
+                        (it as ShapeableImageView).setImageResource(R.mipmap.qqmusic)
+                        currentSource = SourceType.QQMUSIC
                     }
-                    "QQMUSIC" -> {
-                        (it as ImageButton).setImageResource(R.mipmap.wyymusic)
-                        source = "WYYMUSIC"
+                    SourceType.QQMUSIC -> {
+                        (it as ShapeableImageView).setImageResource(R.mipmap.wyymusic)
+                        currentSource = SourceType.WYYMUSIC
                     }
-                    "WYYMUSIC" -> {
-                        (it as ImageButton).setImageResource(R.mipmap.migu)
-                        source = "MIGUMUSIC"
+                    SourceType.WYYMUSIC -> {
+                        (it as ShapeableImageView).setImageResource(R.mipmap.migu)
+                        currentSource = SourceType.MIGUMUSIC
                     }
-                    "MIGUMUSIC" -> {
-                        (it as ImageButton).setImageResource(R.mipmap.kugou)
-                        source = "KUGOU"
+                    SourceType.MIGUMUSIC -> {
+                        (it as ShapeableImageView).setImageResource(R.mipmap.kugou)
+                        currentSource = SourceType.KUGOU
                     }
                 }
             }
         }
     }
-    private fun sendRequest() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val keyWord = binding.etSearch.text.toString()
-            if (keyWord.trim().isNotEmpty()){
-                val data = viewModel.sendRequestMessage(keyWord, source)
-                data?.let {
-                    binding.rvSearchList.adapter = SearchListAdapter(data, source).apply {
-                        setOnItemClickListener(object : SearchListAdapter.OnItemClickListener{
-                            override fun onItemClick(binding: ListItemSearchBinding, position: Int) {
-                                val vm: SongViewModel by activityViewModels()
-                                GlobalScope.launch(Dispatchers.Main) {
-                                    val audioBean = withContext(Dispatchers.Main) {
-                                        convertToAudioBean(data, source, position)
-                                    }
-                                    audioBean?.let {
-                                        vm.audioBean.set(audioBean)
-                                        findNavController().navigate(R.id.action_searchFragment_to_bottomDialogFragment)
-                                        binding.btnOther.isClickable = true
-                                    } ?: showToast("未拿到歌曲信息，请返回上个页面")
-                                }
-                            }
-                        })
-                    }
-                } ?: showToast("网络出问题了，也可能是接口挂了")
-            } else showToast("此BUG已被处理")
+
+    private fun sendRequest(keyWord: String) {
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            Log.d("SearchFragment：当前来源", "$currentSource ==== 上次来源$lastSource")
+            if ( currentSource != lastSource){
+                resetListAdapter()
+                lastSource=currentSource
+            }
+            viewModel.sendRequestMessage(keyWord, currentSource).collectLatest {
+                adapter.setSource(currentSource)
+                adapter.submitData(it)
+                lastSource=currentSource
+            }
         }
     }
 
     private suspend fun convertToAudioBean(
         data: SearchBean,
-        course: String,
-        position: Int
+        course: SourceType,
     ): SongBean? {
         when (course) {
-            "KUGOU" -> {
-                val s = (data as KuGouSearchBean).data.info[position]
+            SourceType.KUGOU -> {
+                val s = (data as Info)
                 val dat = withContext(Dispatchers.IO) {
-                    KUGOUModel().getMusicBean(s.albumId,s.hash)
+                    KuGouModel.getMusicBean(s.albumId, s.hash)
                 }
-                return KUGOUModel().convertSongBean(s,dat!!.img,dat.play_url)
+                return KuGouModel.convertSongBean(s, dat!!.img, dat.play_url)
             }
-            "QQMUSIC" -> {
-                val s = (data as ListSearchResponse).data.songList.data[position]
-                val url = QQMusicModel().getPath(s.songmid)
+            SourceType.QQMUSIC -> {
+                val s = (data as AudioList)
+                val url = QQMusicModel(viewModel.qqMusicServer).getPath(s.songmid)
                 val parameterMap = HashMap<String, String>()
                 parameterMap["mid"] = s.songmid
-                return QQMusicModel().convertSongBean(s, url, parameterMap)
+                return QQMusicModel.convertSongBean(s, url, parameterMap)
             }
-            "WYYMUSIC" -> {
-                val s= (data as WyySearchListBean).result.songs[position]
-                val response = WyyMusicModel().getSongPath(s.id)
+            SourceType.WYYMUSIC -> {
+                val s = (data as WyySearchListBean.Result.Song)
+                val response = WyyMusicModel(viewModel.wyyMusicServer).getSongPath(s.mid)
                 response?.let {
-                    return WyyMusicModel().convertSongBean(response.data[0], s)
+                    return WyyMusicModel.convertSongBean(response.data[0], s)
                 }
             }
-            "MIGUMUSIC" ->{
-                val s=(data as MiguSearchListBean).songResultData.result[position]
+            SourceType.MIGUMUSIC -> {
+                val s = (data as MiguSearchListBean.SongResultData.ResultXX)
                 val toneFlag = "HQ"
-                val response = MiGuMusicModel().getMusicBean(s.albumId ,s.songId,toneFlag)
+                val response = MiGuMusicModel(viewModel.miGuMusicServer).getMusicBean(
+                    s.albumId,
+                    s.songId,
+                    toneFlag
+                )
                 response?.let {
-                   return MiGuMusicModel().convertSongBean(response)
+                    return MiGuMusicModel.convertSongBean(response)
                 }
             }
         }
@@ -180,7 +182,35 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding=null
+        searchJob?.cancel()
+        _binding = null
+    }
+
+
+    private fun resetListAdapter() {
+        adapter = SearchListAdapter(
+            viewModel.kuGouServer,
+            viewModel.qqMusicServer,
+            viewModel.wyyMusicServer,
+            viewModel.miGuMusicServer
+        ).apply {
+            setOnItemOtherClickListener(object : SearchListAdapter.OnItemClickListener {
+                override fun onItemClick(binding: ListItemSearchBinding, bean: SearchBean) {
+                    val vm: SongViewModel by activityViewModels()
+                    GlobalScope.launch(Dispatchers.Main) {
+                        val audioBean = withContext(Dispatchers.Main) {
+                            convertToAudioBean(bean, currentSource)
+                        }
+                        audioBean?.let {
+                            vm.audioBean.set(audioBean)
+                            findNavController().navigate(R.id.action_searchFragment_to_bottomDialogFragment)
+                            binding.btnOther.isClickable = true
+                        } ?: showToast("未拿到歌曲信息，请返回上个页面")
+                    }
+                }
+            })
+        }
+        binding.rvSearchList.adapter = adapter
     }
 
 }

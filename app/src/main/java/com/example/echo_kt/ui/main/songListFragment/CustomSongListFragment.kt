@@ -20,7 +20,7 @@ import com.example.echo_kt.adapter.SongViewModel
 import com.example.echo_kt.api.showToast
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.data.SongListBean
-import com.example.echo_kt.databinding.CustomSongListFragmentBinding
+import com.example.echo_kt.databinding.FragmentCustomListBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
@@ -43,7 +43,7 @@ class CustomSongListFragment : Fragment() {
 
     private val viewModel: HomeViewModel by activityViewModels()
     private val args: CustomSongListFragmentArgs by navArgs()
-    private var _binding: CustomSongListFragmentBinding? = null
+    private var _binding: FragmentCustomListBinding? = null
     private val binding get() = _binding!!
     private lateinit var songList: SongListBean
     private lateinit var songs: MutableList<SongBean>
@@ -51,8 +51,8 @@ class CustomSongListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = CustomSongListFragmentBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentCustomListBinding.inflate(inflater, container, false)
         initToolBar()
         return binding.root
     }
@@ -62,11 +62,11 @@ class CustomSongListFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.albumView.text = songList.name[0].toString()
             val rgb = getRandomColor()
-            binding.albumView.solid = Color.rgb(rgb[0],rgb[1],rgb[2])
-        }else{
-            binding.albumView.solid=Color.MAGENTA
+            binding.albumView.solid = Color.rgb(rgb[0], rgb[1], rgb[2])
+        } else {
+            binding.albumView.solid = Color.MAGENTA
         }
-        binding.albumView.corner=20f
+        binding.albumView.corner = 20f
     }
 
     private fun initToolBar() {
@@ -112,8 +112,8 @@ class CustomSongListFragment : Fragment() {
                 SongListBean("like", "我的收藏", getDate(), getMipmapToUri(R.mipmap.album_like))
             binding.songListBean = songList
             GlobalScope.launch(Dispatchers.Main) {
-                viewModel.likeSongs.observe(viewLifecycleOwner, Observer {
-                    this@CustomSongListFragment.songs=it.toMutableList()
+                viewModel.likeSongs.observe(viewLifecycleOwner, {
+                    this@CustomSongListFragment.songs = it.toMutableList()
                     initListAdapter()
                 })
             }
@@ -121,10 +121,11 @@ class CustomSongListFragment : Fragment() {
             songList = viewModel.readCustomList(args.index)
             binding.songListBean = songList
             GlobalScope.launch(Dispatchers.IO) {
-                val s=AppDataBase.getInstance().customSongListDao().getPlaylistsWithSongs(songList.playlistId).asLiveData()
+                val s = AppDataBase.getInstance().customSongListDao()
+                    .getPlaylistsWithSongs(songList.playlistId).asLiveData()
                 withContext(Dispatchers.Main) {
-                    s.observe(this@CustomSongListFragment.viewLifecycleOwner, Observer{
-                        this@CustomSongListFragment.songs=it.songs.toMutableList()
+                    s.observe(this@CustomSongListFragment.viewLifecycleOwner, {
+                        this@CustomSongListFragment.songs = it.songs.toMutableList()
                         initListAdapter()
                     })
                 }
@@ -160,16 +161,19 @@ class CustomSongListFragment : Fragment() {
             "确定"
         ) { _, _ ->
             GlobalScope.launch {
+                //-1为历史列表
                 if (args.index != -1) {
+                    //删除该歌曲
                     AppDataBase.getInstance().customSongListDao().deletePlaylistsWithSong(
                         PlaylistSongCrossRef(
                             playlistId = songList.playlistId,
                             id = songs[position].id
                         )
                     )
-                } else AppDataBase.getInstance().historyAudioDao()
-                    .deleteAudio(songs[position].id)
-
+                    //歌单长度减一
+                    AppDataBase.getInstance().customSongListDao()
+                        .updateSongList(songList.apply { number -= 1 })
+                } else AppDataBase.getInstance().historyAudioDao().deleteAudio(songs[position].id)
             }
             binding.rvSongList.adapter!!.notifyDataSetChanged()
             showToast("删除成功")
@@ -178,4 +182,8 @@ class CustomSongListFragment : Fragment() {
         normalDialog.show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

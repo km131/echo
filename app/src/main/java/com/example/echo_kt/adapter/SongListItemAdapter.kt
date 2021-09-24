@@ -84,7 +84,7 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = BottomDialogSongBinding.inflate(inflater, container, false)
         initOptionList()
         return binding.root
@@ -110,8 +110,7 @@ class BottomDialogFragment : BottomSheetDialogFragment(){
                             findNavController().navigate(R.id.action_bottomDialogFragment_to_addToPlayListDialog)
                         }
                         2 -> {
-                            //下载(具体代码gitee上应该有)
-                            showToast("考虑到版权问题，该功能被注释掉了")
+
                         }
                         3 -> {
                             //收藏

@@ -3,21 +3,28 @@ package com.example.echo_kt.ui.search.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.api.kugou.Info
-import com.example.echo_kt.api.kugou.KuGouSearchBean
+import com.example.echo_kt.api.kugou.KuGouServer
+import com.example.echo_kt.api.migu.MiguMusicServer
 import com.example.echo_kt.api.migu.MiguSearchListBean
 import com.example.echo_kt.api.qqmusic.AudioList
-import com.example.echo_kt.api.qqmusic.ListSearchResponse
+import com.example.echo_kt.api.qqmusic.QQMusicServer
 import com.example.echo_kt.api.showToast
+import com.example.echo_kt.api.wyymusic.WyyMusicServer
 import com.example.echo_kt.api.wyymusic.WyySearchListBean
-import com.example.echo_kt.data.*
+import com.example.echo_kt.data.SearchBean
+import com.example.echo_kt.data.ShowSearchBean
+import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.ListItemSearchBinding
-import com.example.echo_kt.model.KUGOUModel
+import com.example.echo_kt.model.KuGouModel
 import com.example.echo_kt.model.MiGuMusicModel
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.ui.SourceType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,24 +34,25 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchListAdapter internal constructor(private var mList: SearchBean,private var cource: String) :
-    RecyclerView.Adapter<SearchListAdapter.ViewHolder>() {
+
+class SearchListAdapter constructor(
+    private val kuGouServer: KuGouServer,
+    private val qqMusicServer: QQMusicServer,
+    private val wyyMusicServer: WyyMusicServer,
+    private val miguMusicServer: MiguMusicServer
+)  : PagingDataAdapter<SearchBean, SearchListAdapter.ViewHolder>(ListDiffCallback()) {
 
     private lateinit var onItemClickListener: OnItemClickListener
+    private var source=SourceType.KUGOU
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemOtherClickListener(listener: OnItemClickListener) {
         this.onItemClickListener = listener
     }
     interface OnItemClickListener{
-        fun onItemClick(binding: ListItemSearchBinding, position: Int)
+        fun onItemClick(binding: ListItemSearchBinding,bean: SearchBean)
     }
-
-    val list = when(cource){
-        "KUGOU" -> mList as KuGouSearchBean
-        "QQMUSIC" -> mList as ListSearchResponse
-        "WYYMUSIC" -> mList as WyySearchListBean
-        "MIGUMUSIC" -> mList as MiguSearchListBean
-        else -> mList
+    fun setSource(sourceType: SourceType){
+        source = sourceType
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -56,31 +64,21 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
         )
     }
 
-    override fun getItemCount(): Int{
-        return when(cource){
-            "KUGOU" -> (mList as KuGouSearchBean).data.info.size
-            "QQMUSIC" -> (mList as ListSearchResponse).data.songList.data.size
-            "WYYMUSIC" -> (mList as WyySearchListBean).result.songs.size
-            "MIGUMUSIC" -> (mList as MiguSearchListBean).songResultData.result.size
-            else -> 0
-        }
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val  listBody = getItem(position)!!
         holder.getBind().btnOther.setOnClickListener {
             holder.getBind().btnOther.isClickable = false
-            onItemClickListener.onItemClick(holder.getBind(), position)
+            onItemClickListener.onItemClick(holder.getBind(),listBody)
         }
-        return when(cource){
-            "KUGOU" -> holder.bind((mList as KuGouSearchBean).data.info[position])
-            "QQMUSIC" -> holder.bind((mList as ListSearchResponse).data.songList.data[position])
-            "WYYMUSIC" -> holder.bind((mList as WyySearchListBean).result.songs[position])
-            "MIGUMUSIC" -> holder.bind((mList as MiguSearchListBean).songResultData.result[position])
-            else -> holder.bind((mList as KuGouSearchBean).data.info[position])
+        return when(source){
+            SourceType.KUGOU -> holder.bind(listBody as Info)
+            SourceType.QQMUSIC -> holder.bind(listBody as AudioList,qqMusicServer)
+            SourceType.WYYMUSIC -> holder.bind(listBody as WyySearchListBean.Result.Song,wyyMusicServer)
+            SourceType.MIGUMUSIC -> holder.bind(listBody as MiguSearchListBean.SongResultData.ResultXX,miguMusicServer)
         }
     }
 
-    inner class ViewHolder internal constructor(
+    class ViewHolder (
         private val binding: ListItemSearchBinding
     ) : RecyclerView.ViewHolder(
         binding.root
@@ -94,19 +92,19 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
             binding.llPlay.setOnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
                     val data = withContext(Dispatchers.IO) {
-                        KUGOUModel().getMusicBean(item.albumId,item.hash)
+                        KuGouModel.getMusicBean(item.albumId,item.hash)
                     }
                     data?.let {
-                        val audioBean = KUGOUModel().convertSongBean(item,it.img,it.play_url)
+                        val audioBean = KuGouModel.convertSongBean(item,it.img,it.play_url)
                         PlayerManager.instance.playNewAudio(audioBean)
                     } ?: showToast("网络出问题了，也可能是接口挂了")
                 }
             }
-            //酷狗单曲下载（其他的没写）
+//            //酷狗单曲下载（其他的没写）
 //            binding.btnOther.setOnClickListener{
 //                GlobalScope.launch(Dispatchers.Main) {
 //                    val data: SearchMusicDetails.Data? = withContext(Dispatchers.IO) {
-//                        KUGOUModel().getMusicBean(item)
+//                        KuGouModel(kuGouServer).getMusicBean(item.albumId,item.hash)
 //                    }
 //                    data?.let {
 //                        val url: String = data.play_url
@@ -131,10 +129,10 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
 //            }
         }
         //qq音乐
-        fun bind(item: AudioList) {
+        fun bind(item: AudioList,qqMusicServer: QQMusicServer) {
             binding.apply {
                 binding.bean = ShowSearchBean(item.songName, item.singer[0].singerName)
-                val model = QQMusicModel()
+                val model = QQMusicModel(qqMusicServer)
                 binding.llPlay.setOnClickListener {
                     GlobalScope.launch(Dispatchers.Main) {
                         val vk = model.getVKey(item.songmid)
@@ -154,7 +152,7 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
                                     val parameterMap = HashMap<String,String>()
                                     parameterMap["mid"]=item.songmid
                                     PlayerManager.instance.playNewAudio(
-                                        model.convertSongBean(
+                                        QQMusicModel.convertSongBean(
                                             item,
                                             url,
                                             parameterMap
@@ -171,16 +169,16 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
         }
 
         //网易云音乐
-        fun bind(item: WyySearchListBean.Result.Song) {
-            val viewModel = WyyMusicModel()
+        fun bind(item: WyySearchListBean.Result.Song,wyyMusicServer: WyyMusicServer) {
+            val viewModel = WyyMusicModel(wyyMusicServer)
             binding.apply {
                 binding.bean = ShowSearchBean(item.name, item.author[0].name)
                 binding.llPlay.setOnClickListener {
                     GlobalScope.launch(Dispatchers.Main) {
-                        val response = viewModel.getSongPath(item.id)
+                        val response = viewModel.getSongPath(item.mid)
                         response?.let {
                             val audioBean: SongBean =
-                                viewModel.convertSongBean(response.data[0], item)
+                                WyyMusicModel.convertSongBean(response.data[0], item)
                             PlayerManager.instance.playNewAudio(audioBean)
                         } ?: showToast("网络出问题了，也可能是接口挂了")
                     }
@@ -188,8 +186,8 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
             }
         }
         //咪咕音乐
-        fun bind(item: MiguSearchListBean.SongResultData.ResultXX) {
-            val viewModel = MiGuMusicModel()
+        fun bind(item: MiguSearchListBean.SongResultData.ResultXX,server: MiguMusicServer) {
+            val viewModel = MiGuMusicModel(server)
             binding.apply {
                 binding.bean = ShowSearchBean(item.songName, item.singer)
                 binding.llPlay.setOnClickListener {
@@ -198,12 +196,21 @@ class SearchListAdapter internal constructor(private var mList: SearchBean,priva
                         val response = viewModel.getMusicBean(albumId = item.albumId ,songId=item.songId,toneFlag=toneFlag)
                         response?.let {
                             val audioBean: SongBean =
-                                viewModel.convertSongBean(response)
+                                MiGuMusicModel.convertSongBean(response)
                             PlayerManager.instance.playNewAudio(audioBean)
                         } ?: showToast("网络出问题了，也可能是接口挂了")
                     }
                 }
             }
         }
+    }
+}
+private class ListDiffCallback : DiffUtil.ItemCallback<SearchBean>() {
+    override fun areItemsTheSame(oldItem: SearchBean, newItem: SearchBean): Boolean {
+       return oldItem.getId() == newItem.getId()
+    }
+
+    override fun areContentsTheSame(oldItem: SearchBean, newItem: SearchBean): Boolean {
+       return oldItem.getId() == newItem.getId()
     }
 }

@@ -31,10 +31,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     private val viewModel: HomeViewModel by activityViewModels()
     private var _binding:HomeFragmentBinding? = null
     private val binding get() = _binding!!
@@ -50,17 +46,22 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = HomeFragmentBinding.inflate(inflater,container,false)
         initRvHome()
         initSongList()
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
+    }
+
     private fun initSongList() {
         binding.vmHome = viewModel
         // 观察LiveData，将这个活动作为LifecycleOwner和observer传递进来。
-        viewModel.songList.observe(this.viewLifecycleOwner, Observer<List<SongListBean>> { data ->
+        viewModel.songList.observe(this.viewLifecycleOwner, { data ->
             // update UI
             adapterSongList = SongListAdapter(data).apply {
                 setOnItemClickListener(object : SongListAdapter.OnItemClickListener {

@@ -82,7 +82,7 @@
         android:id="@+id/customSongListFragment"
         android:name="com.example.echo_kt.ui.main.songListFragment.CustomSongListFragment"
         android:label="custom_song_list_fragment"
-        tools:layout="@layout/custom_song_list_fragment" >
+        tools:layout="@layout/fragment_custom_list" >
         <argument
             android:name="index"
             app:argType="integer" />

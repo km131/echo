@@ -99,7 +99,6 @@
             android:padding="10dp"
             android:textStyle="bold"
             android:text="此功能因没有合适的接口,故暂未实现"
-            android:textColor="@color/sunflower_black"
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

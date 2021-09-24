@@ -1,10 +1,10 @@
 package com.example.echo_kt.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.R
@@ -13,7 +13,7 @@ import com.example.echo_kt.databinding.MainFragmentBinding
 import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import java.util.Formatter
+import java.util.*
 
 class MainFragment : Fragment(), AudioObserver {
 
@@ -27,17 +27,15 @@ class MainFragment : Fragment(), AudioObserver {
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
-        val viewPage = binding.vpHome
-        val btnNav = binding.navView
-        viewPage.adapter = MainPagerAdapter(this)
+        binding.vpHome.adapter = MainPagerAdapter(this)
         //禁止滑动
-        viewPage.isUserInputEnabled = false
-        btnNav.run {
+        binding.vpHome.isUserInputEnabled = false
+        binding.navView.run {
             setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
-                    R.id.menu_home -> viewPage.setCurrentItem(0, false)
-                    R.id.menu_video -> viewPage.setCurrentItem(1, false)
-                    R.id.menu_info -> viewPage.setCurrentItem(2, false)
+                    R.id.menu_home -> binding.vpHome.setCurrentItem(0, false)
+                    R.id.menu_video -> binding.vpHome.setCurrentItem(1, false)
+                    R.id.menu_info -> binding.vpHome.setCurrentItem(2, false)
                 }
                 // 这里注意返回true,否则点击失效
                 true
@@ -64,7 +62,6 @@ class MainFragment : Fragment(), AudioObserver {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //将bind置空，控制binding生命周期
         _binding=null
     }
 
@@ -112,11 +109,11 @@ class MainFragment : Fragment(), AudioObserver {
         viewModel.playStatus.set(playStatus)
     }
 
-    private fun stringForTime(duration: Int): String? {
+    private fun stringForTime(duration: Int): String {
         val totalSeconds = duration/1000
         val seconds = totalSeconds % 60
         val minutes = (totalSeconds/60)%60
 
-        return Formatter().format("%02d:%02d",minutes,seconds).toString();
+        return Formatter().format("%02d:%02d",minutes,seconds).toString()
     }
 }

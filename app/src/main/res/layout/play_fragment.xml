@@ -18,9 +18,10 @@
         android:background="#FFFFFF">
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAlbumPic"
             urlAlbum2="@{pvm.albumPic}"
+            android:elevation="10dp"
             android:layout_width="315dp"
             android:layout_height="315dp"
             android:scaleType="fitXY"
@@ -31,7 +32,7 @@
             app:layout_constraintVertical_bias="0.14999998"
             tools:src="@tools:sample/avatars" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvName"
             style="@style/text_oneLine_18"
             android:layout_width="0dp"
@@ -81,11 +82,14 @@
             app:layout_constraintStart_toStartOf="@+id/tvProgress"
             app:layout_constraintTop_toBottomOf="@+id/tvProgress" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPlayStart"
+            app:shapeAppearanceOverlay="@style/circle"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:onClick="@{onClick}"
+            android:elevation="10dp"
+            android:background="@color/white"
             android:src="@drawable/selector_play_pic"
             app:imgPlay="@{pvm.playStatus}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -94,33 +98,42 @@
             app:layout_constraintTop_toBottomOf="@+id/seekBar"
             app:layout_constraintVertical_bias="0.53" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPrevious"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="24dp"
             android:onClick="@{onClick}"
+            android:elevation="5dp"
+            app:shapeAppearance="@style/circle"
+            android:background="@color/white"
             android:src="@mipmap/media_previous"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
             app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgNext"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
-            android:contentDescription="TODO"
+            android:elevation="5dp"
+            android:background="@color/white"
+            app:shapeAppearance="@style/circle"
+            android:contentDescription="@string/next"
             android:onClick="@{onClick}"
             android:src="@mipmap/media_next"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
             app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAudioList"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:elevation="5dp"
+            android:background="@color/white"
+            app:shapeAppearanceOverlay="@style/circle"
             android:layout_marginStart="16dp"
             android:onClick="@{onClick}"
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
@@ -129,19 +142,22 @@
             app:layout_constraintTop_toTopOf="@+id/imgNext"
             app:srcCompat="@mipmap/list" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgListMode"
             url="@{pvm.playModePic}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{onClick}"
+            android:background="@color/white"
+            android:elevation="5dp"
+            app:shapeAppearanceOverlay="@style/circle"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"
             app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
             app:layout_constraintStart_toStartOf="@+id/seekBar"
             app:layout_constraintTop_toTopOf="@+id/imgPrevious" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_singer"
             style="@style/text_oneLine_16"
             android:layout_width="0dp"
@@ -152,7 +168,8 @@
             app:layout_constraintEnd_toEndOf="@+id/tvName"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="***********************"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

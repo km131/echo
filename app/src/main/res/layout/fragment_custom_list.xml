@@ -14,8 +14,7 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
         android:fitsSystemWindows="true"
-        tools:context=".ui.main.songListFragment.CustomSongListFragment"
-        tools:ignore="MergeRootFrame">
+        tools:context=".ui.main.songListFragment.CustomSongListFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -55,14 +54,15 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="?attr/actionBarSize"
                         android:elevation="5dp"
                         android:gravity="center"
                         android:outlineProvider="bounds"
                         android:textSize="50sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -99,11 +99,11 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="#FF9090"
+                    android:background="@color/white"
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
                     app:menu="@menu/menu_songlist"
-                    app:navigationIcon="@drawable/abc_vector_test"
+                    app:navigationIcon="?android:attr/textCheckMarkInverse"
                     app:titleTextColor="?attr/colorOnSurface" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>

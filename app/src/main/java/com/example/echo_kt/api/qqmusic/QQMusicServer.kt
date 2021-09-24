@@ -27,7 +27,9 @@ interface QQMusicServer {
         @Query("loginUin")
         loginUin: String,
         @Query("format")
-        format:String
+        format:String,
+        @Query("p")
+        page:Int,
     ):ListSearchResponse
 
     /**

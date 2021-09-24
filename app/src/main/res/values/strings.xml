@@ -6,7 +6,9 @@
     <string name="title_my">我的</string>
     <string name="mySongList">我的歌单</string>
     <string name="home">首页</string>
+    <string name="setting">设置</string>
     <string name="playAll">播放全部</string>
+    <string name="play">播放</string>
     <string name="toggle_sort">切换排序方式</string>
     <string name="localMusic">本地音乐</string>
     <string name="historyMusic">历史播放</string>
@@ -28,4 +30,14 @@
     <string name="matter2">2.播放本地音频请手动打开权限。</string>
     <string name="matter3">3.歌曲下载功能已被注释，若要使用请联系作者。</string>
     <string name="matter4">4.安装时若显示签名被修改切勿安装，软件下载地址请访问：https://gitee.com/k__m/echo_kt</string>
+    <string name="searchByKeyWord">根据关键字搜索</string>
+    <string name="timingClosure">定时关闭</string>
+    <string name="countDown">倒计时</string>
+    <string name="updatePath">更新所有音频地址</string>
+    <string name="other">其他</string>
+    <string name="addSonglist">新增歌单</string>
+    <string name="albumPic">歌曲封面</string>
+    <string name="currentList">当前列表</string>
+    <string name="next">下一首</string>
+    <string name="updateComplete">更新成功</string>
 </resources>

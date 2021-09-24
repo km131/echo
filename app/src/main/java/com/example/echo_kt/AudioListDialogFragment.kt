@@ -29,7 +29,7 @@ class AudioListDialogFragment : BottomSheetDialogFragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         this.context?.let { PlayerManager.instance.register(this) }
         _binding = AudioListDialogBinding.inflate(inflater, container, false)
         binding.bottomList.adapter = PlayerManager.instance.getPlayList().let {
@@ -63,6 +63,10 @@ class AudioListDialogFragment : BottomSheetDialogFragment(),
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
+    }
     override fun onAudioBean(audioBean: SongBean) {
         if (_binding != null)
             binding.bottomList.adapter?.notifyDataSetChanged()

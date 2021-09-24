@@ -1,13 +1,11 @@
 package com.example.echo_kt.ui.main
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.echo_kt.R
@@ -35,7 +33,7 @@ class PlayFragment : Fragment(), AudioObserver {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding= PlayFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -66,13 +64,17 @@ class PlayFragment : Fragment(), AudioObserver {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
         binding.lifecycleOwner = this
         binding.pvm=viewModel
         binding.onClick=onClick()
     }
 
-    private fun onClick(): View.OnClickListener? {
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
+    }
+
+    private fun onClick(): View.OnClickListener {
         return View.OnClickListener{
             when(it.id){
                 R.id.imgListMode -> PlayerManager.instance.switchPlayMode()

@@ -11,7 +11,7 @@ data class KuGouSearchBean(
     val data: Data,
     @SerializedName("errcode")
     val errorCode: Int
-): SearchBean
+)
 data class Data(
     @SerializedName("info")
     val info: List<Info>,
@@ -72,4 +72,6 @@ data class Info(
     val singerName: String,
     @SerializedName("songname")
     val songName: String
-)
+): SearchBean {
+    override fun getId(): String = albumAudioId.toString() + hash
+}

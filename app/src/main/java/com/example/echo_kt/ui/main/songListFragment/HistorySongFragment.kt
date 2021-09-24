@@ -34,7 +34,7 @@ class HistorySongFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHistorySongBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -43,7 +43,7 @@ class HistorySongFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.isNull = false
         viewModel.scanHistorySong()
-        viewModel.listSongData.observe(this.viewLifecycleOwner, Observer{
+        viewModel.listSongData.observe(this.viewLifecycleOwner, {
             if (viewModel.listSongData.value != null) {
                 binding.rvLocalSong.adapter = SongListItemAdapter(viewModel.listSongData.value ?: mutableListOf()).apply {
                     setOnItemClickListener(object : SongListItemAdapter.OnItemClickListener {

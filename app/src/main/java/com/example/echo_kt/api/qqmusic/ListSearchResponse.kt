@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class ListSearchResponse (
     @field:SerializedName("code") val code: String,
     @field:SerializedName("data") val data: Data
-):SearchBean
+)
 data class Data(
     @field:SerializedName("song") val songList: PageList
 )
@@ -20,7 +20,11 @@ data class AudioList (
     @field:SerializedName("songname") val songName: String,
     @field:SerializedName("singer") val singer: List<Singer>,
     @field:SerializedName("albummid") val album: String
-)
+):SearchBean {
+    override fun getId(): String = songmid+album
+
+}
+
 data class Singer(
     @field:SerializedName("id") val id :String,
     @field:SerializedName("mid") val mediaMid: String,

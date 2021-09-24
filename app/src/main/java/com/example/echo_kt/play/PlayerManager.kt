@@ -206,7 +206,7 @@ class PlayerManager private constructor() :
     /**
      * 获取当前正在播放的音频大小
      */
-    fun getPlayListSize(): Int? {
+    fun getPlayListSize(): Int {
         return playList.getPlayListSize()
     }
 
@@ -222,7 +222,6 @@ class PlayerManager private constructor() :
      */
     fun clear() {
         disposable?.dispose()
-        playList.clear()
         playerHelper.reset()
         playerHelper.release()
         playList.clear()
