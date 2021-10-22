@@ -1,9 +1,9 @@
 package com.example.echo_kt.ui.main
 
-import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -37,30 +37,48 @@ fun imgPlay(view: View,playStatus: Int){
     }
 }
 @BindingAdapter("url")
-fun setImgUrl(view: ImageView,url: Int) {
+fun setImgUrl(view: ImageView,@DrawableRes url: Int) {
     Glide.with(view.context).load(url).into(view)
 }
 
 @BindingAdapter("urlAlbum")
 fun setImgUrl(view: ImageView, url: String?) {
+    url?.apply{
+        Glide.with(view.context)
+            .load(url)
+            .apply(RequestOptions.bitmapTransform(CircleCrop()))
+            .into(view)
+        Log.i("专辑图片", "setImgUrl: $url")
+        return
+    }
     Glide.with(view.context)
-        .load(url)
+        .load(R.mipmap.album)
         .apply(RequestOptions.bitmapTransform(CircleCrop()))
-        .error(Uri.parse("content://media/external/audio/albumart/$url"))
-        .fallback(R.mipmap.album)
         .into(view)
+
     Log.i("专辑图片", "setImgUrl: $url")
 }
 @BindingAdapter("urlAlbum2")
 fun setImgUrl2(view: ImageView, url: String?) {
+    url?.apply {
+        Glide.with(view.context)
+            .load(url)
+            .apply(RequestOptions.bitmapTransform(
+                MultiTransformation(
+                    RoundedCorners(20) //设置图片圆角角度
+                )
+            ))
+            .into(view)
+        Log.i("专辑图片", "setImgUrl: $url")
+        return
+    }
     Glide.with(view.context)
-        .load(url)
+        .load(R.mipmap.album)
         .apply(RequestOptions.bitmapTransform(
             MultiTransformation(
                 RoundedCorners(20) //设置图片圆角角度
             )
         ))
-        .error(R.mipmap.album)
         .into(view)
     Log.i("专辑图片", "setImgUrl: $url")
 }

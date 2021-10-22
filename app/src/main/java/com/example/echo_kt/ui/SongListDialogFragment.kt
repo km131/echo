@@ -11,8 +11,7 @@ import com.example.echo_kt.R
 import com.example.echo_kt.databinding.FragmentSongListDialogBinding
 
 /**
- * 此处其实应该直接继承Dialog，但因为nav导航组件跳转需要传入fragment，
- * dialog似乎不能获取fragment故而选择继承DialogFragment
+ * 此处其实应该直接继承Dialog
  */
 class SongListDialogFragment: DialogFragment() {
 
@@ -33,7 +32,6 @@ class SongListDialogFragment: DialogFragment() {
                     this.dismiss()
                 }
                 R.id.tv_edit -> Toast.makeText(this.context,"功能待添加",Toast.LENGTH_SHORT).show()
-                R.id.btn_cancel -> dismiss()
             }
         }
         return binding.root
@@ -56,13 +54,13 @@ class SongListDialogFragment: DialogFragment() {
     }
     override fun onStart() {
         super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            val metrics = resources.displayMetrics
-            //宽度设为屏幕宽度的90%
-            dialog.window?.setLayout( (metrics.widthPixels * 0.9).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.window!!.attributes.height = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setGravity(Gravity.BOTTOM)
-        }
+       dialog!!.apply {
+           val metrics = resources.displayMetrics
+           //宽度设为屏幕宽度的90%
+           window!!.setLayout( metrics.widthPixels , ViewGroup.LayoutParams.WRAP_CONTENT)
+           window!!.attributes.height = WindowManager.LayoutParams.WRAP_CONTENT
+           window!!.setGravity(Gravity.BOTTOM)
+           window!!.setBackgroundDrawableResource(R.drawable.radius_16_theme)
+       }
     }
 }

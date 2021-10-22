@@ -19,16 +19,28 @@
             android:layout_height="wrap_content"
             style="@style/text_oneLine_18"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="歌曲名称"/>
 
         <TextView
             android:id="@+id/tv_singerName"
+            style="@style/text_oneLine_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            style="@style/text_oneLine_16"
             app:layout_constraintStart_toStartOf="@+id/tv_songName"
-            app:layout_constraintTop_toBottomOf="@+id/tv_songName" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_songName"
+            tools:text="歌手" />
+
+        <TextView
+            android:id="@+id/tv_source"
+            style="@style/text_oneLine_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_songName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_singerName"
+            tools:text="来源" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_itemList"
@@ -39,9 +51,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_singerName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_source"
             app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_text_image"
-            tools:itemCount="4"/>
+            tools:itemCount="4"
+            tools:listitem="@layout/item_text_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

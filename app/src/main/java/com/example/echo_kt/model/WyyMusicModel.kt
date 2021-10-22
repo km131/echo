@@ -14,25 +14,34 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class WyyMusicModel @Inject constructor(private val service: WyyMusicServer) :Model{
+class WyyMusicModel @Inject constructor(private val service: WyyMusicServer) : Model {
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 25
-        fun convertSongBean(pathBean:WyyPathBean.Data, listBean:WyySearchListBean.Result.Song):SongBean{
+        fun convertSongBean(
+            pathBean: WyyPathBean.Data,
+            listBean: WyySearchListBean.Result.Song
+        ): SongBean {
+            var authorStr = ""
+            for (i in listBean.author.indices) {
+                authorStr += listBean.author[i].name + "/"
+            }
+            authorStr = authorStr.substring(0, authorStr.length - 1)
             return SongBean(
                 songName = listBean.name,
-                author = listBean.author[0].name,
+                author = authorStr,
                 albumUrl = listBean.album.picUrl,
                 audioUrl = pathBean.url,
                 id = "WyyMusic/${listBean.mid}",
                 source = "wyy"
             ).apply {
-                val parameterMap = HashMap<String,String>()
-                parameterMap["musicId"]=listBean.mid
+                val parameterMap = HashMap<String, String>()
+                parameterMap["musicId"] = listBean.mid
                 requestParameter = parameterMap
             }
         }
     }
+
     override fun getSearchList(keyWord: String): Flow<PagingData<SearchBean>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
@@ -46,7 +55,7 @@ class WyyMusicModel @Inject constructor(private val service: WyyMusicServer) :Mo
         val params = getWyyParameter(key)
         return try {
             service.searchPath(params.params, params.encSecKey)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             null
         }
     }

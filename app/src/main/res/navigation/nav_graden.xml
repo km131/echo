@@ -24,7 +24,11 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_mainFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:enterAnim="@animator/slide_in_right"
+            app:exitAnim="@animator/slide_out_left"
+            app:popEnterAnim="@animator/slide_in_left"
+            app:popExitAnim="@animator/slide_out_right" />
         <action
             android:id="@+id/action_mainFragment_to_historySongFragment"
             app:destination="@id/historySongFragment" />

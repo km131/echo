@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.util.forEach
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.adapter.MultipleChoiceListAdapter
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.FragmentAddSongsBinding
@@ -19,9 +23,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class AddSongsFragment : Fragment() {
-    companion object {
-        fun newInstance() = AddSongsFragment()
-    }
 
     private var _binding: FragmentAddSongsBinding? = null
     private val args: AddSongsFragmentArgs by navArgs()
@@ -32,7 +33,7 @@ class AddSongsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding= FragmentAddSongsBinding.inflate(inflater,container,false)
         initToolBar()
         initOnClick()
@@ -63,12 +64,21 @@ class AddSongsFragment : Fragment() {
                     }
                     AppDataBase.getInstance().customSongListDao().insertPlaylistsWithSongs(playlistWithSongs)
                     AppDataBase.getInstance().customSongListDao().updateSongList(playList.apply { number+=playlistWithSongs.size })
+                    Toast.makeText(BaseApplication.getContext(),"添加成功",Toast.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
                 }
             }
         }
     }
 
     private fun initToolBar() {
+        binding.toolbar.setNavigationOnClickListener { view ->
+            view.findNavController().navigateUp()
+        }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding=null
     }
 }

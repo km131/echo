@@ -199,13 +199,15 @@ class SearchFragment : Fragment() {
                     val vm: SongViewModel by activityViewModels()
                     GlobalScope.launch(Dispatchers.Main) {
                         val audioBean = withContext(Dispatchers.Main) {
-                            convertToAudioBean(bean, currentSource)
+                            // 此处传上一次使用的来源，如使用当前来源的话，在获取列表后切换来源
+                            // 然后拿取详细信息时会因来源不同而崩溃
+                            convertToAudioBean(bean, lastSource)
                         }
                         audioBean?.let {
                             vm.audioBean.set(audioBean)
                             findNavController().navigate(R.id.action_searchFragment_to_bottomDialogFragment)
                             binding.btnOther.isClickable = true
-                        } ?: showToast("未拿到歌曲信息，请返回上个页面")
+                        } ?: showToast("未拿到歌曲信息")
                     }
                 }
             })

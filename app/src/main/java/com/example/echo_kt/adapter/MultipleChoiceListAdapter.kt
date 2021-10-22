@@ -11,7 +11,8 @@ import com.example.echo_kt.databinding.ListItemAddSongBinding
 /**
  * 多项选择列表，向歌单添加歌曲时用到
  */
-class MultipleChoiceListAdapter(private var mList: MutableList<SongBean>) : RecyclerView.Adapter<MultipleChoiceListAdapter.ViewHolder>() {
+class MultipleChoiceListAdapter(private var mList: MutableList<SongBean>) :
+    RecyclerView.Adapter<MultipleChoiceListAdapter.ViewHolder>() {
 
     var mSelectedPositions = SparseBooleanArray()
 
@@ -26,20 +27,29 @@ class MultipleChoiceListAdapter(private var mList: MutableList<SongBean>) : Recy
     }
 
     override fun onBindViewHolder(holder: MultipleChoiceListAdapter.ViewHolder, position: Int) {
-        holder.bind(mList[position],position)
+        holder.bind(mList[position], position)
     }
 
     override fun getItemCount(): Int = mList.size
 
-    inner class ViewHolder(private val binding : ListItemAddSongBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: SongBean,i:Int) {
+    inner class ViewHolder(private val binding: ListItemAddSongBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: SongBean, i: Int) {
             //设置数据
             binding.apply {
-                binding.bean=item
+                binding.bean = item
                 executePendingBindings()
+                when (isItemChecked(i)) {
+                    false -> {
+                        binding.checkBox.isChecked = false
+                    }
+                    true -> {
+                        binding.checkBox.isChecked = true
+                    }
+                }
             }
             //设置监听
-            binding.onClick=View.OnClickListener {
+            binding.onClick = View.OnClickListener {
                 if (isItemChecked(i)) {
                     setItemChecked(i, false)
                     binding.checkBox.isChecked = false

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 <data>
     <variable
@@ -7,10 +8,11 @@
         type="android.view.View.OnClickListener" />
 </data>
 
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:padding="20dp"
     android:paddingLeft="@dimen/list_item_spacing"
     android:paddingTop="@dimen/list_item_spacing"
     android:paddingRight="@dimen/list_item_spacing"
@@ -20,37 +22,49 @@
         android:id="@+id/tv_sort"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radius_10_hollow"
         android:drawableStart="@mipmap/sort"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
-        android:text="@string/toggle_sort" />
+        android:text="@string/toggle_sort"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_add"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/radius_10_hollow"
         android:drawableStart="@mipmap/add_black"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
-        android:text="@string/addsongs" />
+        android:text="@string/addsongs"
+        app:layout_constraintEnd_toEndOf="@+id/tv_sort"
+        app:layout_constraintStart_toStartOf="@+id/tv_sort"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sort" />
 
     <TextView
         android:id="@+id/tv_edit"
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/radius_10_hollow"
         android:drawableStart="@mipmap/edit"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:onClick="@{onClick}"
-        android:text="@string/editsonglist" />
-
-    <Button
-        android:id="@+id/btn_cancel"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="#00000000"
-        android:onClick="@{onClick}"
-        android:text="@string/cancel" />
-</LinearLayout>
+        android:text="@string/editsonglist"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_sort"
+        app:layout_constraintStart_toStartOf="@+id/tv_sort"
+        app:layout_constraintTop_toBottomOf="@+id/tv_add" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

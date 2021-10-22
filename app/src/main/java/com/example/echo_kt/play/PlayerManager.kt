@@ -7,9 +7,9 @@ import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.ui.notification.PlayService
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.ui.setting.SettingViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
 /**
@@ -232,7 +232,6 @@ class PlayerManager private constructor() :
      */
     fun register(audioObserver: AudioObserver) {
         observers.add(audioObserver)
-        //TODO 注册时手动更新观察者,相当于粘性通知
         notifyObserver(audioObserver)
     }
 

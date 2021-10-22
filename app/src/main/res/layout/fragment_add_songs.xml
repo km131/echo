@@ -33,6 +33,7 @@
             android:id="@+id/rv_Songs"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            tools:listitem="@layout/list_item_add_song"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/ll_addSongs"
             app:layout_constraintEnd_toEndOf="parent"

@@ -14,7 +14,6 @@
     <!--    android:exported="false" 禁止其他应用访问应用的内容提供程序-->
     <application
         android:name=".BaseApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/echo"
         android:roundIcon="@mipmap/echo"
         android:supportsRtl="true"

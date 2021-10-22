@@ -1,18 +1,22 @@
 package com.example.echo_kt.api.kugou
 
+import com.example.echo_kt.api.ProgressListener
+import com.example.echo_kt.util.ProgressInterceptor
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+
 
 interface KuGouServer {
     @GET("/v1/kugou/song")
     suspend fun searchMusic(
         @Query("aid")
-        aid:String,
+        aid: String,
         @Query("hash")
         hash: String
     ): SearchMusicDetails
@@ -20,7 +24,7 @@ interface KuGouServer {
     @GET("song")
     suspend fun searchMusicList(
         @Query("format")
-        format:String,
+        format: String,
         @Query("keyWord")
         keyWord: String,
         @Query("page")
@@ -34,8 +38,9 @@ interface KuGouServer {
     /**
      * 用 suspend 修饰会导致报错，具体原因未知
      */
+    @Streaming
     @GET
-    fun downloadFile(@Url url: String): Call<ResponseBody>
+    fun downloadFile( @Url url: String): Observable<ResponseBody>
 
     companion object {
         //根据关键字搜索歌曲
@@ -45,7 +50,8 @@ interface KuGouServer {
         // &page=1
         // &pagesize=20
         // &showtype=1
-        private const val BASE_URL ="http://mobilecdn.kugou.com/api/v3/search/"
+        private const val BASE_URL = "http://mobilecdn.kugou.com/api/v3/search/"
+
         //获取歌曲详情，带MP3链接
         private const val SINGLE_URL = "http://iecoxe.top:5000/"
 
@@ -94,14 +100,20 @@ interface KuGouServer {
         /**
          * 下载歌曲接口
          */
-        fun create3(): KuGouServer {
+        fun create3(listener: ProgressListener): KuGouServer {
 
+            val interceptor = ProgressInterceptor(listener)
             val retrofitBuilder = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://webfs.cloud.kugou.com/")
             return retrofitBuilder
-                .client(OkHttpClient.Builder().build())
-                .build().create(KuGouServer::class.java)
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor(interceptor)
+                        .retryOnConnectionFailure(true).build()
+                ).baseUrl(BASE_URL)
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .build()
+                .create(KuGouServer::class.java)
         }
     }
 }

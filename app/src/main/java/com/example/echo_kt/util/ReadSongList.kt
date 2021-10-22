@@ -86,7 +86,7 @@ fun readLikePlayList(songsRepository:SongsRepository): MutableList<SongBean> {
  */
 fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
     try {
-        val uri = getAudioUrl("$fileName.mp3")
+        val uri = getAudioUri("$fileName.mp3")
         Log.i("文件路径", "writeResponseBodyToDisk: $uri")
         //初始化输入流
         var inputStream: InputStream? = null
@@ -131,9 +131,9 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
 }
 
 /**
- * 获取公共存储空间
+ * 获取音频文件公共存储空间
  */
-private fun getAudioUrl(fileName: String): Uri? {
+fun getAudioUri(fileName: String): Uri? {
     val contentValues = ContentValues()
     contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
     contentValues.put(MediaStore.Images.Media.MIME_TYPE, "audio/mp3")
@@ -144,20 +144,20 @@ private fun getAudioUrl(fileName: String): Uri? {
 /**
  * 获取存储路径(包名下的file文件夹)
  */
-private fun getPublicDiskFileDir(context: Context, fileName: String): String {
+ fun getPublicDiskFileDir( fileName: String): File {
     var cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) { //此目录下的是外部存储下的私有的fileName目录
-        context.getExternalFilesDir(fileName)!!.absolutePath
+        BaseApplication.getContext().getExternalFilesDir(fileName)!!.absolutePath
     } else {
-        context.filesDir.path
+        BaseApplication.getContext().filesDir.path
             .toString() + "/" + fileName
     }
     val file = File(cachePath)
     if (!file.exists()) {
         file.mkdirs()
     }
-    return file.absolutePath
+    return file
 }
 // 重新获取音频地址
 suspend fun updateUrl(wyyService: WyyMusicServer,qqServer: QQMusicServer){

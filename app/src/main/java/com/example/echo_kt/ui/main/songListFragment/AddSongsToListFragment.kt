@@ -13,17 +13,13 @@ import com.example.echo_kt.ui.main.MainFragmentDirections
 
 class AddSongsToListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AddSongsToListFragment()
-    }
-
     private var _binding: AddSongsToListFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding= AddSongsToListFragmentBinding.inflate(inflater,container,false)
         initToolBar()
         initOnClick()

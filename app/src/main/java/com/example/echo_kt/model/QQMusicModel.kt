@@ -1,5 +1,6 @@
 package com.example.echo_kt.model
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -20,9 +21,15 @@ class QQMusicModel @Inject constructor(private val listService: QQMusicServer) :
     companion object {
         private const val NETWORK_PAGE_SIZE = 25
         fun convertSongBean(audioList: AudioList, url: String, parameterMap:HashMap<String,String>):SongBean{
+            var authorStr = ""
+            Log.i("SIZE", "convertSongBean: "+audioList.singer.size)
+            for (i in audioList.singer.indices) {
+                authorStr += audioList.singer[i].singerName+"/"
+            }
+            authorStr = authorStr.substring(0,authorStr.length-1)
             return SongBean(
                 songName = audioList.songName,
-                author = audioList.singer[0].singerName,
+                author = authorStr,
                 albumUrl = "https://y.gtimg.cn/music/photo_new/T002R300x300M000${audioList.album}.jpg",
                 audioUrl = url,
                 id = "qqMusic/${audioList.songmid}",
