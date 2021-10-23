@@ -1,11 +1,13 @@
 package com.example.echo_kt.adapter
 
+import android.os.Build
 import com.example.echo_kt.api.ProgressListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.ObservableField
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
@@ -23,6 +25,8 @@ import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.util.downloadFile
+import com.example.echo_kt.util.getFileSize
+import com.example.echo_kt.util.updateProgress
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -133,14 +137,20 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
                             viewModel.audioBean.get()!!.let {
                                 val url: String = it.audioUrl
                                 val songName: String = it.songName
-                                downloadFile(songName,url,object : ProgressListener {
+                                downloadFile(songName, url, object : ProgressListener {
+                                    @RequiresApi(Build.VERSION_CODES.N)
                                     override fun update(
                                         url: String,
                                         bytesRead: Long,
                                         contentLength: Long,
                                         done: Boolean
                                     ) {
-                                        Log.e("", "onProgress: 正在下载$contentLength")
+                                        Log.e(
+                                            "",
+                                            "onProgress: 正在下载 bytesRead:$bytesRead ,contentLength:$contentLength ,done: $done"
+                                        )
+                                        val percent = (100 * bytesRead / contentLength).toInt()
+                                        updateProgress(percent,title = it.songName,maxSize = getFileSize(contentLength),isEnd = done)
                                     }
                                 })
                             }

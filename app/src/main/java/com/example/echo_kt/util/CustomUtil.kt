@@ -3,9 +3,12 @@ package com.example.echo_kt.util
 import com.example.echo_kt.api.ProgressListener
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.icu.text.DecimalFormat
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
@@ -98,52 +101,7 @@ fun downloadFile(fileName: String, url: String, downloadCallback: ProgressListen
             @SuppressLint("CommitPrefEdits")
             override fun onNext(responseBody: ResponseBody) {
                 GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        val uri = getPublicDiskFileDir("$fileName.mp3").toUri()
-                        Log.i("文件路径", "writeResponseBodyToDisk: $uri")
-                        //初始化输入流
-                        var inputStream: InputStream? = null
-                        //初始化输出流
-                        var outputStream: OutputStream? = null
-
-                        try {
-                            //设置每次读写的字节
-                            val fileReader = ByteArray(4096)
-
-                            var fileSizeDownloaded = 0
-                            //请求返回的字节流
-                            inputStream = responseBody.byteStream()
-                            //创建输出流
-                            outputStream =
-                                BaseApplication.getContext().contentResolver.openOutputStream(uri)
-                            //进行读取操作
-                            while (true) {
-                                val read = inputStream.read(fileReader)
-
-                                if (read == -1) {
-                                    break
-                                }
-                                //进行写入操作
-                                outputStream!!.write(fileReader, 0, read)
-                                fileSizeDownloaded += read
-
-                            }
-                            //刷新
-                            outputStream!!.flush()
-                        } catch (e: IOException) {
-                            Log.e("", "onNext: 文件保存失败")
-                        } finally {
-                            inputStream?.close()
-                            outputStream?.close()
-                        }
-                    } catch (e: IOException) {
-                        Toast.makeText(
-                            BaseApplication.getContext(),
-                            "此功能暂未适配android10以下机型",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
+                    writeResponseBodyToDisk(responseBody, fileName)
                 }
             }
 
@@ -155,61 +113,36 @@ fun downloadFile(fileName: String, url: String, downloadCallback: ProgressListen
                 Log.i("", "onComplete: 下载完成")
             }
         })
-
-//    var totalLength = "-"
-//    if (file.exists()) {
-//        totalLength += file.length()
-//    }
-//    val listener = object : ProgressResponse.com.example.echo_kt.api.com.example.echo_kt.api.ProgressListener {
-//        override fun update(
-//            bytesRead: Long,
-//            contentLength: Long,
-//            done: Boolean
-//        ) {
-//            //计算百分比并更新ProgressBar
-//            val percent = (100 * bytesRead / contentLength).toInt()
-//            updateProgress(percent)
-//        }
-//
-//    }
-//    val download: Call<ResponseBody> =
-//        KuGouServer.create3(listener).downloadFile("bytes=$range$totalLength", url, object :DownloadCallBack{
-//
-//        })
-
-//    download.enqueue(object : Callback<ResponseBody> {
-//        override fun onResponse(
-//            call: Call<ResponseBody>,
-//            response: Response<ResponseBody>
-//        ) {
-//            //writeResponseBodyToDisk(response.body(), uri)
-//            Log.i("SUCCEED", "onResponse: 请求下载成功，")
-//        }
-//
-//        override fun onFailure(
-//            call: Call<ResponseBody>,
-//            t: Throwable
-//        ) {
-//            Log.e("ERROR", "onFailure: 请求下载失败")
-//        }
-//    })
-
 }
 
-private fun updateProgress(progress: Int) {
+fun updateProgress(progress: Int, title: String, maxSize: String, isEnd: Boolean) {
     val builder = NotificationCompat.Builder(BaseApplication.getContext(), CHANNEL_ID).apply {
-        setContentTitle("正在下载")
+        setContentTitle(title)
         setContentText("下载进度")
         setSmallIcon(R.mipmap.echo)
         priority = NotificationCompat.PRIORITY_LOW
     }
-    val PROGRESS_MAX = 100
-    val PROGRESS_CURRENT = 0
     NotificationManagerCompat.from(BaseApplication.getContext()).apply {
-        builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false)
+        if (isEnd) {
+            builder.setContentText(maxSize).setProgress(0, 0, false)
+        } else {
+            builder.setContentText(maxSize).setProgress(100, progress, false)
+        }
         notify(1025, builder.build())
-        builder.setContentText("Download complete")
-            .setProgress(0, progress, false)
-        notify(1025, builder.build())
+    }
+}
+@RequiresApi(Build.VERSION_CODES.N)
+fun getFileSize(size: Long): String {
+
+    var GB = 1024 * 1024 * 1024
+    var MB = 1024 * 1014
+    var KB = 1024
+    var df = DecimalFormat("0.00")
+
+    return when {
+        size / GB >= 1 -> df.format(size / GB.toFloat()) + "GB"
+        size / MB >= 1 -> df.format(size / MB.toFloat()) + "MB"
+        size / KB >= 1 -> df.format(size / KB.toFloat()) + "KB"
+        else -> size.toString() + "B"
     }
 }
