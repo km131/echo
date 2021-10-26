@@ -61,16 +61,17 @@ fun readLocalPlayList(context: Context): MutableList<SongBean> {
 fun readHistoryPlayList(): MutableList<SongBean> {
     val list = mutableListOf<SongBean>()
     val s = AppDataBase.getInstance().historyAudioDao().getAllSongs()
-        if (!s.isNullOrEmpty()) {
-            for (element in s)
-                list.add(element.playlists)
-        }
-        return list
+    if (!s.isNullOrEmpty()) {
+        for (element in s)
+            list.add(element.playlists)
+    }
+    return list
 }
+
 /**
  * 读取收藏列表
  */
-fun readLikePlayList(songsRepository:SongsRepository): MutableList<SongBean> {
+fun readLikePlayList(songsRepository: SongsRepository): MutableList<SongBean> {
     val list = mutableListOf<SongBean>()
     val s = songsRepository.findSongByIsLike(true)
     val ss = s.asLiveData().value
@@ -84,10 +85,10 @@ fun readLikePlayList(songsRepository:SongsRepository): MutableList<SongBean> {
 /**
  * 写入音频文件
  */
-fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
-    try {
-        val uri = getAudioUri("$fileName.mp3")
-        Log.i("文件路径", "writeResponseBodyToDisk: $uri")
+fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String, fileType: String): Boolean {
+    val uri = getAudioUri("$fileName.$fileType")
+    Log.i("文件路径", "writeResponseBodyToDisk: $uri")
+    uri?.apply {
         //初始化输入流
         var inputStream: InputStream? = null
         //初始化输出流
@@ -101,7 +102,7 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
             //请求返回的字节流
             inputStream = body!!.byteStream()
             //创建输出流
-            outputStream = BaseApplication.getContext().contentResolver.openOutputStream(uri!!)
+            outputStream = BaseApplication.getContext().contentResolver.openOutputStream(uri)
             //进行读取操作
             while (true) {
                 val read = inputStream.read(fileReader)
@@ -123,11 +124,9 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String): Boolean {
             inputStream?.close()
             outputStream?.close()
         }
-    } catch (e: IOException) {
-        Toast.makeText(BaseApplication.getContext(), "此功能暂未适配android10以下机型", Toast.LENGTH_SHORT)
-            .show()
-        return true
     }
+    Toast.makeText(BaseApplication.getContext(),"文件写入路径获取失败",Toast.LENGTH_SHORT).show()
+    return false
 }
 
 /**
@@ -144,7 +143,7 @@ fun getAudioUri(fileName: String): Uri? {
 /**
  * 获取存储路径(包名下的file文件夹)
  */
- fun getPublicDiskFileDir( fileName: String): File {
+fun getPublicDiskFileDir(fileName: String): File {
     var cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) { //此目录下的是外部存储下的私有的fileName目录
@@ -159,42 +158,44 @@ fun getAudioUri(fileName: String): Uri? {
     }
     return file
 }
+
 // 重新获取音频地址
-suspend fun updateUrl(wyyService: WyyMusicServer,qqServer: QQMusicServer){
-        AppDataBase.getInstance()
-            .songDao()
-            .findSongBySource("kugou")
-            ?.apply {
-                AppDataBase.getInstance()
-                    .songDao()
-                    .updateSongs(this.onEach {
-                        val map = it.requestParameter!!
-                        it.audioUrl = KuGouServer.create2()
-                            .searchMusic(map["id"]!!, map["hash"]!!).data.play_url
-                    })
-            }
-        AppDataBase.getInstance()
-            .songDao()
-            .findSongBySource("wyy")
-            ?.apply {
-                AppDataBase.getInstance()
-                    .songDao()
-                    .updateSongs(this.onEach {
-                        val map = it.requestParameter!!
-                        it.audioUrl = WyyMusicModel(wyyService).getSongPath(map["musicId"]!!)!!.data[0].url
-                    })
-            }
-        AppDataBase.getInstance()
-            .songDao()
-            .findSongBySource("qq")
-            ?.apply {
-                AppDataBase.getInstance()
-                    .songDao()
-                    .updateSongs(this.onEach {
-                        val map = it.requestParameter!!
-                        it.audioUrl = QQMusicModel(qqServer).getPath(map["mid"]!!)
-                    })
-            }
+suspend fun updateUrl(wyyService: WyyMusicServer, qqServer: QQMusicServer) {
+    AppDataBase.getInstance()
+        .songDao()
+        .findSongBySource("kugou")
+        ?.apply {
+            AppDataBase.getInstance()
+                .songDao()
+                .updateSongs(this.onEach {
+                    val map = it.requestParameter!!
+                    it.audioUrl = KuGouServer.create2()
+                        .searchMusic(map["id"]!!, map["hash"]!!).data.play_url
+                })
+        }
+    AppDataBase.getInstance()
+        .songDao()
+        .findSongBySource("wyy")
+        ?.apply {
+            AppDataBase.getInstance()
+                .songDao()
+                .updateSongs(this.onEach {
+                    val map = it.requestParameter!!
+                    it.audioUrl =
+                        WyyMusicModel(wyyService).getSongPath(map["musicId"]!!)!!.data[0].url
+                })
+        }
+    AppDataBase.getInstance()
+        .songDao()
+        .findSongBySource("qq")
+        ?.apply {
+            AppDataBase.getInstance()
+                .songDao()
+                .updateSongs(this.onEach {
+                    val map = it.requestParameter!!
+                    it.audioUrl = QQMusicModel(qqServer).getPath(map["mid"]!!)
+                })
+        }
 }
 
 

@@ -26,6 +26,7 @@ class KuGouModel @Inject constructor(private val service: KuGouServer):Model{
                 source = "kugou"
             ).apply {
                 requestParameter = hashMapOf("id" to bean.albumId , "hash" to bean.hash)
+                fileType = bean.format
             }
         }
         suspend fun getMusicBean(albumId:String,hash:String): SearchMusicDetails.Data? {

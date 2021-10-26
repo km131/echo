@@ -24,7 +24,10 @@ class MiGuMusicModel @Inject constructor(private val service: MiguMusicServer):M
                 audioUrl = bean.data.url,
                 id = "miguMusic/${bean.data.songItem.songId}",
                 source = "migu"
-            )
+            ).apply {
+                //暂时凑合
+                fileType = ".mp3"
+            }
         }
     }
 

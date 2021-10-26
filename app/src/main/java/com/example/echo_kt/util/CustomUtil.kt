@@ -2,16 +2,17 @@ package com.example.echo_kt.util
 
 import com.example.echo_kt.api.ProgressListener
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.content.ContentResolver
+import android.content.Context.DOWNLOAD_SERVICE
 import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.net.toUri
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
 import com.example.echo_kt.api.kugou.KuGouServer
@@ -24,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -84,7 +84,7 @@ fun getRandomColor(): Array<Float> {
     return arrayOf(r, g, b)
 }
 
-fun downloadFile(fileName: String, url: String, downloadCallback: ProgressListener) {
+fun downloadFile(fileName: String, url: String,fileType: String, downloadCallback: ProgressListener) {
     Log.i("", "下载链接: $url")
     KuGouServer.create3(downloadCallback).downloadFile(url)
         .subscribeOn(Schedulers.io())
@@ -101,30 +101,37 @@ fun downloadFile(fileName: String, url: String, downloadCallback: ProgressListen
             @SuppressLint("CommitPrefEdits")
             override fun onNext(responseBody: ResponseBody) {
                 GlobalScope.launch(Dispatchers.IO) {
-                    writeResponseBodyToDisk(responseBody, fileName)
+                    writeResponseBodyToDisk(responseBody, fileName,fileType)
                 }
             }
 
             override fun onError(e: Throwable) {
-
+                Log.e("", "onError: ${e.message}")
             }
 
             override fun onComplete() {
-                Log.i("", "onComplete: 下载完成")
+                Log.i("", "onComplete")
             }
         })
+}
+fun downLoadFile(url: String,fileName: String,fileType:String){
+    val downloadManager = BaseApplication.getContext().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+    val request = DownloadManager.Request(Uri.parse(url))
+    request.setDestinationInExternalPublicDir("Music",MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.encodedPath+"/$fileName.$fileType")
+    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+    val downloadId: Long = downloadManager.enqueue(request)
 }
 
 fun updateProgress(progress: Int, title: String, maxSize: String, isEnd: Boolean) {
     val builder = NotificationCompat.Builder(BaseApplication.getContext(), CHANNEL_ID).apply {
         setContentTitle(title)
-        setContentText("下载进度")
         setSmallIcon(R.mipmap.echo)
         priority = NotificationCompat.PRIORITY_LOW
     }
     NotificationManagerCompat.from(BaseApplication.getContext()).apply {
         if (isEnd) {
-            builder.setContentText(maxSize).setProgress(0, 0, false)
+            builder.setContentText("$maxSize 下载完成").setProgress(0, 0, false)
         } else {
             builder.setContentText(maxSize).setProgress(100, progress, false)
         }
@@ -134,15 +141,15 @@ fun updateProgress(progress: Int, title: String, maxSize: String, isEnd: Boolean
 @RequiresApi(Build.VERSION_CODES.N)
 fun getFileSize(size: Long): String {
 
-    var GB = 1024 * 1024 * 1024
-    var MB = 1024 * 1014
-    var KB = 1024
-    var df = DecimalFormat("0.00")
+    val mGB = 1024 * 1024 * 1024
+    val mMB = 1024 * 1024
+    val mKB = 1024
+    val df = DecimalFormat("0.00")
 
     return when {
-        size / GB >= 1 -> df.format(size / GB.toFloat()) + "GB"
-        size / MB >= 1 -> df.format(size / MB.toFloat()) + "MB"
-        size / KB >= 1 -> df.format(size / KB.toFloat()) + "KB"
+        size / mGB >= 1 -> df.format(size / mGB.toFloat()) + "GB"
+        size / mMB >= 1 -> df.format(size / mMB.toFloat()) + "MB"
+        size / mKB >= 1 -> df.format(size / mKB.toFloat()) + "KB"
         else -> size.toString() + "B"
     }
 }

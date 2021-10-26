@@ -54,6 +54,12 @@ data class SongBean (
      */
     @ColumnInfo(name = "isLike")
     var isLike: Boolean = false
+
+    /**
+     * 文件类型(后缀)
+     */
+    @ColumnInfo(name = "fileType")
+    var fileType:String=""
 }
 
 

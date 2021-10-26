@@ -24,6 +24,7 @@ import com.example.echo_kt.databinding.ListItemSearchBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
+import com.example.echo_kt.util.downLoadFile
 import com.example.echo_kt.util.downloadFile
 import com.example.echo_kt.util.getFileSize
 import com.example.echo_kt.util.updateProgress
@@ -137,22 +138,23 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
                             viewModel.audioBean.get()!!.let {
                                 val url: String = it.audioUrl
                                 val songName: String = it.songName
-                                downloadFile(songName, url, object : ProgressListener {
-                                    @RequiresApi(Build.VERSION_CODES.N)
-                                    override fun update(
-                                        url: String,
-                                        bytesRead: Long,
-                                        contentLength: Long,
-                                        done: Boolean
-                                    ) {
-                                        Log.e(
-                                            "",
-                                            "onProgress: 正在下载 bytesRead:$bytesRead ,contentLength:$contentLength ,done: $done"
-                                        )
-                                        val percent = (100 * bytesRead / contentLength).toInt()
-                                        updateProgress(percent,title = it.songName,maxSize = getFileSize(contentLength),isEnd = done)
-                                    }
-                                })
+//                                downloadFile(songName, url, object : ProgressListener {
+//                                    @RequiresApi(Build.VERSION_CODES.N)
+//                                    override fun update(
+//                                        url: String,
+//                                        bytesRead: Long,
+//                                        contentLength: Long,
+//                                        done: Boolean
+//                                    ) {
+//                                        Log.e(
+//                                            "",
+//                                            "onProgress: 正在下载 bytesRead:$bytesRead ,contentLength:$contentLength ,done: $done"
+//                                        )
+//                                        val percent = (100 * bytesRead / contentLength).toInt()
+//                                        updateProgress(percent,title = it.songName,maxSize = getFileSize(contentLength),isEnd = done)
+//                                    }
+//                                })
+                                downLoadFile(url,songName,it.fileType)
                             }
                         }
                         3 -> {

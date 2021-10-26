@@ -38,6 +38,7 @@ class WyyMusicModel @Inject constructor(private val service: WyyMusicServer) : M
                 val parameterMap = HashMap<String, String>()
                 parameterMap["musicId"] = listBean.mid
                 requestParameter = parameterMap
+                fileType = pathBean.type
             }
         }
     }

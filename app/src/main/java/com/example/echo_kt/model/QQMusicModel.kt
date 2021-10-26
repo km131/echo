@@ -36,6 +36,8 @@ class QQMusicModel @Inject constructor(private val listService: QQMusicServer) :
                 source = "qq"
             ).apply {
                 requestParameter = parameterMap
+                //暂时凑合一下
+                fileType = "m4a"
             }
         }
     }
