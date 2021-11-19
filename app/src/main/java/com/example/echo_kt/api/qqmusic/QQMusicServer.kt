@@ -53,7 +53,7 @@ interface QQMusicServer {
     fun getAudioFile(@Url url: String): Call<ResponseBody>
 
     companion object {
-        //soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.song&searchid=55240636747206584&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=10&w=%E6%9C%89%E4%BD%95%E4%B8%8D%E5%8F%AF&g_tk_new_20200303=713787748&g_tk=713787748&loginUin=2602241712&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0
+        //https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.song&searchid=55240636747206584&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=10&w=%E6%9C%89%E4%BD%95%E4%B8%8D%E5%8F%AF&g_tk_new_20200303=713787748&g_tk=713787748&loginUin=2602241712&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0
         private const val BASE_URL = "https://c.y.qq.com/"
 
         private const val VKey_URL = "https://u.y.qq.com/"

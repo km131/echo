@@ -17,10 +17,6 @@ import com.example.echo_kt.util.stringForTime
 
 class PlayFragment : Fragment(), AudioObserver {
 
-    companion object {
-        fun newInstance() = PlayFragment()
-    }
-
     private val viewModel: MainViewModel by activityViewModels()
     private var _binding:PlayFragmentBinding?=null
     private val binding get()=_binding!!

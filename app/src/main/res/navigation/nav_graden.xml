@@ -12,7 +12,11 @@
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_mainFragment_to_playFragment"
-            app:destination="@id/playFragment"/>
+            app:destination="@id/playFragment"
+            app:enterAnim="@animator/slide_in_bottom"
+            app:exitAnim="@animator/slide_out_top"
+            app:popEnterAnim="@animator/slide_in_top"
+            app:popExitAnim="@animator/slide_out_bottom"/>
         <action
             android:id="@+id/action_mainFragment_to_localSongFragment"
             app:destination="@id/localSongFragment" />
@@ -21,7 +25,11 @@
             app:destination="@id/audioListDialogFragment" />
         <action
             android:id="@+id/action_mainFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@animator/slide_in_right"
+            app:exitAnim="@animator/slide_out_left"
+            app:popEnterAnim="@animator/slide_in_left"
+            app:popExitAnim="@animator/slide_out_right" />
         <action
             android:id="@+id/action_mainFragment_to_searchFragment"
             app:destination="@id/searchFragment"

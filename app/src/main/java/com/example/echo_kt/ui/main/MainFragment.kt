@@ -34,7 +34,7 @@ class MainFragment : Fragment(), AudioObserver {
             setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.menu_home -> binding.vpHome.setCurrentItem(0, false)
-                    R.id.menu_video -> binding.vpHome.setCurrentItem(1, false)
+//                    R.id.menu_video -> binding.vpHome.setCurrentItem(1, false)
                     R.id.menu_info -> binding.vpHome.setCurrentItem(2, false)
                 }
                 // 这里注意返回true,否则点击失效
@@ -46,7 +46,6 @@ class MainFragment : Fragment(), AudioObserver {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
         binding.mainVM=viewModel
     }
 
@@ -100,7 +99,6 @@ class MainFragment : Fragment(), AudioObserver {
     override fun onAudioBean(audioBean: SongBean) {
         viewModel.songName.set(audioBean.songName)
         viewModel.singer.set(audioBean.author)
-        viewModel.maxProgress.set(100000)
         viewModel.albumPic.set(audioBean.albumUrl)
     }
 

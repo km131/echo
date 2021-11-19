@@ -11,10 +11,6 @@ import com.example.echo_kt.ui.video.listadapter.VideoMainAdapter
 
 class InfoFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = InfoFragment()
-    }
-
     private val viewModel: InfoViewModel by viewModels()
     private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!
@@ -23,7 +19,7 @@ class InfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding= FragmentInfoBinding.inflate(inflater,container,false)
         return binding.root
     }

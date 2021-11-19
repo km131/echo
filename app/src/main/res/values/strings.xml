@@ -32,6 +32,7 @@
     <string name="matter4">4.安装时若显示签名被修改切勿安装，软件下载地址请访问：https://gitee.com/k__m/echo_kt</string>
     <string name="searchByKeyWord">根据关键字搜索</string>
     <string name="timingClosure">定时关闭</string>
+    <string name="floatWindow">悬浮窗</string>
     <string name="countDown">倒计时</string>
     <string name="updatePath">更新所有音频地址</string>
     <string name="other">其他</string>
@@ -40,4 +41,6 @@
     <string name="currentList">当前列表</string>
     <string name="next">下一首</string>
     <string name="updateComplete">更新成功</string>
+    <string name="downloadSettings">下载设置</string>
+    <string name="tone">音质</string>
 </resources>

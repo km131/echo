@@ -22,17 +22,18 @@ import com.example.echo_kt.play.PlayerManager
 /**
  * 每播放一个新的音频或者播放状态改变，发送一个新的通知
  */
-const val CHANNEL_ID="echo_1024"
+const val CHANNEL_ID = "echo_1024"
+
 class PlayService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val results = PlayerManager.instance.getCurrentAudioBean()
         val mode = PlayerManager.instance.getPlayState()
-        createNotification(results,mode)
+        createNotification(results, mode)
         return START_NOT_STICKY
     }
 
-    private fun createNotification(results: SongBean?,mode:Int) {
+    private fun createNotification(results: SongBean?, mode: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
@@ -50,11 +51,11 @@ class PlayService : Service() {
             .setOngoing(true)
             .build()
         when (mode) {
-            PlayerManager.RESUME ,PlayerManager.START -> noti.contentView.setImageViewResource(
+            PlayerManager.RESUME, PlayerManager.START -> noti.contentView.setImageViewResource(
                 R.id.player_play,
                 R.mipmap.play_resume_gray
             )
-            PlayerManager.PAUSE-> noti.contentView.setImageViewResource(
+            PlayerManager.PAUSE -> noti.contentView.setImageViewResource(
                 R.id.player_play,
                 R.mipmap.play_pause_gray
             )
@@ -89,7 +90,7 @@ class PlayService : Service() {
         )
         with(NotificationManagerCompat.from(this)) {
             notify(1024, noti)
-            startForeground(1024,noti)
+            startForeground(1024, noti)
         }
     }
 
@@ -112,6 +113,7 @@ class PlayService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
     private fun setListeners(view: RemoteViews) {
         try {
             var pendingIntent = PendingIntent.getBroadcast(

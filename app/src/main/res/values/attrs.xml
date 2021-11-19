@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DemoView">
+        <attr name="imageUrl" format="reference"/>
+        <attr name="progressBarColor" format="reference|color"/>
+        <attr name="solidCircleWidth" format="float"/>
+    </declare-styleable>
+</resources>

@@ -45,15 +45,14 @@ class MediaPlayerHelper : IPlayer,
         mediaPlayer.reset()
         //可能会抛FileNotFound异常
         kotlin.runCatching {
-            Log.i("MediaPlayHelper LINE:45", "播放地址: $path")
+            Log.i("MediaPlayHelper", "播放地址: $path")
             mediaPlayer.setDataSource(path)
         }.onSuccess {
             //异步加载网络音频避免卡顿导致界面挂起
             mediaPlayer.prepareAsync()
-            Log.i("MediaPlayHelper LINE:45", "加载中播放地址: $path")
         }.onFailure {
-            showToast("MediaPlayHelper LINE:52 ：播放异常")
-            Log.i("MediaPlayHelper LINE:45", "播放异常: $path")
+            showToast("播放异常 path = $path")
+            Log.i("MediaPlayHelper", "播放异常: $path")
         }
     }
 

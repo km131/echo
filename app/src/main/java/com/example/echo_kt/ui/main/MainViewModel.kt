@@ -1,17 +1,26 @@
 package com.example.echo_kt.ui.main
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Path
+import android.graphics.PixelFormat
+import android.os.Build
+import android.util.Log
+import android.view.Gravity
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
+import com.example.echo_kt.customview.FloatWindowView
 import com.example.echo_kt.play.PlayerManager
+import com.example.echo_kt.ui.float_window.ItemViewTouchListener
+import java.lang.ref.WeakReference
+import kotlin.coroutines.coroutineContext
 
 class MainViewModel : ViewModel() {
-    companion object{
-        val instance: MainViewModel by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            MainViewModel()
-        }
-    }
     /**
      * 歌名
      */
@@ -70,15 +79,22 @@ class MainViewModel : ViewModel() {
      */
     val playProgress = MutableLiveData<Int>()
 
+    /**
+     * 悬浮窗状态
+     */
+    val floatWindowViewState = MutableLiveData(false)
+
 //    /**
 //     * 是否收藏
 //     */
 //    val collect = ObservableField<Boolean>()
+    private var windowManager: WindowManager? = null
+    private var floatWindowView: WeakReference<FloatWindowView?> = WeakReference(null)
 
     /**
      * 重置
      */
-    fun reset(){
+    fun reset() {
         songName.set("")
         singer.set("")
         albumPic.set("")
@@ -88,6 +104,55 @@ class MainViewModel : ViewModel() {
         maxProgress.set(0)
         playProgress.postValue(0)
 //        collect.set(false)
+    }
+
+    fun showFloatWindow() {
+        //如果悬浮窗已存在，取消创建。此情况在打开悬浮窗后重新进入设置页面时会出现
+        if (floatWindowViewState.value!!) {
+            return
+        }
+        windowManager =
+            BaseApplication.getContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val layoutParam = getLayoutParams()
+        floatWindowView.get()?.run {
+            windowManager!!.addView(this, layoutParam)
+        } ?: run {
+            floatWindowView = WeakReference(FloatWindowView(BaseApplication.getContext()).apply {
+                setOnTouchListener(ItemViewTouchListener(layoutParam, windowManager!!))
+            })
+            windowManager!!.addView(floatWindowView.get(), layoutParam)
+        }
+        floatWindowViewState.value = true
+    }
+
+    fun closeFloatWindow() {
+        floatWindowView.let { it1 ->
+            windowManager?.removeView(it1.get())
+            floatWindowView.clear()
+            Log.e("TAG", "closeFloatWindow")
+        }
+        floatWindowViewState.value = false
+    }
+
+    private fun getLayoutParams(): WindowManager.LayoutParams {
+        val layoutParams = WindowManager.LayoutParams()
+        return layoutParams.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+            }
+            flags = (WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                    )
+            format = PixelFormat.TRANSLUCENT
+            width = 100
+            height = 100
+            layoutAnimationParameters
+            gravity = Gravity.CENTER
+        }
     }
 
 }

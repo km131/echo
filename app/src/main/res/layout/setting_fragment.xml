@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <import type="com.example.echo_kt.util.CustomUtilKt"/>
         <variable
-            name="vmHome"
+            name="vmSetting"
             type="com.example.echo_kt.ui.setting.SettingViewModel" />
     </data>
 
@@ -20,7 +20,8 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:elevation="6dp"
+            android:elevation="60dp"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +34,7 @@
                 android:layout_height="50dp"
                 android:padding="15dp"
                 android:src="@drawable/ic_detail_back"
+                android:background="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -53,23 +55,38 @@
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchTimeOff"
+            style="@style/text_oneLine_16"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:checked="@{vmHome.countdownBean.countdownState}"
-            style="@style/text_oneLine_16"
-            android:text="@string/timingClosure"
+            android:layout_marginTop="16dp"
             android:background="@drawable/radius_10_hollow"
+            android:checked="@{vmSetting.countdownBean.countdownState}"
+            android:elevation="2dp"
             android:gravity="center_vertical"
+            android:text="@string/timingClosure"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFloatWindow"
+            style="@style/text_oneLine_16"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/radius_10_hollow"
+            android:elevation="2dp"
+            android:gravity="center_vertical"
+            android:text="@string/floatWindow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_update" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:visibility="@{!vmHome.countdownBean.countdownState ? View.GONE : View.VISIBLE }"
+            android:visibility="@{!vmSetting.countdownBean.countdownState ? View.GONE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="@+id/switchTimeOff"
             app:layout_constraintStart_toStartOf="@+id/switchTimeOff"
             app:layout_constraintTop_toBottomOf="@+id/switchTimeOff">
@@ -80,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:max="@{6000000}"
-                android:progress="@{CustomUtilKt.intForLong(vmHome.countdownBean.countdown)}"
+                android:progress="@{CustomUtilKt.intForLong(vmSetting.countdownBean.countdown)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.9"
@@ -102,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{CustomUtilKt.stringForTime(vmHome.countdownBean.countdown)}"
+                android:text="@{CustomUtilKt.stringForTime(vmSetting.countdownBean.countdown)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/seekBarOff"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -115,9 +132,10 @@
             style="@style/text_oneLine_16"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="50dp"
             android:background="@drawable/radius_10_hollow"
+            android:elevation="2dp"
             android:gravity="center_vertical"
             android:text="@string/updatePath"
             app:layout_constraintEnd_toEndOf="parent"

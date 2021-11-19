@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import com.example.echo_kt.BaseApplication
-import com.example.echo_kt.ui.notification.PlayService
 import com.example.echo_kt.data.SongBean
+import com.example.echo_kt.ui.notification.PlayService
 import com.example.echo_kt.ui.setting.SettingViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -55,8 +55,7 @@ class PlayerManager private constructor() :
      */
     private val observers = mutableListOf<AudioObserver>()
 
-    private val playerHelper: IPlayer =
-        MediaPlayerHelper()
+    private val playerHelper: IPlayer = MediaPlayerHelper()
 
     /**
      * 用于关闭rxJava
@@ -64,11 +63,12 @@ class PlayerManager private constructor() :
     private var disposable: Disposable? = null
     private var countdownDisposable: Disposable? = null
 
-    private var settingViewModel : SettingViewModel? = null
+    private var settingViewModel: SettingViewModel? = null
 
-    fun getSettingViewModel():SettingViewModel?{
+    fun getSettingViewModel(): SettingViewModel? {
         return settingViewModel
     }
+
     /**
      * 播放状态，默认为重置
      */
@@ -107,13 +107,15 @@ class PlayerManager private constructor() :
             }
         }
     }
+
     fun stopPlay() {
         if (playerHelper.isPlaying()) {
             pause()
         }
     }
-    fun getPlayState():Int{
-       return playStatus
+
+    fun getPlayState(): Int {
+        return playStatus
     }
 
     /**
@@ -316,17 +318,13 @@ class PlayerManager private constructor() :
      * 每1000毫秒更新一次
      */
     private fun startTimer() {
-        disposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
+        disposable = Observable.interval(100, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-               // try {
-                    //仅在播放状态下通知观察者
-                    if (playerHelper.isPlaying()) {
-                        sendProgressToObserver(playerHelper.getProgress())
-                    }
-//                }catch (e:IllegalStateException){
-//                    showToast("出错了，请重进应用")
-//                }
+                //仅在播放状态下通知观察者
+                if (playerHelper.isPlaying()) {
+                    sendProgressToObserver(playerHelper.getProgress())
+                }
             }
     }
 
@@ -335,20 +333,22 @@ class PlayerManager private constructor() :
         countdownDisposable = Observable.interval(1000, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                vm.countdownBean.value=(
-                    SettingViewModel.CountdownBean(
-                        vm.countdownBean.value?.countdown!!.minus(
-                            1000
-                        ), true
-                    )
-                )
-                Log.i("TAG", "startTimer:倒计时 " + vm.countdownBean.value+vm)
+                vm.countdownBean.value = (
+                        SettingViewModel.CountdownBean(
+                            vm.countdownBean.value?.countdown!!.minus(
+                                1000
+                            ), true
+                        )
+                        )
+                Log.i("TAG", "startTimer:倒计时 " + vm.countdownBean.value + vm)
                 //倒计时结束
                 if (vm.countdownBean.value!!.countdown <= 0L) {
                     //如果正在播放，则停止播放
-                    if (playerHelper.isPlaying()){controlPlay()}
+                    if (playerHelper.isPlaying()) {
+                        controlPlay()
+                    }
                     //关闭定时关闭按钮
-                    vm.countdownBean.value=(SettingViewModel.CountdownBean(0, false))
+                    vm.countdownBean.value = (SettingViewModel.CountdownBean(0, false))
                     cleanCountdown()
                 }
             }
@@ -356,7 +356,7 @@ class PlayerManager private constructor() :
 
     //关闭定时结束任务
     fun cleanCountdown() {
-        if (playerHelper.isPlaying()){
+        if (playerHelper.isPlaying()) {
             controlPlay()
         }
         countdownDisposable?.dispose()
