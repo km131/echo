@@ -3,10 +3,12 @@ package com.example.echo_kt
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.play.AudioObserver
@@ -27,13 +29,13 @@ import java.util.*
 class MainActivity : AppCompatActivity(),
     AudioObserver {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
     private val myBroadcastReceiver = MyBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        Log.e("MainActivity1", "onCreate:${System.currentTimeMillis()}" )
+//        installSplashScreen()
         //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(),
             addAction("com.echo_kt.next")
             addAction("com.echo_kt.close")
         })
+        Log.e("MainActivity2", "onCreate:${System.currentTimeMillis()}" )
     }
 
     override fun onResume() {

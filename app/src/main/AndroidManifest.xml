@@ -22,11 +22,10 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:exported="false"
-        android:theme="@style/SplashTheme"
+        android:theme="@style/Base.Theme.Echo"
         tools:replace="android:label">
 
-        <activity android:name=".MainActivity"
-            android:exported="false">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

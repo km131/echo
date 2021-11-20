@@ -1,12 +1,12 @@
 <resources>
 
-    <style name="SplashTheme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFFFFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/logo</item>
-        <item name="postSplashScreenTheme">@style/Base.Theme.Echo</item>
-        <!--   背景色     -->
-        <item name="android:colorBackground">@color/primary</item>
-    </style>
+<!--    <style name="SplashTheme" parent="Theme.SplashScreen">-->
+<!--        <item name="windowSplashScreenBackground">#FFFFFF</item>-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@mipmap/logo</item>-->
+<!--        <item name="postSplashScreenTheme">@style/Base.Theme.Echo</item>-->
+<!--        &lt;!&ndash;   背景色     &ndash;&gt;-->
+<!--        <item name="android:colorBackground">@color/primary</item>-->
+<!--    </style>-->
     <!-- To see how these attributes are used, please visit https://material.io/develop/android/theming/color/ -->
     <style name="Base.Theme.Echo" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#6200EE</item>

@@ -1,6 +1,7 @@
 package com.example.echo_kt.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ class MainFragment : Fragment(), AudioObserver {
                 true
             }
         }
+        Log.e("MainFragment", "onCreate:${System.currentTimeMillis()}" )
         return binding.root
     }
 
