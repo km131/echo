@@ -1,6 +1,6 @@
 package com.example.echo_kt.api.qqmusic
 
-import com.example.echo_kt.util.getMD5
+import com.example.echo_kt.utils.getMD5
 import kotlin.random.Random
 
 class QQMusicParameter {

@@ -1,20 +1,14 @@
 package com.example.echo_kt.adapter
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.ListItemSonglistBinding
-import com.example.echo_kt.util.getRandomColor
-import java.util.*
+import com.example.echo_kt.utils.getRandomColor
 
 /**
  * 歌单列表，在HomeFragment中

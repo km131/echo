@@ -4,9 +4,9 @@ import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.ui.main.HistoryAudioBean
-import com.example.echo_kt.util.getDate
-import com.example.echo_kt.util.readHistoryPlayList
-import com.example.echo_kt.util.readLocalPlayList
+import com.example.echo_kt.utils.getDate
+import com.example.echo_kt.utils.readHistoryPlayList
+import com.example.echo_kt.utils.readLocalPlayList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

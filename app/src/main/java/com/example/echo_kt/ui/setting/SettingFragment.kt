@@ -11,20 +11,16 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.echo_kt.api.showToast
 import com.example.echo_kt.databinding.SettingFragmentBinding
-import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.ui.main.ListSongViewModel
 import com.example.echo_kt.ui.main.MainViewModel
-import com.example.echo_kt.util.stringForTime
-import com.example.echo_kt.util.updateUrl
+import com.example.echo_kt.utils.stringForTime
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -33,6 +29,7 @@ class SettingFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private var _binding: SettingFragmentBinding? = null
     private val binding get() = _binding!!
+    private var updateJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,12 +95,9 @@ class SettingFragment : Fragment() {
             btnUpdate.setOnClickListener {
                 progressBar.isGone = false
                 updateState.isGone = true
-                GlobalScope.launch(Dispatchers.IO) {
-                    updateUrl(settingViewModel.wyyMusicServer, settingViewModel.qqMusicServer)
-                    Log.i("TAG", "onClick: 更新内存中地址")
-                    PlayList.instance.initHistoryList()
-                    ListSongViewModel().scanHistorySong()
-                    withContext(Dispatchers.Main) {
+                updateJob?.cancel()
+                updateJob = lifecycleScope.launch {
+                    vmSetting!!.updateAudioUrl {
                         showToast("歌曲地址更新完成")
                         progressBar.isGone = true
                         updateState.isGone = false

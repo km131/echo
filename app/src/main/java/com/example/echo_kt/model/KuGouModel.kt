@@ -36,7 +36,7 @@ class KuGouModel @Inject constructor(private val service: KuGouServer):Model{
                 aid = albumId
             return try {
                 KuGouServer.create2().searchMusic(
-                    aid = aid,
+                    albumId = aid,
                     hash = hash
                 ).data
             } catch (e: Exception) {

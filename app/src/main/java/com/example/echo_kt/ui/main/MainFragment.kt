@@ -14,7 +14,6 @@ import com.example.echo_kt.databinding.MainFragmentBinding
 import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import java.util.*
 
 class MainFragment : Fragment(), AudioObserver {
 
@@ -42,17 +41,12 @@ class MainFragment : Fragment(), AudioObserver {
                 true
             }
         }
-        Log.e("MainFragment", "onCreate:${System.currentTimeMillis()}" )
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.mainVM=viewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.mainVM=viewModel
         onClick()
     }
 
@@ -107,13 +101,5 @@ class MainFragment : Fragment(), AudioObserver {
     override fun onPlayStatus(playStatus: Int) {
         super.onPlayStatus(playStatus)
         viewModel.playStatus.set(playStatus)
-    }
-
-    private fun stringForTime(duration: Int): String {
-        val totalSeconds = duration/1000
-        val seconds = totalSeconds % 60
-        val minutes = (totalSeconds/60)%60
-
-        return Formatter().format("%02d:%02d",minutes,seconds).toString()
     }
 }

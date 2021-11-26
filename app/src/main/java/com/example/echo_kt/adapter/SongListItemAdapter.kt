@@ -1,13 +1,9 @@
 package com.example.echo_kt.adapter
 
-import android.os.Build
-import com.example.echo_kt.api.ProgressListener
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.databinding.ObservableField
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
@@ -24,10 +20,7 @@ import com.example.echo_kt.databinding.ListItemSearchBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
-import com.example.echo_kt.util.downLoadFile
-import com.example.echo_kt.util.downloadFile
-import com.example.echo_kt.util.getFileSize
-import com.example.echo_kt.util.updateProgress
+import com.example.echo_kt.utils.downLoadFile
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

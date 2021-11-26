@@ -1,7 +1,7 @@
 package com.example.echo_kt.api.kugou
 
 data class SearchMusicDetails(
-    val `data`: Data,
+    val data: Data,
     val err_code: Int,
     val status: Int
 ){

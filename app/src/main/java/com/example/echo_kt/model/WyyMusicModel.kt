@@ -9,7 +9,7 @@ import com.example.echo_kt.api.wyymusic.WyySearchListBean
 import com.example.echo_kt.data.SearchBean
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.paging.WyyPagingSource
-import com.example.echo_kt.util.getWyyParameter
+import com.example.echo_kt.utils.getWyyParameter
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

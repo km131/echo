@@ -9,7 +9,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -21,9 +20,9 @@ import com.example.echo_kt.data.ErectBean
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.HomeFragmentBinding
 import com.example.echo_kt.room.AppDataBase
-import com.example.echo_kt.util.getDate
-import com.example.echo_kt.util.getMipmapToUri
-import com.example.echo_kt.util.getSongListId
+import com.example.echo_kt.utils.getDate
+import com.example.echo_kt.utils.getMipmapToUri
+import com.example.echo_kt.utils.getSongListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

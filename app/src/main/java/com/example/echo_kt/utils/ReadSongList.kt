@@ -1,4 +1,4 @@
-package com.example.echo_kt.util
+package com.example.echo_kt.utils
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -170,7 +170,7 @@ suspend fun updateUrl(wyyService: WyyMusicServer, qqServer: QQMusicServer) {
                 .updateSongs(this.onEach {
                     val map = it.requestParameter!!
                     it.audioUrl = KuGouServer.create2()
-                        .searchMusic(map["id"]!!, map["hash"]!!).data.play_url
+                        .searchMusic(hash = map["hash"]!!,albumId = map["id"]!!).data.play_url
                 })
         }
     AppDataBase.getInstance()

@@ -8,11 +8,6 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import com.example.echo_kt.data.SongBean
-import com.example.echo_kt.play.AudioObserver
-import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.MainFragment
 import com.example.echo_kt.ui.main.MainViewModel
@@ -26,8 +21,7 @@ import java.util.*
  *  间接通过DataBinding更新View
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),
-    AudioObserver {
+class MainActivity : AppCompatActivity(){
 
     private val viewModel: MainViewModel by viewModels()
     private val myBroadcastReceiver = MyBroadcastReceiver()
@@ -60,44 +54,10 @@ class MainActivity : AppCompatActivity(),
         volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
-    override fun onProgress(currentDuration: Int, totalDuration: Int) {
-        viewModel.currentDuration.set(stringForTime(currentDuration))
-        viewModel.playProgress.postValue(totalDuration)
-    }
-
-    override fun onPlayMode(playMode: Int) {
-        when (playMode) {
-            PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.order)
-            PlayList.PlayMode.RANDOM_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.random)
-            PlayList.PlayMode.SINGLE_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.single)
-        }
-    }
-
-    override fun onReset() {
-        viewModel.reset()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(myBroadcastReceiver)
     }
-
-    override fun onAudioBean(audioBean: SongBean) {
-        viewModel.songName.set(audioBean.songName)
-        viewModel.singer.set(audioBean.author)
-        //viewModel.maxDuration.set(stringForTime(audioBean.duration))
-        //viewModel.maxProgress.set(audioBean.duration)
-        viewModel.albumPic.set(audioBean.albumUrl)
-    }
-
-    private fun stringForTime(duration: Int): String {
-        val totalSeconds = duration / 1000
-        val seconds = totalSeconds % 60
-        val minutes = (totalSeconds / 60) % 60
-
-        return Formatter().format("%02d:%02d", minutes, seconds).toString();
-    }
-
     //    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
 //        if (keyCode == KeyEvent.KEYCODE_BACK){
 //            moveTaskToBack(false)

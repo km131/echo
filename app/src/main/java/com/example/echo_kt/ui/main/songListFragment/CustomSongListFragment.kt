@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -27,9 +26,9 @@ import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.room.PlaylistSongCrossRef
 import com.example.echo_kt.ui.SongListDialogFragment
 import com.example.echo_kt.ui.main.HomeViewModel
-import com.example.echo_kt.util.getDate
-import com.example.echo_kt.util.getMipmapToUri
-import com.example.echo_kt.util.getRandomColor
+import com.example.echo_kt.utils.getDate
+import com.example.echo_kt.utils.getMipmapToUri
+import com.example.echo_kt.utils.getRandomColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

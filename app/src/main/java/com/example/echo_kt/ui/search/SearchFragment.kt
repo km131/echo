@@ -197,7 +197,7 @@ class SearchFragment : Fragment() {
             setOnItemOtherClickListener(object : SearchListAdapter.OnItemClickListener {
                 override fun onItemClick(binding: ListItemSearchBinding, bean: SearchBean) {
                     val vm: SongViewModel by activityViewModels()
-                    GlobalScope.launch(Dispatchers.Main) {
+                    lifecycleScope.launch(Dispatchers.Main) {
                         val audioBean = withContext(Dispatchers.Main) {
                             // 此处传上一次使用的来源，如使用当前来源的话，在获取列表后切换来源
                             // 然后拿取详细信息时会因来源不同而崩溃

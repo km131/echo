@@ -13,7 +13,7 @@ import com.example.echo_kt.databinding.PlayFragmentBinding
 import com.example.echo_kt.play.AudioObserver
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.util.stringForTime
+import com.example.echo_kt.utils.stringForTime
 
 class PlayFragment : Fragment(), AudioObserver {
 
@@ -36,6 +36,9 @@ class PlayFragment : Fragment(), AudioObserver {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
+        binding.pvm=viewModel
+        binding.onClick=onClick()
         initSeekBar()
     }
 
@@ -56,13 +59,6 @@ class PlayFragment : Fragment(), AudioObserver {
 
             })
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.lifecycleOwner = this
-        binding.pvm=viewModel
-        binding.onClick=onClick()
     }
 
     override fun onDestroy() {

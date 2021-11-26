@@ -1,4 +1,4 @@
-package com.example.echo_kt.util
+package com.example.echo_kt.utils
 
 import com.example.echo_kt.api.ProgressListener
 import android.annotation.SuppressLint

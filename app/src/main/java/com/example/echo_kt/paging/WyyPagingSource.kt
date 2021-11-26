@@ -5,7 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.echo_kt.api.wyymusic.WyyMusicServer
 import com.example.echo_kt.api.wyymusic.WyySearchListBean
-import com.example.echo_kt.util.getWyyParameter
+import com.example.echo_kt.utils.getWyyParameter
 import com.google.gson.Gson
 
 private const val UNSPLASH_STARTING_PAGE_INDEX = 1

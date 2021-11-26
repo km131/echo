@@ -104,10 +104,10 @@ class SearchListAdapter constructor(
                     val data = withContext(Dispatchers.IO) {
                         KuGouModel.getMusicBean(item.albumId, item.hash)
                     }
-                    data?.let {
-                        val audioBean = KuGouModel.convertSongBean(item, it.img, it.play_url)
+                    data?.run {
+                        val audioBean = KuGouModel.convertSongBean(item, this.img, this.play_url)
                         PlayerManager.instance.playNewAudio(audioBean)
-                    } ?: showToast("网络出问题了，也可能是接口挂了")
+                    } ?: showToast("网络出问题了，也可能是接口有变动")
                 }
             }
         }

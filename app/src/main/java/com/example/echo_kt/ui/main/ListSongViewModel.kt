@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.play.PlayList
-import com.example.echo_kt.util.readLocalPlayList
+import com.example.echo_kt.utils.readLocalPlayList
 
 class ListSongViewModel : ViewModel() {
     /**
