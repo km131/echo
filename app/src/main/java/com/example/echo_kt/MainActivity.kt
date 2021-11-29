@@ -1,19 +1,19 @@
 package com.example.echo_kt
 
 import android.content.IntentFilter
+import android.graphics.Color
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.MainFragment
-import com.example.echo_kt.ui.main.MainViewModel
 import com.example.echo_kt.ui.notification.MyBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 
 /**
@@ -21,20 +21,18 @@ import java.util.*
  *  间接通过DataBinding更新View
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
     private val myBroadcastReceiver = MyBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("MainActivity1", "onCreate:${System.currentTimeMillis()}" )
+        initSystemBars()
 //        installSplashScreen()
         //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
         registerReceiver(myBroadcastReceiver, IntentFilter().apply {
             //音频输出切回到内置扬声器广播
             addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
@@ -45,7 +43,6 @@ class MainActivity : AppCompatActivity(){
             addAction("com.echo_kt.next")
             addAction("com.echo_kt.close")
         })
-        Log.e("MainActivity2", "onCreate:${System.currentTimeMillis()}" )
     }
 
     override fun onResume() {
@@ -78,6 +75,30 @@ class MainActivity : AppCompatActivity(){
             moveTaskToBack(false)
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun initSystemBars() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val controller = window.decorView.windowInsetsController
+            if (this.applicationContext.resources.configuration.uiMode == 0x11) {
+                // 设置状态栏和导航栏反色
+                controller?.setSystemBarsAppearance(
+                    (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS),
+                    (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS)
+                )
+                window.statusBarColor = Color.TRANSPARENT
+            }
+        } else {
+            if (this.applicationContext.resources.configuration.uiMode == 0x11) {
+                //设置状态栏图标和文字颜色为暗色
+                window.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = Color.TRANSPARENT
         }
     }
 }

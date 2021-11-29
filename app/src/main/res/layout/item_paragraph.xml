@@ -36,7 +36,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
             android:text="@{info.text}"
-            android:textColor="#990C0C0C"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="13sp"
             tools:text="text" />
 

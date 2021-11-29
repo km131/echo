@@ -1,6 +1,58 @@
 <resources>
-    <style name="Widget.SplashTheme.MyView" parent="">
-        <item name="android:background">@color/gray_600</item>
-        <item name="exampleColor">@color/light_blue_600</item>
+    <style name="Base.Theme.Echo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryVariant">#C3C3C3</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorSecondary">#009083</item>
+        <item name="colorSecondaryVariant">#00605F</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorOnSurface">@color/gray_400</item>
+        <item name="colorAccent">#2196F3</item>
+        <item name="colorSurface">#000000</item>
+        <!--   背景色     -->
+        <item name="android:colorBackground">#000000</item>
+    </style>
+    <style name="TextAppearance.Sunflower.Toolbar.Text" parent="TextAppearance.MaterialComponents.Headline5" >
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="text_title">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="text_link">
+        <item name="android:textColor">#5C7FFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="text_oneLine">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="text_oneLine_18">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="text_oneLine_16">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="navigation" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimary">#E5E5E5</item>
+    </style>
+    <style name="circle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources>
