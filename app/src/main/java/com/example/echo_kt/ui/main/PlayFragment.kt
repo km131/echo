@@ -74,7 +74,6 @@ class PlayFragment : Fragment(), AudioObserver {
                 R.id.imgPlayStart -> PlayerManager.instance.controlPlay()
                 R.id.imgNext -> PlayerManager.instance.next()
                 R.id.imgAudioList -> findNavController(this).navigate(R.id.action_playFragment_to_audioListDialogFragment)
-                R.id.imgAlbumPic -> findNavController(this).navigate(R.id.action_playFragment_to_demoFragment)
             }
         }
     }

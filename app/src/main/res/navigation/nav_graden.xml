@@ -52,9 +52,6 @@
         <action
             android:id="@+id/action_playFragment_to_audioListDialogFragment"
             app:destination="@id/audioListDialogFragment" />
-        <action
-            android:id="@+id/action_playFragment_to_demoFragment"
-            app:destination="@id/demoFragment" />
     </fragment>
     <fragment
         android:id="@+id/localSongFragment"
@@ -153,8 +150,4 @@
         android:name="com.example.echo_kt.ui.main.songListFragment.AddToPlayListDialog"
         android:label="AddToPlayListDialog"
         tools:layout="@layout/add_to_playlist_dialog"/>
-    <fragment
-        android:id="@+id/demoFragment"
-        android:name="com.example.echo_kt.compose.DemoFragment"
-        android:label="DemoFragment" />
 </navigation>
