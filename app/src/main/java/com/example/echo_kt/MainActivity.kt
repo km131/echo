@@ -1,14 +1,20 @@
 package com.example.echo_kt
 
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.MainFragment
@@ -32,6 +38,11 @@ class MainActivity : AppCompatActivity() {
         //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
+        val bitmap: Bitmap? = Drawable.createFromPath(filesDir.path + "/echo_bg.jpg")?.toBitmap()
+        bitmap?.run {
+            (findViewById<ViewGroup>(R.id.main_container)).background =
+                BitmapDrawable(resources, bitmap)
+        }
 
         registerReceiver(myBroadcastReceiver, IntentFilter().apply {
             //音频输出切回到内置扬声器广播
@@ -55,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         unregisterReceiver(myBroadcastReceiver)
     }
+
     //    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
 //        if (keyCode == KeyEvent.KEYCODE_BACK){
 //            moveTaskToBack(false)
@@ -82,7 +94,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.decorView.windowInsetsController
             if (this.applicationContext.resources.configuration.uiMode == 0x11) {
-                // 设置状态栏和导航栏反色
                 controller?.setSystemBarsAppearance(
                     (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS),
                     (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS)
@@ -90,14 +101,15 @@ class MainActivity : AppCompatActivity() {
                 window.statusBarColor = Color.TRANSPARENT
             }
         } else {
-            if (this.applicationContext.resources.configuration.uiMode == 0x11) {
-                //设置状态栏图标和文字颜色为暗色
-                window.decorView.systemUiVisibility =
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.decorView.systemUiVisibility =
+                    //根据是否为夜间模式设置状态栏图标及文字颜色
+                if (this.applicationContext.resources.configuration.uiMode == 0x11) {
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-//            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                } else {
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                }
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.TRANSPARENT
         }
     }

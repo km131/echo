@@ -19,9 +19,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="45dp"
             android:elevation="5dp"
-            android:background="@color/white"
+            android:background="@color/white60"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +129,7 @@
                 tools:text="15:00" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_update"
             style="@style/text_oneLine_16"
             android:layout_width="0dp"
@@ -166,6 +166,21 @@
             app:layout_constraintTop_toTopOf="@+id/btn_update"
             app:srcCompat="@mipmap/ok"
             android:contentDescription="@string/updateComplete" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_changeBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/text_oneLine_16"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:text="从相册选取背景"
+            android:background="@drawable/radius_10_hollow"
+            android:elevation="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/switchFloatWindow"
+            app:layout_constraintStart_toStartOf="@+id/switchFloatWindow"
+            app:layout_constraintTop_toBottomOf="@+id/switchFloatWindow"
+            tools:ignore="RtlHardcoded" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

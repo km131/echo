@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="songListBean"
             type="com.example.echo_kt.data.SongListBean" />
@@ -12,8 +13,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurface"
-        android:fitsSystemWindows="true"
+        android:background="#33FFFFFF"
         tools:context=".ui.main.songListFragment.CustomSongListFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -35,7 +35,7 @@
                 android:fitsSystemWindows="true"
                 app:collapsedTitleGravity="center"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Sunflower.Toolbar.Text"
-                app:contentScrim="#FF91B4"
+                app:contentScrim="@color/white"
                 android:background="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="?attr/colorSurface"
@@ -83,16 +83,16 @@
 
                     <TextView
                         android:id="@+id/textView5"
+                        style="@style/text_oneLine"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@{songListBean.date}"
-                        style="@style/text_oneLine"
                         app:layout_constraintBottom_toBottomOf="@+id/albumView"
                         app:layout_constraintEnd_toEndOf="@+id/textView10"
                         app:layout_constraintStart_toStartOf="@+id/textView10"
                         app:layout_constraintTop_toBottomOf="@+id/textView10"
                         app:layout_constraintVertical_bias="0.3"
-                        tools:text="创建日期"/>
+                        tools:text="创建日期" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.appbar.MaterialToolbar
@@ -111,8 +111,8 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:clipToPadding="false"
-            android:paddingVertical="10dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -126,7 +126,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/list_item_search"/>
+                tools:listitem="@layout/list_item_search" />
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

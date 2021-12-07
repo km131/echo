@@ -84,8 +84,10 @@ class CustomSongListFragment : Fragment() {
                         true
                     }
                     R.id.action_playAll -> {
-                        PlayList.instance.switchAudioList(songs.toMutableList())
-                        PlayerManager.instance.startAll()
+                        if (songs.size>0){
+                            PlayList.instance.switchAudioList(songs.toMutableList())
+                            PlayerManager.instance.startAll()
+                        }
                         true
                     }
                     else -> false

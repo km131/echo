@@ -5,24 +5,22 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 向SD卡写入数据权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--  后台刷新服务和通知栏要用  -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <!--    android:requestLegacyExternalStorage="true" 取消android10沙盒模式用于读取音频数据-->
-    <!--    android:exported="false" 禁止其他应用访问应用的内容提供程序-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 向SD卡写入数据权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 后台刷新服务和通知栏要用 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".BaseApplication"
+        android:exported="false"
         android:icon="@mipmap/echo"
+        android:label="echo"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/echo"
         android:supportsRtl="true"
-        android:label="echo"
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
-        android:exported="false"
         android:theme="@style/Base.Theme.Echo"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label">
 
         <activity android:name=".MainActivity">
@@ -33,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.notification.PlayService"/>
+        <service android:name=".ui.notification.PlayService" />
     </application>
 
 </manifest>

@@ -1,30 +1,42 @@
 package com.example.echo_kt.utils
 
-import com.example.echo_kt.api.ProgressListener
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.ContentResolver
 import android.content.Context.DOWNLOAD_SERVICE
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Build
+import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.example.echo_kt.BaseApplication
 import com.example.echo_kt.R
+import com.example.echo_kt.api.ProgressListener
 import com.example.echo_kt.api.kugou.KuGouServer
+import com.example.echo_kt.api.showToast
 import com.example.echo_kt.ui.notification.CHANNEL_ID
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import okio.IOException
+import java.io.File
+import java.io.FileDescriptor
+import java.io.FileOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -84,7 +96,12 @@ fun getRandomColor(): Array<Float> {
     return arrayOf(r, g, b)
 }
 
-fun downloadFile(fileName: String, url: String,fileType: String, downloadCallback: ProgressListener) {
+fun CoroutineScope.downloadFile(
+    fileName: String,
+    url: String,
+    fileType: String,
+    downloadCallback: ProgressListener
+) {
     Log.i("", "下载链接: $url")
     KuGouServer.create3(downloadCallback).downloadFile(url)
         .subscribeOn(Schedulers.io())
@@ -100,8 +117,8 @@ fun downloadFile(fileName: String, url: String,fileType: String, downloadCallbac
 
             @SuppressLint("CommitPrefEdits")
             override fun onNext(responseBody: ResponseBody) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    writeResponseBodyToDisk(responseBody, fileName,fileType)
+                launch(Dispatchers.IO) {
+                    writeResponseBodyToDisk(responseBody, fileName, fileType)
                 }
             }
 
@@ -114,10 +131,15 @@ fun downloadFile(fileName: String, url: String,fileType: String, downloadCallbac
             }
         })
 }
-fun downLoadFile(url: String,fileName: String,fileType:String){
-    val downloadManager = BaseApplication.getContext().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+
+fun downLoadFile(url: String, fileName: String, fileType: String) {
+    val downloadManager =
+        BaseApplication.getContext().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
     val request = DownloadManager.Request(Uri.parse(url))
-    request.setDestinationInExternalPublicDir("Music",MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.encodedPath+"/$fileName.$fileType")
+    request.setDestinationInExternalPublicDir(
+        "Music",
+        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.encodedPath + "/$fileName.$fileType"
+    )
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     val downloadId: Long = downloadManager.enqueue(request)
@@ -138,6 +160,7 @@ fun updateProgress(progress: Int, title: String, maxSize: String, isEnd: Boolean
         notify(1025, builder.build())
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.N)
 fun getFileSize(size: Long): String {
 
@@ -151,5 +174,66 @@ fun getFileSize(size: Long): String {
         size / mMB >= 1 -> df.format(size / mMB.toFloat()) + "MB"
         size / mKB >= 1 -> df.format(size / mKB.toFloat()) + "KB"
         else -> size.toString() + "B"
+    }
+}
+
+fun getPermission(activity: Activity, permissions: Array<String>, requestCode: Int){
+    val mPermissionList: MutableList<String> = mutableListOf()
+    permissions.forEach {
+        if (ContextCompat.checkSelfPermission(
+                BaseApplication.getContext(),
+                it
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            mPermissionList.add(it)
+        }
+    }
+    if (mPermissionList.size > 0) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode)
+    }
+}
+fun checkPermissions(permissions: Array<String>):Boolean{
+    permissions.forEach {
+        if (ContextCompat.checkSelfPermission(
+                BaseApplication.getContext(),
+                it
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return false
+        }
+    }
+    return true
+}
+fun getBitmapFromUri(uri: Uri): Bitmap? {
+    val parcelFileDescriptor: ParcelFileDescriptor? =
+        BaseApplication.getContext().contentResolver.openFileDescriptor(uri, "r")
+    val fileDescriptor: FileDescriptor? = parcelFileDescriptor?.fileDescriptor
+    val image: Bitmap? = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+    parcelFileDescriptor?.close()
+    return image
+}
+
+//在协程中调用，
+fun CoroutineScope.saveBackground(uri: Uri) {
+    val file = File(BaseApplication.getContext().filesDir.path + "/echo_bg.jpg")
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+    val bitmap = getBitmapFromUri(uri)
+    if (bitmap != null) {
+        val out = FileOutputStream(file)
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            out.flush()
+            out.close()
+            launch(Dispatchers.Main) {
+                showToast("保存图片成功")
+            }
+        } catch (e: IOException) {
+            showToast("写入内部存储失败")
+        } finally {
+            out.flush()
+            out.close()
+        }
     }
 }

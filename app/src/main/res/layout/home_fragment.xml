@@ -28,41 +28,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/home"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clSearch"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="32dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="70dp"
                 android:background="@drawable/radius_10_hollow"
                 android:elevation="4dp"
-                android:layout_marginLeft="70dp"
-                android:layout_marginRight="70dp"
+                android:onClick="@{jumpSearch}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{jumpSearch}">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
+                    android:contentDescription="@string/search"
                     android:scaleType="center"
                     android:src="@mipmap/search"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/search" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/etSearch"
@@ -81,7 +69,7 @@
                 android:id="@+id/ibtSetting"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="#00000000"
+                android:background="@drawable/radius_16_theme"
                 android:src="@android:drawable/ic_menu_sort_by_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +105,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mySongList"
-                android:textSize="24sp"
+                android:background="@drawable/radius_10_hollow"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

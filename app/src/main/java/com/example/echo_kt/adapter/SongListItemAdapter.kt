@@ -1,5 +1,6 @@
 package com.example.echo_kt.adapter
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,9 @@ import com.example.echo_kt.databinding.ListItemSearchBinding
 import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.room.AppDataBase
+import com.example.echo_kt.utils.checkPermissions
 import com.example.echo_kt.utils.downLoadFile
+import com.example.echo_kt.utils.getPermission
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -120,14 +123,22 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
                                 PlayList.instance.setNextPlay(it)
                                 showToast("添加成功")
                                 findNavController().navigateUp()
-                            } ?: showToast("SongListAdapter：106。添加失败,可能接口或网络出问题了")
+                            } ?: showToast("添加失败,可能接口或网络出问题了")
                         }
                         1 -> {
                             //加到歌单
                             findNavController().navigate(R.id.action_bottomDialogFragment_to_addToPlayListDialog)
                         }
                         2 -> {
+                            val permissions = arrayOf(
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.INTERNET
+                            )
                             //下载
+                            if (!checkPermissions(permissions)){
+                                getPermission(requireActivity(), permissions, 2002)
+                            }
                             viewModel.audioBean.get()!!.let {
                                 val url: String = it.audioUrl
                                 val songName: String = it.songName
