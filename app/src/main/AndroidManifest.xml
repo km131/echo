@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-sdk tools:overrideLibrary="com.km.common"/>
+
     <application
         android:name=".BaseApplication"
         android:exported="false"

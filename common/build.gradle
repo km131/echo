@@ -1,0 +1,153 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    compileSdk 26
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 26
+        versionCode 1
+        versionName "1.0"
+
+        buildFeatures {
+            //noinspection DataBindingWithoutKapt
+            dataBinding true
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.activity:activity-ktx:1.2.2"
+    implementation "androidx.fragment:fragment-ktx:1.3.2"
+    implementation 'com.google.android.material:material:1.3.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //网络请求
+    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.google.code.gson:gson:2.8.2"
+//    implementation "com.squareup.retrofit2:adapter-rxjava2:2.8.2"
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+}
+
+
+apply plugin: 'maven-publish'
+//def hasJavaPlugin() {
+//    if (plugins.hasPlugin("java-library")) {
+//        return true
+//    }
+//    return false
+//}
+//def hasKotlinPlugin() {
+//    if (plugins.hasPlugin("kotlin-library")) {
+//        return true
+//    }
+//    return false
+//}
+//def hasAndroidPlugin() {
+//    if (plugins.hasPlugin("com.android.library")) {
+//        return true
+//    }
+//    return false
+//}
+//task sourceJar(type: Jar) {
+//    if (hasAndroidPlugin()) {
+//        println "======> Android"
+//        from android.sourceSets.main.java.srcDirs
+//        //noinspection GroovyAccessibility
+//        archiveClassifier = 'sources'
+//    } else if (hasJavaPlugin()) {
+//        println "======> Java"
+//        from sourceSets.main.allSource
+//        //noinspection GroovyAccessibility
+//        archiveClassifier = 'sources'
+//    }else if (hasKotlinPlugin()) {
+//        println "======> Kotlin"
+//        from sourceSets.main.allSource
+//        //noinspection GroovyAccessibility
+//        archiveClassifier = 'sources'
+//    }
+//}
+task sourcesJar(type: Jar) {
+    if (project.hasProperty("kotlin")) {
+        println "======> Kotlin"
+        from android.sourceSets.main.java.getSrcDirs()
+    } else if (project.hasProperty("android")) {
+        println "======> Android"
+        from android.sourceSets.main.java.sourceFiles
+    } else {
+        println "======> OOOOO"
+        println project
+        from sourceSets.main.allSource
+    }
+    classifier = 'sources'
+}
+afterEvaluate {
+    publishing {
+        repositories {
+            // 本地仓库
+            maven {
+                name('modulelive')
+                url uri("../repo")
+            }
+//            // 远程仓库
+//            maven {
+//                allowInsecureProtocol(true)
+//                name('modulelive')
+//                url = url//私有maven库地址
+//                credentials {
+//                    username// 账号
+//                    password// 密码
+//                }
+//            }
+        }
+        publications {
+            debugType(MavenPublication) {
+                from components.debug
+                groupId "com.km.common"
+                artifactId "common-debug"
+                version "1.0.0"
+                artifact(sourcesJar)
+            }
+            releaseType(MavenPublication) {
+                from components.release
+                groupId "com.km.common"
+                artifactId "common-release"
+                version "1.0.0"
+                artifact(sourcesJar)
+            }
+        }
+    }
+    // 引入该本地库
+    // implementation 'com.km.common:common-debug:1.0.0@aar'
+}

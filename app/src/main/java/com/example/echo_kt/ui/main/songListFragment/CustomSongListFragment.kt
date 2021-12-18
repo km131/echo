@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +32,11 @@ import com.example.echo_kt.utils.getMipmapToUri
 import com.example.echo_kt.utils.getRandomColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CustomSongListFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = CustomSongListFragment()
-    }
 
     private val viewModel: HomeViewModel by activityViewModels()
     private val args: CustomSongListFragmentArgs by navArgs()
@@ -103,8 +101,8 @@ class CustomSongListFragment : Fragment() {
         newFragment.show(childFragmentManager, "歌单操作对话框")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //设置目前的自定义列表索引（修改时要用到）
         viewModel.songlistIndex = args.index
         //-1是收藏列表所传的参数
@@ -112,7 +110,7 @@ class CustomSongListFragment : Fragment() {
             songList =
                 SongListBean("like", "我的收藏", getDate(), getMipmapToUri(R.mipmap.album_like))
             binding.songListBean = songList
-            GlobalScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch(Dispatchers.Main) {
                 viewModel.likeSongs.observe(viewLifecycleOwner, {
                     this@CustomSongListFragment.songs = it.toMutableList()
                     initListAdapter()
@@ -121,7 +119,7 @@ class CustomSongListFragment : Fragment() {
         } else {
             songList = viewModel.readCustomList(args.index)
             binding.songListBean = songList
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val s = AppDataBase.getInstance().customSongListDao()
                     .getPlaylistsWithSongs(songList.playlistId).asLiveData()
                 withContext(Dispatchers.Main) {
@@ -161,7 +159,7 @@ class CustomSongListFragment : Fragment() {
         normalDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
-            GlobalScope.launch {
+            lifecycleScope.launch {
                 //-1为历史列表
                 if (args.index != -1) {
                     //删除该歌曲
@@ -176,7 +174,7 @@ class CustomSongListFragment : Fragment() {
                         .updateSongList(songList.apply { number -= 1 })
                 } else AppDataBase.getInstance().historyAudioDao().deleteAudio(songs[position].id)
             }
-            binding.rvSongList.adapter!!.notifyDataSetChanged()
+            binding.rvSongList.adapter!!.notifyItemRemoved(position)
             showToast("删除成功")
         }
         // 显示

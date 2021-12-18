@@ -32,12 +32,14 @@
 
         <TextView
             android:id="@+id/item_tv_singer"
+            style="@style/text_oneLine_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@{pvm.author}"
-            style="@style/text_oneLine_16"
             app:layout_constraintBottom_toBottomOf="@+id/item_tv_music"
+            app:layout_constraintEnd_toStartOf="@+id/image_remove"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/item_tv_music"
             app:layout_constraintTop_toTopOf="@+id/item_tv_music"
             app:layout_constraintVertical_bias="1.0" />

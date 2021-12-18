@@ -51,27 +51,17 @@ fun setImgUrl(view: ImageView, @DrawableRes url: Int) {
 
 @BindingAdapter("urlAlbum")
 fun setImgUrl(view: ImageView, url: String?) {
-    url?.apply {
         Glide.with(view.context)
-            .load(url)
+            .load(url?:R.mipmap.album)
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(view)
         Log.i("专辑图片", "setImgUrl: $url")
-        return
-    }
-    Glide.with(view.context)
-        .load(R.mipmap.album)
-        .apply(RequestOptions.bitmapTransform(CircleCrop()))
-        .into(view)
-
-    Log.i("专辑图片", "setImgUrl: $url")
 }
 
 @BindingAdapter("urlAlbum2")
 fun setImgUrl2(view: ImageView, url: String?) {
-    url?.apply {
         Glide.with(view.context)
-            .load(url)
+            .load(url ?: R.mipmap.album)
             .apply(
                 RequestOptions.bitmapTransform(
                     MultiTransformation(
@@ -81,19 +71,6 @@ fun setImgUrl2(view: ImageView, url: String?) {
             )
             .into(view)
         Log.i("专辑图片", "setImgUrl: $url")
-        return
-    }
-    Glide.with(view.context)
-        .load(R.mipmap.album)
-        .apply(
-            RequestOptions.bitmapTransform(
-                MultiTransformation(
-                    RoundedCorners(20) //设置图片圆角角度
-                )
-            )
-        )
-        .into(view)
-    Log.i("专辑图片", "setImgUrl: $url")
 }
 
 /**

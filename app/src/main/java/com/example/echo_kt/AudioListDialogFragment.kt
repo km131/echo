@@ -131,7 +131,6 @@ class ItemAdapter internal constructor(private var mList: MutableList<SongBean>)
     interface OnItemClickListener{
         fun onItemClickPlay(view: View, position: Int)
         fun onItemClickRemove(view: View, position: Int)
-        //TODO 长按拖动到指定位置
         fun onItemLongClick(view: View, position: Int)
     }
 

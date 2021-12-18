@@ -27,6 +27,8 @@ import com.example.echo_kt.model.KuGouModel
 import com.example.echo_kt.model.MiGuMusicModel
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
+import com.example.echo_kt.play.PlayList
+import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.SourceType
 import com.example.echo_kt.ui.search.adapter.SearchListAdapter
 import com.google.android.material.imageview.ShapeableImageView
@@ -54,8 +56,8 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.apply {
             searchSrc.setOnClickListener {
                 val keyWord = binding.etSearch.text.toString()
@@ -214,5 +216,4 @@ class SearchFragment : Fragment() {
         }
         binding.rvSearchList.adapter = adapter
     }
-
 }

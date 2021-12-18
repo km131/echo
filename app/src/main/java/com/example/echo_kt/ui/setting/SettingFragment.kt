@@ -3,8 +3,6 @@ package com.example.echo_kt.ui.setting
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,7 +14,6 @@ import android.widget.CompoundButton
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,9 +25,16 @@ import com.example.echo_kt.api.showToast
 import com.example.echo_kt.databinding.SettingFragmentBinding
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.MainViewModel
-import com.example.echo_kt.utils.*
+import com.example.echo_kt.utils.checkPermissions
+import com.example.echo_kt.utils.getPermission
+import com.example.echo_kt.utils.saveBackground
+import com.example.echo_kt.utils.stringForTime
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
 
 
 @AndroidEntryPoint
@@ -50,13 +54,12 @@ class SettingFragment : Fragment() {
                     showToast("获取图片成功")
                     lifecycleScope.launch(Dispatchers.IO) {
                         saveBackground(it.data!!.data!!)
-                        val bitmap: Bitmap? =
-                            Drawable.createFromPath(requireActivity().filesDir.path + "/echo_bg.jpg")?.toBitmap()
-                        bitmap?.run {
+                        val drawable: Drawable? =
+                            Drawable.createFromPath(requireActivity().filesDir.path + "/echo_bg.jpg")
+                        drawable?.run {
                             withContext(Dispatchers.Main) {
                                 (this@SettingFragment.requireActivity()
-                                    .findViewById<ViewGroup>(R.id.main_container)).background =
-                                    BitmapDrawable(resources, bitmap)
+                                    .findViewById<ViewGroup>(R.id.main_container)).background = drawable
                             }
                         }
                     }
@@ -153,18 +156,16 @@ class SettingFragment : Fragment() {
             btnChangeBackground.setOnClickListener {
                 val permissions = arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.INTERNET
+                    Manifest.permission.READ_EXTERNAL_STORAGE
                 )
-                //下载
                 if (!checkPermissions(permissions)) {
                     getPermission(requireActivity(), permissions, 2002)
                 }
                 val intent = Intent().apply {
                     type = "image/*"
                     action = Intent.ACTION_PICK
-                    data =
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI //直接打开系统相册  不设置会有选择相册一步（例：系统相册、QQ浏览器相册）
+                    //直接打开系统相册  不设置会有选择相册一步（例：系统相册、QQ浏览器相册）
+                    data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 }
                 startActivity.launch(intent)
             }
