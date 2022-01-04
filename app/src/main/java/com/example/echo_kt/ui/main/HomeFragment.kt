@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ import com.example.echo_kt.utils.getDate
 import com.example.echo_kt.utils.getMipmapToUri
 import com.example.echo_kt.utils.getSongListId
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -146,7 +148,7 @@ class HomeFragment : Fragment() {
     private fun showDialog() {
         val editText = EditText(this.context)
         val inputDialog: AlertDialog.Builder = AlertDialog.Builder(this.context)
-        inputDialog.setTitle("输入歌单名字").setView(editText)
+        inputDialog.setTitle("输入歌单名称").setView(editText)
         inputDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
@@ -159,7 +161,7 @@ class HomeFragment : Fragment() {
                     //暂时如此,可扩展
                     coverImage = getMipmapToUri(R.mipmap.echo)
                 )
-                GlobalScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     //存入数据库
                     AppDataBase.getInstance().customSongListDao().insertSongList(songListBean)
                 }

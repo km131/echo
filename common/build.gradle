@@ -6,16 +6,15 @@ plugins {
 }
 
 android {
-    compileSdk 26
+    compileSdk 30
 
     defaultConfig {
-        minSdk 26
-        targetSdk 26
+        minSdk 24
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
         buildFeatures {
-            //noinspection DataBindingWithoutKapt
             dataBinding true
         }
 
@@ -54,7 +53,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.google.code.gson:gson:2.8.2"
-//    implementation "com.squareup.retrofit2:adapter-rxjava2:2.8.2"
+
     //glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
@@ -62,42 +61,6 @@ dependencies {
 
 
 apply plugin: 'maven-publish'
-//def hasJavaPlugin() {
-//    if (plugins.hasPlugin("java-library")) {
-//        return true
-//    }
-//    return false
-//}
-//def hasKotlinPlugin() {
-//    if (plugins.hasPlugin("kotlin-library")) {
-//        return true
-//    }
-//    return false
-//}
-//def hasAndroidPlugin() {
-//    if (plugins.hasPlugin("com.android.library")) {
-//        return true
-//    }
-//    return false
-//}
-//task sourceJar(type: Jar) {
-//    if (hasAndroidPlugin()) {
-//        println "======> Android"
-//        from android.sourceSets.main.java.srcDirs
-//        //noinspection GroovyAccessibility
-//        archiveClassifier = 'sources'
-//    } else if (hasJavaPlugin()) {
-//        println "======> Java"
-//        from sourceSets.main.allSource
-//        //noinspection GroovyAccessibility
-//        archiveClassifier = 'sources'
-//    }else if (hasKotlinPlugin()) {
-//        println "======> Kotlin"
-//        from sourceSets.main.allSource
-//        //noinspection GroovyAccessibility
-//        archiveClassifier = 'sources'
-//    }
-//}
 task sourcesJar(type: Jar) {
     if (project.hasProperty("kotlin")) {
         println "======> Kotlin"
@@ -120,16 +83,6 @@ afterEvaluate {
                 name('modulelive')
                 url uri("../repo")
             }
-//            // 远程仓库
-//            maven {
-//                allowInsecureProtocol(true)
-//                name('modulelive')
-//                url = url//私有maven库地址
-//                credentials {
-//                    username// 账号
-//                    password// 密码
-//                }
-//            }
         }
         publications {
             debugType(MavenPublication) {
@@ -149,5 +102,5 @@ afterEvaluate {
         }
     }
     // 引入该本地库
-    // implementation 'com.km.common:common-debug:1.0.0@aar'
+    // implementation 'com.km.common:common-debug:1.0.0'
 }

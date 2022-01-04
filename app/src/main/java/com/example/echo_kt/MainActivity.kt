@@ -76,11 +76,9 @@ class MainActivity : AppCompatActivity() {
 //    }
     override fun onBackPressed() {
         //获取hostFragment
-        val mMainNavFragment: Fragment? =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val mMainNavFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         //获取当前所在的fragment
-        val fragment =
-            mMainNavFragment?.childFragmentManager?.primaryNavigationFragment
+        val fragment = mMainNavFragment?.childFragmentManager?.primaryNavigationFragment
         //如果当前处于根fragment即HostFragment
         if (fragment is MainFragment) {
             //Activity退出但不销毁

@@ -2,6 +2,8 @@ package com.km.common.utils
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Formatter
@@ -23,6 +25,7 @@ fun stringForTime(duration: Long): String {
 /**
  * @return 返回当前时间 yyyy年MM月dd日 HH:mm:ss
  */
+@RequiresApi(Build.VERSION_CODES.O)
 fun getDate(): String {
     val simpleDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     return simpleDateFormat.format(LocalDateTime.now())
@@ -32,6 +35,7 @@ fun getDate(): String {
  * @param dateTime yyyy-MM-dd ,需要查询的日期
  * @return 所在星期的第几天
  */
+@RequiresApi(Build.VERSION_CODES.N)
 private fun getDayOfWeek(dateTime: String): Int {
     val cal: Calendar = Calendar.getInstance()
     if (dateTime == "") {
@@ -48,6 +52,7 @@ private fun getDayOfWeek(dateTime: String): Int {
  * @param dateTime yyyy-MM-dd ,需要查询的日期
  * @return 星期几，按每星期第一天为星期日计算
  */
+@RequiresApi(Build.VERSION_CODES.N)
 private fun getWeek(dateTime: String): String {
     val week = when (getDayOfWeek(dateTime)) {
         1 -> "星期日"

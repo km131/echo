@@ -61,19 +61,4 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment() {
             setNegativeButton("取消") { _, _ -> }
         }.show()
     }
-    protected open fun initNav(vp:ViewPager2,navView:BottomNavigationView,fragmentMap:Map<Int,()->Fragment>){
-        vp.adapter = MainPagerAdapter(this,fragmentMap)
-        vp.isUserInputEnabled = false
-        navView.run {
-            setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-//                    R.id.menu_home -> vp.setCurrentItem(0, false)
-//                    R.id.menu_video -> vp.setCurrentItem(1, false)
-//                    R.id.menu_info -> vp.setCurrentItem(2, false)
-                }
-                // 这里注意返回true,否则点击失效
-                true
-            }
-        }
-    }
 }

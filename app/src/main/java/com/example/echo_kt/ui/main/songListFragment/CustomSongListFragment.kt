@@ -159,7 +159,7 @@ class CustomSongListFragment : Fragment() {
         normalDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 //-1为历史列表
                 if (args.index != -1) {
                     //删除该歌曲

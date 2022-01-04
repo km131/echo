@@ -13,12 +13,12 @@ abstract class BaseRvAdapter<T,B : ViewDataBinding>(context: Context, data: Muta
     RecyclerView.Adapter<BaseViewHolder<B>>() {
     private var mDatas: MutableList<T> = data ?: mutableListOf()
     private var mInflater: LayoutInflater = LayoutInflater.from(context)
-    protected var itemClickListener: ((view: View, position:Int, data:T )->Unit)? = null
+    protected var mItemClickListener: ((view: View, position:Int, data:T )->Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<B> {
         val mBinding: B = DataBindingUtil.inflate(mInflater, getItemViewId(viewType), parent, false)
         val holder: BaseViewHolder<B> = BaseViewHolder(mBinding)
-        itemClickListener?.let {
+        mItemClickListener?.let {
             holder.itemView.setOnClickListener { v ->
               it.invoke(v, holder.layoutPosition, mDatas[holder.adapterPosition])
             }

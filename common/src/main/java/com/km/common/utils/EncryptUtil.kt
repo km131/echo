@@ -1,5 +1,7 @@
 package com.km.common.utils
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.MessageDigest
@@ -16,6 +18,7 @@ import javax.crypto.spec.SecretKeySpec
  * @param key 加密秘钥
  * @return 返回加密后的内容
  */
+@RequiresApi(Build.VERSION_CODES.O)
 private fun aesEncrypt(content: String, key: String, iv: String): String {
     val raw = key.toByteArray(charset("utf-8"))
     //设置密钥规范为AES
@@ -36,6 +39,7 @@ private fun aesEncrypt(content: String, key: String, iv: String): String {
  * @param publicKey 公钥
  * @return 密文
  */
+@RequiresApi(Build.VERSION_CODES.O)
 fun rsaEncrypt(str: String, publicKey: String): String {
     //base64编码的公钥
     val decoded: ByteArray = Base64.getDecoder().decode(publicKey)

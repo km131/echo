@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.util.forEach
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,8 +20,10 @@ import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.room.PlaylistSongCrossRef
 import com.example.echo_kt.ui.main.HomeViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddSongsFragment : Fragment() {
 
@@ -53,7 +56,7 @@ class AddSongsFragment : Fragment() {
     private fun initOnClick() {
         binding.apply {
             setAddSongs {
-                GlobalScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     val isCheckedList = (rvSongs.adapter as MultipleChoiceListAdapter).mSelectedPositions
                     val playList = viewModel.songList.value!![viewModel.songlistIndex]
                     val playlistWithSongs= mutableListOf<PlaylistSongCrossRef>()
@@ -64,8 +67,10 @@ class AddSongsFragment : Fragment() {
                     }
                     AppDataBase.getInstance().customSongListDao().insertPlaylistsWithSongs(playlistWithSongs)
                     AppDataBase.getInstance().customSongListDao().updateSongList(playList.apply { number+=playlistWithSongs.size })
-                    Toast.makeText(BaseApplication.getContext(),"添加成功",Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(BaseApplication.getContext(),"添加成功",Toast.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                    }
                 }
             }
         }
