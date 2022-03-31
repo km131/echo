@@ -13,7 +13,7 @@ import com.example.echo_kt.ui.main.HistoryAudioBean
 
 @Database(
     entities = [HistoryAudioBean::class, SongListBean::class, SongBean::class, PlaylistSongCrossRef::class],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class AppDataBase : RoomDatabase() {
@@ -47,7 +47,7 @@ abstract class AppDataBase : RoomDatabase() {
                     }
                 })
                 //清空数据库中的数据
-                //.fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigration()
                 //迁移数据库数据
                 //.addMigrations(MIGRATION_9_10)
                 .build()

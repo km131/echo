@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="erectBean"
-            type="com.example.echo_kt.data.ErectBean" />
+            name="bean"
+            type="com.example.echo_kt.data.ImageAndTextBean" />
 
         <variable
             name="clickListener"
@@ -26,7 +26,7 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            app:url="@{erectBean.imageId}"
+            app:url="@{bean.imageId}"
             android:layout_width="65dp"
             android:layout_height="65dp"
             app:layout_constraintBottom_toTopOf="@+id/textView4"
@@ -39,7 +39,7 @@
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{erectBean.text}"
+            android:text="@{bean.text}"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageView3"

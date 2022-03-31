@@ -33,16 +33,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initSystemBars()
 //        installSplashScreen()
         //updateUrl()
         PlayerManager.instance.init()
         setContentView(R.layout.main_activity)
         val bitmap: Bitmap? = Drawable.createFromPath(filesDir.path + "/echo_bg.jpg")?.toBitmap()
         bitmap?.run {
-            (findViewById<ViewGroup>(R.id.main_container)).background =
-                BitmapDrawable(resources, bitmap)
-        }
+            (findViewById<ViewGroup>(R.id.main_container)).apply {
+                background = BitmapDrawable(resources, bitmap)
+            }
+            initSystemBars(false)
+        }?:initSystemBars(true)
 
         registerReceiver(myBroadcastReceiver, IntentFilter().apply {
             //音频输出切回到内置扬声器广播
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initSystemBars() {
+    private fun initSystemBars(isTransparent:Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.decorView.windowInsetsController
             if (this.applicationContext.resources.configuration.uiMode == 0x11) {
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                     (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS),
                     (APPEARANCE_LIGHT_STATUS_BARS or APPEARANCE_LIGHT_NAVIGATION_BARS)
                 )
-                window.statusBarColor = Color.TRANSPARENT
+                window.statusBarColor = if (isTransparent) Color.TRANSPARENT else  resources.getColor(R.color.white60,null)
             }
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 }
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.TRANSPARENT
+            window.statusBarColor = if (isTransparent) Color.TRANSPARENT else  resources.getColor(R.color.white60,null)
         }
     }
 }

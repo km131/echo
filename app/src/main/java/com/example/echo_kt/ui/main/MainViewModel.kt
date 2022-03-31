@@ -45,7 +45,7 @@ class MainViewModel : ViewModel() {
      * 图片播放模式
      */
     val playModePic = ObservableField<Int>().apply {
-        set(R.mipmap.order)
+        set(R.drawable.ic_order_play)
     }
 
     /**
@@ -67,6 +67,9 @@ class MainViewModel : ViewModel() {
      */
     val currentDuration = ObservableField<String>().apply {
         set("00:00")
+    }
+    val lyricStr = ObservableField<String>().apply {
+        set("暂无歌词")
     }
 
     /**
@@ -103,6 +106,7 @@ class MainViewModel : ViewModel() {
         currentDuration.set("00:00")
         maxProgress.set(0)
         playProgress.postValue(0)
+        lyricStr.set("暂无歌词")
 //        collect.set(false)
     }
 

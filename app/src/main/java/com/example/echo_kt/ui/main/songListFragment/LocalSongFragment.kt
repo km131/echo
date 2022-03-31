@@ -29,16 +29,16 @@ class LocalSongFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLocalSongBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.scanLocalSong()
         binding.vm = viewModel
-        viewModel.listSongData.observe(this.viewLifecycleOwner, Observer {
+        viewModel.listSongData.observe(this.viewLifecycleOwner, {
             if (viewModel.listSongData.value != null) {
                 binding.rvLocalSong.adapter =
                     SongListItemAdapter(viewModel.listSongData.value ?: mutableListOf()).apply {
@@ -53,10 +53,6 @@ class LocalSongFragment : Fragment() {
                     }
             }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         onClick()
     }
 
@@ -66,7 +62,7 @@ class LocalSongFragment : Fragment() {
     }
 
     private fun onClick() {
-        binding.btnScan.setOnClickListener {
+        binding.scan.setOnClickListener {
             val permissions = arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -84,9 +80,11 @@ class LocalSongFragment : Fragment() {
         }
         binding.playAll.setOnClickListener {
             viewModel.listSongData.value?.let {
-                PlayList.instance.switchAudioList(it)
-            } ?: showToast("播放列表暂无歌曲")
-            PlayerManager.instance.startAll()
+                if (it.size>0){
+                    PlayList.instance.switchAudioList(it)
+                    PlayerManager.instance.startAll()
+                }else showToast("播放列表暂无歌曲")
+            } ?: showToast("播放列表为空")
         }
     }
 }

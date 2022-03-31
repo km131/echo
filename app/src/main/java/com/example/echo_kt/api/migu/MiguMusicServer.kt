@@ -8,6 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.math.BigInteger
 import java.security.MessageDigest
+import retrofit2.http.Url
+
+import okhttp3.ResponseBody
+
+import retrofit2.http.GET
+
+
+
 
 interface MiguMusicServer {
 
@@ -46,6 +54,9 @@ interface MiguMusicServer {
         @Query("lowerQualityContentId")
         lowerQualityContentId:String
     ): MiguSearchMusicBean
+
+    @GET
+    suspend fun getLyricStr(@Url url: String): ResponseBody
 
     companion object {
         private const val BASE_URL = "https://jadeite.migu.cn/music_search/v2/search/"

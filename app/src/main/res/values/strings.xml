@@ -43,4 +43,7 @@
     <string name="downloadSettings">下载设置</string>
     <string name="tone">音质</string>
     <string name="title_activity_demo">DemoActivity</string>
+    <string name="text_scanLocalSongs">扫描本地歌曲</string>
+    <string name="text_playAll">全部播放</string>
+    <string name="select_background">从相册选取背景</string>
 </resources>

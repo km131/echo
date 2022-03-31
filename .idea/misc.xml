@@ -3,33 +3,49 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_back.xml" value="0.28425925925925927" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_collect.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_cycle_play.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_detail_back.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_download.xml" value="0.1" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_downloads.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_history.xml" value="0.12" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_next.xml" value="0.14" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_order_play.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_play.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_play_list.xml" value="0.3228266395526182" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_prev.xml" value="0.25" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_stop.xml" value="0.3228266395526182" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/ic_svg.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/radius_10_hollow.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/radius_10_hollow_scotch.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/radius_16_theme.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/radius_24.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/seekbar1.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/selector_play_float_pic.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/drawable/selector_play_pic.xml" value="0.3228266395526182" />
-        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/add_songs_to_list_fragment.xml" value="0.1838768115942029" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/add_songs_to_list_fragment.xml" value="0.18" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/add_to_playlist_dialog.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/audio_list_dialog.xml" value="0.17708333333333334" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/audio_list_dialog_item.xml" value="0.24818840579710144" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/bottom_dialog_song.xml" value="0.23505434782608695" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/custom_song_list_fragment.xml" value="0.30572916666666666" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_add_songs.xml" value="0.14741336012054243" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_custom_list.xml" value="0.1" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_history_song.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_info.xml" value="0.223731884057971" />
-        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_local_song.xml" value="0.30572916666666666" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_local_song.xml" value="0.1" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_lyric.xml" value="0.1" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/fragment_song_list_dialog.xml" value="0.14741336012054243" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/home_fragment.xml" value="0.25" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/item_flex_string.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/item_paragraph.xml" value="0.223731884057971" />
-        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/item_text_image.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/item_text_image.xml" value="0.1" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/item_video_main.xml" value="0.14741336012054243" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/list_item_add_song.xml" value="0.14270833333333333" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/list_item_douban_minor.xml" value="0.30572916666666666" />
@@ -37,7 +53,7 @@
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/list_item_search.xml" value="0.14741336012054243" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/list_item_songlist.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/main_activity.xml" value="0.14741336012054243" />
-        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/main_fragment.xml" value="0.43291839557399725" />
+        <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/main_fragment.xml" value="0.22" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/notify_player_big.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/play_fragment.xml" value="0.1" />
         <entry key="..\:/Users/km/AndroidStudioProjects/echo_kt/app/src/main/res/layout/sample_float_window_view.xml" value="0.14270833333333333" />
@@ -52,7 +68,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

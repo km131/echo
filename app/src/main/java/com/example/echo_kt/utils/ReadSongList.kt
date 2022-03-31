@@ -143,8 +143,8 @@ fun getAudioUri(fileName: String): Uri? {
 /**
  * 获取存储路径(包名下的file文件夹)
  */
-fun getPublicDiskFileDir(fileName: String): File {
-    var cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
+fun getPublicDiskFileDir(fileName: String): File?  {
+    val cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) { //此目录下的是外部存储下的私有的fileName目录
         BaseApplication.getContext().getExternalFilesDir(fileName)!!.absolutePath
@@ -152,11 +152,14 @@ fun getPublicDiskFileDir(fileName: String): File {
         BaseApplication.getContext().filesDir.path
             .toString() + "/" + fileName
     }
-    val file = File(cachePath)
-    if (!file.exists()) {
-        file.mkdirs()
+    cachePath?.let {
+        val file = File(it)
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file
     }
-    return file
+    return null
 }
 
 // 重新获取音频地址

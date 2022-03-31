@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.ObservableField
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.echo_kt.R
 import com.example.echo_kt.api.showToast
-import com.example.echo_kt.data.ErectBean
+import com.example.echo_kt.data.ImageAndTextBean
 import com.example.echo_kt.data.ShowSearchBean
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.databinding.BottomDialogSongBinding
@@ -25,7 +26,8 @@ import com.example.echo_kt.utils.checkPermissions
 import com.example.echo_kt.utils.downLoadFile
 import com.example.echo_kt.utils.getPermission
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -113,8 +115,8 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
         binding.tvSongName.text = viewModel.audioBean.get()!!.songName
         binding.tvSingerName.text = viewModel.audioBean.get()!!.author
         binding.tvSource.text = viewModel.audioBean.get()!!.source
-        binding.rvItemList.adapter = MyErectAdapter(initErectAdapter()).apply {
-            setOnItemClickListener(object : MyErectAdapter.OnItemClickListener {
+        binding.rvItemList.adapter = ImageAndTextAdapter(initAdapter()).apply {
+            setOnItemClickListener(object : ImageAndTextAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     when (position) {
                         0 -> {
@@ -163,7 +165,7 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
                         }
                         3 -> {
                             //收藏
-                            GlobalScope.launch {
+                            lifecycleScope.launch(Dispatchers.IO) {
                                 AppDataBase.getInstance().songDao()
                                     .updateSong(viewModel.audioBean.get()!!.apply {
                                         isLike = true
@@ -185,12 +187,12 @@ class BottomDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun initErectAdapter(): MutableList<ErectBean> {
+    private fun initAdapter(): MutableList<ImageAndTextBean> {
         return mutableListOf(
-            ErectBean(R.mipmap.add_next_play, "下一首播放"),
-            ErectBean(R.mipmap.add_song_list, "加到歌单"),
-            ErectBean(R.mipmap.download, "下载"),
-            ErectBean(R.mipmap.no_collect, "收藏")
+            ImageAndTextBean(R.mipmap.add_next_play, "下一首播放"),
+            ImageAndTextBean(R.mipmap.add_song_list, "加到歌单"),
+            ImageAndTextBean(R.mipmap.download, "下载"),
+            ImageAndTextBean(R.mipmap.no_collect, "收藏")
         )
     }
 }

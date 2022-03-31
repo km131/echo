@@ -53,11 +53,11 @@ class PlayService : Service() {
         when (mode) {
             PlayerManager.RESUME, PlayerManager.START -> noti.contentView.setImageViewResource(
                 R.id.player_play,
-                R.mipmap.play_resume_gray
+                R.drawable.ic_stop
             )
             PlayerManager.PAUSE -> noti.contentView.setImageViewResource(
                 R.id.player_play,
-                R.mipmap.play_pause_gray
+                R.drawable.ic_play
             )
         }
 

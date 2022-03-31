@@ -10,13 +10,16 @@ import com.example.echo_kt.api.migu.MiguSearchMusicBean
 import com.example.echo_kt.data.SearchBean
 import com.example.echo_kt.data.SongBean
 import com.example.echo_kt.paging.MiGuPagingSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MiGuMusicModel @Inject constructor(private val service: MiguMusicServer):Model {
     companion object {
+        const val TAG = "MiGuMusicModel"
         private const val NETWORK_PAGE_SIZE = 25
-        fun convertSongBean(bean: MiguSearchMusicBean): SongBean {
+        suspend fun convertSongBean(bean: MiguSearchMusicBean): SongBean {
             return SongBean(
                 songName = bean.data.songItem.songName,
                 author = bean.data.songItem.singer,
@@ -27,6 +30,13 @@ class MiGuMusicModel @Inject constructor(private val service: MiguMusicServer):M
             ).apply {
                 //暂时凑合
                 fileType = ".mp3"
+                lyric =  getLyric(bean.data.songItem.lrcUrl)
+            }
+        }
+
+        private suspend fun getLyric(url:String): String {
+            return  withContext(Dispatchers.IO) {
+                MiguMusicServer.create(1).getLyricStr(url).string()
             }
         }
     }

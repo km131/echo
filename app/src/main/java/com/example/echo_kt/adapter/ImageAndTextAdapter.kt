@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.echo_kt.data.ErectBean
+import com.example.echo_kt.data.ImageAndTextBean
 import com.example.echo_kt.databinding.ItemTextImageBinding
 
 
-class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.Adapter<ErectViewHolder>() {
+class ImageAndTextAdapter(private var mList: MutableList<ImageAndTextBean>) : RecyclerView.Adapter<ImageAndTextViewHolder>() {
 
     private lateinit var onItemClickListener: OnItemClickListener
 
@@ -20,8 +20,8 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
         fun onItemLongClick(view: View, position: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ErectViewHolder {
-        return ErectViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAndTextViewHolder {
+        return ImageAndTextViewHolder(
             ItemTextImageBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -30,7 +30,7 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
         )
     }
 
-    override fun onBindViewHolder(holder: ErectViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageAndTextViewHolder, position: Int) {
         holder.bind(mList[position])
         holder.itemView.setOnClickListener {
             onItemClickListener.onItemClick(holder.itemView, position)
@@ -38,10 +38,10 @@ class MyErectAdapter(private var mList: MutableList<ErectBean>) : RecyclerView.A
     }
     override fun getItemCount(): Int = mList.size
 }
-class ErectViewHolder(private val binding :ItemTextImageBinding): RecyclerView.ViewHolder(binding.root){
-    fun bind(item: ErectBean) {
+class ImageAndTextViewHolder(private val binding :ItemTextImageBinding): RecyclerView.ViewHolder(binding.root){
+    fun bind(item: ImageAndTextBean) {
         binding.apply {
-            binding.erectBean=item
+            binding.bean=item
             executePendingBindings()
         }
     }

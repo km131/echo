@@ -29,7 +29,7 @@ interface AudioObserver {
     /**
      * 播放模式
      */
-    fun onPlayMode(playMode:Int)
+    fun onPlayMode(playMode:Int){}
 
     /**
      * 重置

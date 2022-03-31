@@ -46,31 +46,31 @@ fun imgPlay(view: View, playStatus: Int) {
 
 @BindingAdapter("url")
 fun setImgUrl(view: ImageView, @DrawableRes url: Int) {
-    Glide.with(view.context).load(url).into(view)
+    view.setImageResource(url)
 }
 
 @BindingAdapter("urlAlbum")
 fun setImgUrl(view: ImageView, url: String?) {
-        Glide.with(view.context)
-            .load(url?:R.mipmap.album)
-            .apply(RequestOptions.bitmapTransform(CircleCrop()))
-            .into(view)
-        Log.i("专辑图片", "setImgUrl: $url")
+    Glide.with(view.context)
+        .load(url ?: R.mipmap.album)
+        .apply(RequestOptions.bitmapTransform(CircleCrop()))
+        .into(view)
+    Log.i("专辑图片", "setImgUrl: $url")
 }
 
 @BindingAdapter("urlAlbum2")
 fun setImgUrl2(view: ImageView, url: String?) {
-        Glide.with(view.context)
-            .load(url ?: R.mipmap.album)
-            .apply(
-                RequestOptions.bitmapTransform(
-                    MultiTransformation(
-                        RoundedCorners(20) //设置图片圆角角度
-                    )
+    Glide.with(view.context)
+        .load(url ?: R.mipmap.album)
+        .apply(
+            RequestOptions.bitmapTransform(
+                MultiTransformation(
+                    RoundedCorners(20) //设置图片圆角角度
                 )
             )
-            .into(view)
-        Log.i("专辑图片", "setImgUrl: $url")
+        )
+        .into(view)
+    Log.i("专辑图片", "setImgUrl: $url")
 }
 
 /**
@@ -83,7 +83,7 @@ fun getGaussianBlurBitmap(bitmap: Bitmap, radius: Float): Bitmap {
     val rs = RenderScript.create(BaseApplication.getContext())
     val blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
     val tmpIn = Allocation.createFromBitmap(rs, inputBitmap)
-    val tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+    val tmpOut = Allocation.createFromBitmap(rs, outputBitmap)
     blurScript.setRadius(radius)
     blurScript.setInput(tmpIn)
     blurScript.forEach(tmpOut)

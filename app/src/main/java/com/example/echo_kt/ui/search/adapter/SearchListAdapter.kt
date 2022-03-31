@@ -74,10 +74,9 @@ class SearchListAdapter constructor(
             onItemClickListener.onItemClick(holder.getBind(), listBody)
         }
         return when (source) {
-            SourceType.KUGOU -> holder.bind(listBody as Info, kuGouServer)
+            SourceType.KUGOU -> holder.bind(listBody as Info)
             SourceType.QQMUSIC -> holder.bind(listBody as AudioList, qqMusicServer)
-            SourceType.WYYMUSIC -> holder.bind(
-                listBody as WyySearchListBean.Result.Song,
+            SourceType.WYYMUSIC -> holder.bind(listBody as WyySearchListBean.Result.Song,
                 wyyMusicServer
             )
             SourceType.MIGUMUSIC -> holder.bind(
@@ -97,7 +96,7 @@ class SearchListAdapter constructor(
         }
 
         //酷狗音乐
-        fun bind(item: Info, kuGouServer: KuGouServer) {
+        fun bind(item: Info) {
             binding.bean = ShowSearchBean(item.songName, item.singerName)
             binding.llPlay.setOnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
@@ -105,7 +104,7 @@ class SearchListAdapter constructor(
                         KuGouModel.getMusicBean(item.albumId, item.hash)
                     }
                     data?.run {
-                        val audioBean = KuGouModel.convertSongBean(item, this.img, this.play_url)
+                        val audioBean = KuGouModel.convertSongBean(item, this.img, this.play_url,this.lyrics)
                         PlayerManager.instance.playNewAudio(audioBean)
                     } ?: showToast("网络出问题了，也可能是接口有变动")
                 }

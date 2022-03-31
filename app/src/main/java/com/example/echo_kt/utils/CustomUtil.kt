@@ -4,16 +4,21 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -41,6 +46,8 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 fun stringForTime(duration: Int): String {
@@ -68,7 +75,7 @@ fun getDate(): String {
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
 }
 
-//将mipmap转化位uri
+//将mipmap转化为uri
 fun getMipmapToUri(resId: Int): String {
     val r = BaseApplication.getContext().resources
     val uri = Uri.parse(
@@ -141,7 +148,7 @@ fun downLoadFile(url: String, fileName: String, fileType: String) {
     )
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-    val downloadId: Long = downloadManager.enqueue(request)
+    downloadManager.enqueue(request)
 }
 
 fun updateProgress(progress: Int, title: String, maxSize: String, isEnd: Boolean) {
@@ -175,8 +182,8 @@ fun getFileSize(size: Long): String {
         else -> size.toString() + "B"
     }
 }
-
-fun getPermission(activity: Activity, permissions: Array<String>, requestCode: Int){
+//获取权限
+fun getPermission(activity: Activity, permissions: Array<String>, requestCode: Int) {
     val mPermissionList: MutableList<String> = mutableListOf()
     permissions.forEach {
         if (ContextCompat.checkSelfPermission(
@@ -191,7 +198,8 @@ fun getPermission(activity: Activity, permissions: Array<String>, requestCode: I
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 }
-fun checkPermissions(permissions: Array<String>):Boolean{
+//检查权限
+fun checkPermissions(permissions: Array<String>): Boolean {
     permissions.forEach {
         if (ContextCompat.checkSelfPermission(
                 BaseApplication.getContext(),
@@ -203,6 +211,7 @@ fun checkPermissions(permissions: Array<String>):Boolean{
     }
     return true
 }
+
 fun getBitmapFromUri(uri: Uri): Bitmap? {
     val parcelFileDescriptor: ParcelFileDescriptor? =
         BaseApplication.getContext().contentResolver.openFileDescriptor(uri, "r")
@@ -212,8 +221,8 @@ fun getBitmapFromUri(uri: Uri): Bitmap? {
     return image
 }
 
-//在协程中调用，
-fun CoroutineScope.saveBackground(uri: Uri) {
+//保存自定义背景图片
+fun saveBackground(uri: Uri): Boolean {
     val file = File(BaseApplication.getContext().filesDir.path + "/echo_bg.jpg")
     if (!file.exists()) {
         file.createNewFile()
@@ -225,9 +234,7 @@ fun CoroutineScope.saveBackground(uri: Uri) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
             out.flush()
             out.close()
-            launch(Dispatchers.Main) {
-                showToast("保存图片成功")
-            }
+            return true
         } catch (e: IOException) {
             showToast("写入内部存储失败")
         } finally {
@@ -235,4 +242,85 @@ fun CoroutineScope.saveBackground(uri: Uri) {
             out.close()
         }
     }
+    return false
+}
+
+fun deleteFile(uri: Uri): Boolean {
+    return DocumentsContract.deleteDocument(BaseApplication.getContext().contentResolver, uri)
+}
+
+fun getRealFilePath(context: Context, uri: Uri): String {
+    val scheme = uri.scheme
+    var data = ""
+    if (scheme == null)
+        data = uri.path.toString()
+    else if (ContentResolver.SCHEME_FILE == scheme) {
+        data = uri.path.toString()
+    } else if (ContentResolver.SCHEME_CONTENT == scheme) {
+        val cursor = context.contentResolver.query(
+            uri,arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
+        if (null != cursor) {
+            if (cursor.moveToFirst()) {
+                val index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                if (index > -1) {
+                    data = cursor.getString(index)
+                }
+            }
+            cursor.close()
+        }
+    }
+    return data
+}
+
+//删除图库照片
+fun deleteImage(imgPath: String): Boolean {
+    val resolver: ContentResolver = BaseApplication.getContext().contentResolver
+    val cursor: Cursor? = MediaStore.Images.Media.query(
+        resolver,
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        arrayOf(MediaStore.Images.Media._ID),
+        MediaStore.Images.Media.DATA + "=?",
+        arrayOf(imgPath),
+        null
+    )
+    return if (null != cursor && cursor.moveToFirst()) {
+        val id: Long = cursor.getLong(0)
+        val contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val uri = ContentUris.withAppendedId(contentUri, id)
+        val count: Int = BaseApplication.getContext().contentResolver.delete(uri, null, null)
+        count == 1
+    } else {
+        val file = File(imgPath)
+        file.delete()
+    }
+}
+
+fun getLongTimex(min: String, sec: String, mill: String): Long {
+    val m = Integer.parseInt(min)
+    val s = Integer.parseInt(sec)
+    val ms = Integer.parseInt(mill)
+    if (s >= 60) {
+        Log.v("", "--> [" + min + ":" + sec + "." + mill.substring(0, 2) + "]")
+    }
+    // 组合成一个长整型表示的以毫秒为单位的时间
+    val time = m * 60 * 1000 + s * 1000 + ms
+    return time.toLong()
+}
+
+fun getLrcList(lrcStr: String): MutableMap<Long, String> {
+    val map = mutableMapOf<Long, String>()
+    Log.i("TAG", "lrcStr:$lrcStr ")
+    val pattern: Pattern = Pattern.compile("\\[(\\d{2}:\\d{2}\\.\\d{2})][^\\[]*")
+    val matcher: Matcher = pattern.matcher(lrcStr)
+    while (matcher.find()) {
+        val s = matcher.group()
+        val min = s.substring(1, 3)
+        val sec = s.substring(4, 6)
+        val mill = s.substring(7, 9)
+        val time = getLongTimex(min, sec, mill)
+        val text = s.substring(10, s.length)
+        map[time] = text
+        Log.i("TAG", "getLrcList: $s , time = $time , text = $text")
+    }
+    return map
 }

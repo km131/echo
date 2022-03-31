@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -26,15 +27,18 @@ import com.example.echo_kt.databinding.SettingFragmentBinding
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.main.MainViewModel
 import com.example.echo_kt.utils.checkPermissions
+import com.example.echo_kt.utils.deleteImage
 import com.example.echo_kt.utils.getPermission
+import com.example.echo_kt.utils.getRealFilePath
 import com.example.echo_kt.utils.saveBackground
 import com.example.echo_kt.utils.stringForTime
+import com.km.common.resultContract.CropPictureContract
+import com.km.common.resultContract.CropPictureParameter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 
 
 @AndroidEntryPoint
@@ -45,28 +49,43 @@ class SettingFragment : Fragment() {
     private var _binding: SettingFragmentBinding? = null
     private val binding get() = _binding!!
     private var updateJob: Job? = null
-    private lateinit var startActivity: ActivityResultLauncher<Intent>
+
+    //从图库中选取图片返回Uri
+    private lateinit var startChoosePictureActivity: ActivityResultLauncher<Intent>
+    private lateinit var cropPictureLauncher: ActivityResultLauncher<CropPictureParameter>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity =
+        startChoosePictureActivity =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.data != null && it.resultCode == Activity.RESULT_OK) {
-                    showToast("获取图片成功")
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        saveBackground(it.data!!.data!!)
+                    showToast("获取原始图片成功")
+                    photoClip(it.data!!.data!!)
+                } else {
+                    showToast("获取图片失败")
+                }
+            }
+        cropPictureLauncher = registerForActivityResult(CropPictureContract()) {
+            if (it != null) {
+                showToast("获取裁剪后图片成功")
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (saveBackground(it)) {
+                        if (deleteImage(getRealFilePath(requireContext(), it)))
+                            Log.i("SettingFragment", "deleteFile: 删除成功")
                         val drawable: Drawable? =
                             Drawable.createFromPath(requireActivity().filesDir.path + "/echo_bg.jpg")
                         drawable?.run {
                             withContext(Dispatchers.Main) {
                                 (this@SettingFragment.requireActivity()
-                                    .findViewById<ViewGroup>(R.id.main_container)).background = drawable
+                                    .findViewById<ViewGroup>(R.id.main_container)).background = this@run
                             }
                         }
                     }
-                } else {
-                    showToast("获取图片失败")
                 }
+            } else {
+                showToast("获取图片失败")
             }
+        }
     }
 
     override fun onCreateView(
@@ -105,9 +124,8 @@ class SettingFragment : Fragment() {
                     PlayerManager.instance.startTimer(settingViewModel)
                 } else {
                     PlayerManager.instance.cleanCountdown()
-                    settingViewModel.countdownBean.value = (
-                            SettingViewModel.CountdownBean(0, false)
-                            )
+                    settingViewModel.countdownBean.value =
+                        (SettingViewModel.CountdownBean(0, false))
                 }
             }
         }
@@ -121,8 +139,7 @@ class SettingFragment : Fragment() {
                     binding.countdown.text = stringForTime(seekBar!!.progress)
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     Log.i("TAG", "onStopTrackingTouch:" + seekBar!!.progress.toLong())
@@ -147,10 +164,15 @@ class SettingFragment : Fragment() {
                 switchFloatWindow.isChecked = it
             })
             switchFloatWindow.setOnCheckedChangeListener { _: CompoundButton, b: Boolean ->
-                if (b) {
-                    mainViewModel.showFloatWindow()
-                } else {
-                    mainViewModel.closeFloatWindow()
+                val permissions = arrayOf(Manifest.permission.SYSTEM_ALERT_WINDOW)
+                if (!checkPermissions(permissions)) {
+                    getPermission(this@SettingFragment.requireActivity(), permissions, 2002)
+                }else{
+                    if (b) {
+                        mainViewModel.showFloatWindow()
+                    } else {
+                        mainViewModel.closeFloatWindow()
+                    }
                 }
             }
             btnChangeBackground.setOnClickListener {
@@ -167,8 +189,20 @@ class SettingFragment : Fragment() {
                     //直接打开系统相册  不设置会有选择相册一步（例：系统相册、QQ浏览器相册）
                     data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 }
-                startActivity.launch(intent)
+                startChoosePictureActivity.launch(intent)
             }
         }
+    }
+
+    private fun photoClip(uri: Uri) {
+        // 通过自定义协定调用系统中自带的图片剪裁
+        val s = resources.displayMetrics
+        cropPictureLauncher.launch(
+            CropPictureParameter(
+                uri,
+                aspectX = s.widthPixels,
+                aspectY = s.heightPixels
+            )
+        )
     }
 }

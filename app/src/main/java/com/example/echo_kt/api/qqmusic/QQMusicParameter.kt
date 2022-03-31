@@ -16,8 +16,8 @@ class QQMusicParameter {
                 "\"req_0\":{\"module\":\"vkey.GetVkeyServer\"" +
                 ",\"method\":\"CgiGetVkey\",\"param\":{\"guid\"" +
                 ":\"596611375\",\"songmid\":[\"$songMid\"]," +
-                "\"songtype\":[0],\"uin\":\"2602241712\",\"loginflag\":1," +
-                "\"platform\":\"20\"}},\"comm\":{\"uin\":2602241712,\"" +
+                "\"songtype\":[0],\"uin\":\"1233122131\",\"loginflag\":1," +
+                "\"platform\":\"20\"}},\"comm\":{\"uin\":1233122131,\"" +
                 "format\":\"json\",\"ct\":24,\"cv\":0}}"
         return String(data.toByteArray(), charset("UTF-8"))
     }

@@ -16,17 +16,18 @@ class KuGouModel @Inject constructor(private val service: KuGouServer):Model{
     companion object {
         private const val NETWORK_PAGE_SIZE = 25
 
-        fun convertSongBean(bean: Info,albumUrl:String,audioUrl:String): SongBean {
+        fun convertSongBean(bean: Info,albumUrl:String,audioUrl:String,lyric:String): SongBean {
             return SongBean(
                 songName = bean.songName,
                 author = bean.singerName,
                 albumUrl = albumUrl,
                 audioUrl = audioUrl,
                 id = "kugouMusic/${bean.albumAudioId}",
-                source = "kugou"
+                source = "kugou",
             ).apply {
                 requestParameter = hashMapOf("id" to bean.albumId , "hash" to bean.hash)
                 fileType = bean.format
+                this.lyric = lyric
             }
         }
         suspend fun getMusicBean(albumId:String,hash:String): SearchMusicDetails.Data? {

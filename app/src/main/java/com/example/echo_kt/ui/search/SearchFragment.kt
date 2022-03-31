@@ -27,14 +27,15 @@ import com.example.echo_kt.model.KuGouModel
 import com.example.echo_kt.model.MiGuMusicModel
 import com.example.echo_kt.model.QQMusicModel
 import com.example.echo_kt.model.WyyMusicModel
-import com.example.echo_kt.play.PlayList
-import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.SourceType
 import com.example.echo_kt.ui.search.adapter.SearchListAdapter
 import com.google.android.material.imageview.ShapeableImageView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -129,7 +130,7 @@ class SearchFragment : Fragment() {
                 val dat = withContext(Dispatchers.IO) {
                     KuGouModel.getMusicBean(s.albumId, s.hash)
                 }
-                return KuGouModel.convertSongBean(s, dat!!.img, dat.play_url)
+                return KuGouModel.convertSongBean(s, dat!!.img, dat.play_url,dat.lyrics)
             }
             SourceType.QQMUSIC -> {
                 val s = (data as AudioList)

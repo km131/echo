@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.echo_kt.adapter.SongListAdapter
 import com.example.echo_kt.adapter.SongViewModel
@@ -14,7 +15,6 @@ import com.example.echo_kt.room.AppDataBase
 import com.example.echo_kt.room.PlaylistSongCrossRef
 import com.example.echo_kt.ui.main.HomeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class AddToPlayListDialog: BottomSheetDialogFragment() {
@@ -26,7 +26,7 @@ class AddToPlayListDialog: BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = AddToPlaylistDialogBinding.inflate(inflater, container, false)
         initOptionList()
         return binding.root
@@ -37,7 +37,7 @@ class AddToPlayListDialog: BottomSheetDialogFragment() {
             setOnItemClickListener(object : SongListAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     val playlistId = hViewModel.songList.value!![position].playlistId
-                    GlobalScope.launch {
+                    lifecycleScope.launch {
                         AppDataBase.getInstance().songDao().insertSong( sViewModel.audioBean.get()!! )
                         AppDataBase.getInstance().customSongListDao().insertPlaylistsWithSong(PlaylistSongCrossRef(id = sViewModel.audioBean.get()!!.id,playlistId = playlistId))
                         AppDataBase.getInstance().customSongListDao().updateSongList(hViewModel.songList.value!![position].apply { number += 1 })

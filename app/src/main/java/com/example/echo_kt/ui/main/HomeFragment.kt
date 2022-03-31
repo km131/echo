@@ -15,9 +15,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.echo_kt.R
-import com.example.echo_kt.adapter.MyErectAdapter
+import com.example.echo_kt.adapter.ImageAndTextAdapter
 import com.example.echo_kt.adapter.SongListAdapter
-import com.example.echo_kt.data.ErectBean
+import com.example.echo_kt.data.ImageAndTextBean
 import com.example.echo_kt.data.SongListBean
 import com.example.echo_kt.databinding.HomeFragmentBinding
 import com.example.echo_kt.room.AppDataBase
@@ -26,7 +26,7 @@ import com.example.echo_kt.utils.getMipmapToUri
 import com.example.echo_kt.utils.getSongListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -37,11 +37,11 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapterSongList:SongListAdapter
 
-    private fun initErectAdapter(): MutableList<ErectBean> {
+    private fun initAdapter(): MutableList<ImageAndTextBean> {
         return mutableListOf(
-            ErectBean(R.mipmap.localmusic,"本地音乐"),
-            ErectBean(R.mipmap.lovemusic,"我喜欢的"),
-            ErectBean(R.mipmap.historymusic,"最近播放")
+            ImageAndTextBean(R.drawable.ic_download,"本地音乐"),
+            ImageAndTextBean(R.drawable.ic_collect,"我的收藏"),
+            ImageAndTextBean(R.drawable.ic_history,"最近播放")
         )
     }
     override fun onCreateView(
@@ -85,8 +85,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRvHome() {
-        binding.rvHome.adapter = MyErectAdapter(initErectAdapter()).apply {
-            setOnItemClickListener(object : MyErectAdapter.OnItemClickListener {
+        binding.rvHome.adapter = ImageAndTextAdapter(initAdapter()).apply {
+            setOnItemClickListener(object : ImageAndTextAdapter.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     when (position) {
                             0 -> view.findNavController().navigate(R.id.action_mainFragment_to_localSongFragment)
@@ -113,7 +113,7 @@ class HomeFragment : Fragment() {
         normalDialog.setPositiveButton(
             "确定"
         ) { _, _ ->
-            GlobalScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 AppDataBase.getInstance().customSongListDao()
                     .deleteSongList(bean.id)
             }

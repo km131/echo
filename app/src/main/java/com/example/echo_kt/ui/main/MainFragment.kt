@@ -73,7 +73,7 @@ class MainFragment : Fragment(), AudioObserver {
     override fun onPlayMode(playMode: Int) {
        when (playMode){
            PlayList.PlayMode.ORDER_PLAY_MODE ->{
-               viewModel.playModePic.set(R.mipmap.order)
+               viewModel.playModePic.set(R.drawable.ic_order_play)
                viewModel.playModeText.set("顺序播放")
            }
            PlayList.PlayMode.RANDOM_PLAY_MODE ->{
@@ -81,7 +81,7 @@ class MainFragment : Fragment(), AudioObserver {
                viewModel.playModeText.set("随机播放")
            }
            PlayList.PlayMode.SINGLE_PLAY_MODE ->{
-               viewModel.playModePic.set(R.mipmap.single)
+               viewModel.playModePic.set(R.drawable.ic_cycle_play)
                viewModel.playModeText.set("单曲循环")
            }
        }
@@ -95,6 +95,7 @@ class MainFragment : Fragment(), AudioObserver {
         viewModel.songName.set(audioBean.songName)
         viewModel.singer.set(audioBean.author)
         viewModel.albumPic.set(audioBean.albumUrl)
+        viewModel.lyricStr.set(audioBean.lyric)
     }
 
     override fun onPlayStatus(playStatus: Int) {

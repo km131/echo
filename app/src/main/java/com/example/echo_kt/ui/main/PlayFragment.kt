@@ -74,15 +74,16 @@ class PlayFragment : Fragment(), AudioObserver {
                 R.id.imgPlayStart -> PlayerManager.instance.controlPlay()
                 R.id.imgNext -> PlayerManager.instance.next()
                 R.id.imgAudioList -> findNavController(this).navigate(R.id.action_playFragment_to_audioListDialogFragment)
+                R.id.imgAlbumPic -> findNavController(this).navigate(R.id.action_playFragment_to_lyricFragment)
             }
         }
     }
 
     override fun onPlayMode(playMode: Int) {
         when (playMode){
-            PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.mipmap.order)
+            PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.drawable.ic_order_play)
             PlayList.PlayMode.RANDOM_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.random)
-            PlayList.PlayMode.SINGLE_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.single)
+            PlayList.PlayMode.SINGLE_PLAY_MODE ->viewModel.playModePic.set(R.drawable.ic_cycle_play)
         }
     }
 

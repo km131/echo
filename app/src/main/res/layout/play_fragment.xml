@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white60">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -85,12 +85,12 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPlayStart"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@color/white"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:elevation="10dp"
             android:onClick="@{onClick}"
             android:src="@drawable/selector_play_pic"
+            android:scaleType="fitXY"
             app:imgPlay="@{pvm.playStatus}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
@@ -107,8 +107,8 @@
             android:onClick="@{onClick}"
             android:elevation="5dp"
             app:shapeAppearance="@style/circle"
-            android:background="@color/white"
-            android:src="@mipmap/media_previous"
+            android:src="@drawable/ic_prev"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
             app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
@@ -119,11 +119,11 @@
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:elevation="5dp"
-            android:background="@color/white"
             app:shapeAppearance="@style/circle"
             android:contentDescription="@string/next"
             android:onClick="@{onClick}"
-            android:src="@mipmap/media_next"
+            android:src="@drawable/ic_next"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
             app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
@@ -132,16 +132,15 @@
             android:id="@+id/imgAudioList"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:elevation="5dp"
-            android:background="@color/white"
             app:shapeAppearanceOverlay="@style/circle"
             android:layout_marginStart="16dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_play_list"
             android:onClick="@{onClick}"
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintStart_toEndOf="@+id/imgNext"
-            app:layout_constraintTop_toTopOf="@+id/imgNext"
-            app:srcCompat="@mipmap/list" />
+            app:layout_constraintTop_toTopOf="@+id/imgNext" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgListMode"
@@ -150,7 +149,7 @@
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{onClick}"
-            android:background="@color/white"
+            android:scaleType="fitXY"
             android:elevation="5dp"
             app:shapeAppearanceOverlay="@style/circle"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"

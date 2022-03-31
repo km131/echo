@@ -9,13 +9,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 后台刷新服务和通知栏要用 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-sdk tools:overrideLibrary="com.km.common"/>
+    <uses-sdk tools:overrideLibrary="com.km.common" />
 
     <application
         android:name=".BaseApplication"
+        android:allowBackup="true"
         android:exported="false"
+        android:fullBackupOnly="true"
         android:icon="${app_icon}"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -24,7 +25,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +35,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.notification.PlayService" />
+        <service android:name=".ui.notification.PlayService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
