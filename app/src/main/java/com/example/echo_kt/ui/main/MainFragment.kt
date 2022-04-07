@@ -45,7 +45,7 @@ class MainFragment : Fragment(), AudioObserver {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mainVM=viewModel
+        binding.mainVM = viewModel
         onClick()
     }
 
@@ -55,36 +55,37 @@ class MainFragment : Fragment(), AudioObserver {
     }
 
     override fun onDestroyView() {
+        _binding = null
         super.onDestroyView()
-        _binding=null
     }
 
     private fun onClick() {
-        binding.playView.setOnClickListener{
+        binding.playView.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_playFragment)
         }
-        binding.btnMusicList.setOnClickListener{
+        binding.btnMusicList.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_audioListDialogFragment)
         }
-        binding.btnPlay.setOnClickListener{
+        binding.btnPlay.setOnClickListener {
             PlayerManager.instance.controlPlay()
         }
     }
+
     override fun onPlayMode(playMode: Int) {
-       when (playMode){
-           PlayList.PlayMode.ORDER_PLAY_MODE ->{
-               viewModel.playModePic.set(R.drawable.ic_order_play)
-               viewModel.playModeText.set("顺序播放")
-           }
-           PlayList.PlayMode.RANDOM_PLAY_MODE ->{
-               viewModel.playModePic.set(R.mipmap.random)
-               viewModel.playModeText.set("随机播放")
-           }
-           PlayList.PlayMode.SINGLE_PLAY_MODE ->{
-               viewModel.playModePic.set(R.drawable.ic_cycle_play)
-               viewModel.playModeText.set("单曲循环")
-           }
-       }
+        when (playMode) {
+            PlayList.PlayMode.ORDER_PLAY_MODE -> {
+                viewModel.playModePic.set(R.drawable.ic_order_play)
+                viewModel.playModeText.set("顺序播放")
+            }
+            PlayList.PlayMode.RANDOM_PLAY_MODE -> {
+                viewModel.playModePic.set(R.mipmap.random)
+                viewModel.playModeText.set("随机播放")
+            }
+            PlayList.PlayMode.SINGLE_PLAY_MODE -> {
+                viewModel.playModePic.set(R.drawable.ic_cycle_play)
+                viewModel.playModeText.set("单曲循环")
+            }
+        }
     }
 
     override fun onReset() {

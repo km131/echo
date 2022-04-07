@@ -17,8 +17,11 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
-import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -144,7 +147,7 @@ fun downLoadFile(url: String, fileName: String, fileType: String) {
     val request = DownloadManager.Request(Uri.parse(url))
     request.setDestinationInExternalPublicDir(
         "Music",
-        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.encodedPath + "/$fileName.$fileType"
+        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.encodedPath + "/$fileName$fileType"
     )
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -182,6 +185,7 @@ fun getFileSize(size: Long): String {
         else -> size.toString() + "B"
     }
 }
+
 //获取权限
 fun getPermission(activity: Activity, permissions: Array<String>, requestCode: Int) {
     val mPermissionList: MutableList<String> = mutableListOf()
@@ -198,6 +202,7 @@ fun getPermission(activity: Activity, permissions: Array<String>, requestCode: I
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 }
+
 //检查权限
 fun checkPermissions(permissions: Array<String>): Boolean {
     permissions.forEach {
@@ -258,7 +263,8 @@ fun getRealFilePath(context: Context, uri: Uri): String {
         data = uri.path.toString()
     } else if (ContentResolver.SCHEME_CONTENT == scheme) {
         val cursor = context.contentResolver.query(
-            uri,arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
+            uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null
+        )
         if (null != cursor) {
             if (cursor.moveToFirst()) {
                 val index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
@@ -320,7 +326,20 @@ fun getLrcList(lrcStr: String): MutableMap<Long, String> {
         val time = getLongTimex(min, sec, mill)
         val text = s.substring(10, s.length)
         map[time] = text
-        Log.i("TAG", "getLrcList: $s , time = $time , text = $text")
+        //Log.i("TAG", "getLrcList: $s , time = $time , text = $text")
     }
     return map
+}
+
+fun getBlurBitmap(context: Context, radius: Int, bitmap: Bitmap): Bitmap {
+    val renderScript = RenderScript.create(context)
+    val input: Allocation = Allocation.createFromBitmap(renderScript, bitmap)
+    val output: Allocation = Allocation.createTyped(renderScript, input.type)
+    val scriptIntrinsicBlur: ScriptIntrinsicBlur =
+        ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
+    scriptIntrinsicBlur.setRadius(radius.toFloat())
+    scriptIntrinsicBlur.setInput(input)
+    scriptIntrinsicBlur.forEach(output)
+    output.copyTo(bitmap)
+    return bitmap
 }

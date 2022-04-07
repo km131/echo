@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -47,15 +48,9 @@ class LyricFragment : Fragment(), AudioObserver {
     private val viewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentLyricBinding? = null
     private val binding get() = _binding!!
-    private var currentItemIndex: Int by mutableStateOf(
-        0
-    )
-    private var timeList: MutableList<Long> by mutableStateOf(
-        mutableListOf()
-    )
-    private var list: MutableList<Pair<Long, String>> by mutableStateOf(
-        mutableListOf()
-    )
+    private var currentItemIndex: Int by mutableStateOf(0)
+    private var timeList: MutableList<Long> by mutableStateOf(mutableListOf())
+    private var list: MutableList<Pair<Long, String>> by mutableStateOf(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +70,7 @@ class LyricFragment : Fragment(), AudioObserver {
             setContent {
                 MaterialTheme {
                     Surface(
-                        color = Color(255, 255, 255, 153),
+                        color = Color(0, 0, 0, 0),
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight()
@@ -106,7 +101,10 @@ class LyricFragment : Fragment(), AudioObserver {
                         })
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             LazyColumn(
-                                modifier = Modifier, state = listState
+                                modifier = Modifier
+                                    .fillMaxWidth(1f)
+                                    .padding(start = 50.dp),
+                                state = listState
                             ) {
                                 itemsIndexed(list) { index: Int, item: Pair<Long, String> ->
                                     val startTime = item.first
@@ -122,8 +120,8 @@ class LyricFragment : Fragment(), AudioObserver {
 
                                     Text(
                                         text = item.second,
-                                        color = if (lineProgress == 0f) Color.DarkGray else Color.Blue,
-                                        fontSize = 18.sp
+                                        color = if (lineProgress == 0f) Color.LightGray else Color.White,
+                                        fontSize = if (lineProgress == 0f) 15.sp else 17.sp
                                     )
 //                                    ProgressText(
 //                                        modifier = Modifier.fillParentMaxWidth(),
@@ -148,8 +146,9 @@ class LyricFragment : Fragment(), AudioObserver {
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        this.context?.let { PlayerManager.instance.unregister(this) }
         _binding = null
+        super.onDestroyView()
     }
 
     /**
@@ -182,7 +181,6 @@ class LyricFragment : Fragment(), AudioObserver {
                 .width(200.dp)
                 .height(60.dp)
         ) {
-
             drawIntoCanvas {
                 it.nativeCanvas.apply {
                     val textPath = Path()

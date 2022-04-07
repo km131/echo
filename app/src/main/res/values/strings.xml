@@ -46,4 +46,8 @@
     <string name="text_scanLocalSongs">扫描本地歌曲</string>
     <string name="text_playAll">全部播放</string>
     <string name="select_background">从相册选取背景</string>
+    <string name="song">歌曲</string>
+    <string name="lyric">歌词</string>
+    <string name="historyList_null">历史列表空无一物</string>
+    <string name="play_all">全部播放</string>
 </resources>

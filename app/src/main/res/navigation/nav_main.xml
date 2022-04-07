@@ -48,13 +48,10 @@
         android:id="@+id/playFragment"
         android:name="com.example.echo_kt.ui.main.PlayFragment"
         android:label="PlayFragment"
-        tools:layout="@layout/play_fragment">
+        tools:layout="@layout/fragment_play">
         <action
             android:id="@+id/action_playFragment_to_audioListDialogFragment"
             app:destination="@id/audioListDialogFragment" />
-        <action
-            android:id="@+id/action_playFragment_to_lyricFragment"
-            app:destination="@id/lyricFragment" />
     </fragment>
     <fragment
         android:id="@+id/localSongFragment"
@@ -153,8 +150,4 @@
         android:name="com.example.echo_kt.ui.main.songListFragment.AddToPlayListDialog"
         android:label="AddToPlayListDialog"
         tools:layout="@layout/add_to_playlist_dialog"/>
-    <fragment
-        android:id="@+id/lyricFragment"
-        android:name="com.example.echo_kt.ui.main.LyricFragment"
-        android:label="LyricFragment" />
 </navigation>

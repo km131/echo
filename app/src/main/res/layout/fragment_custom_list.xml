@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#33FFFFFF"
+        android:fitsSystemWindows="true"
         tools:context=".ui.main.songListFragment.CustomSongListFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -32,11 +33,11 @@
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white"
                 android:fitsSystemWindows="true"
                 app:collapsedTitleGravity="center"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Sunflower.Toolbar.Text"
                 app:contentScrim="@color/white"
-                android:background="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="?attr/colorSurface"
                 app:title="@{songListBean.name}"

@@ -61,27 +61,11 @@ class PlayService : Service() {
             )
         }
 
-        results?.let {
-            //加载通知栏专辑图片
-            Glide.with(BaseApplication.getContext().applicationContext)
-                .asBitmap()
-                .load(results.albumUrl)
-                .apply(
-                    RequestOptions.bitmapTransform(
-                        MultiTransformation(
-                            RoundedCorners(30) //设置图片圆角角度
-                        )
-                    )
-                )
-                .into(
-                    NotificationTarget(
-                        BaseApplication.getContext(),
-                        R.id.player_album_art,
-                        noti.contentView,
-                        noti,
-                        1024
-                    )
-                )
+        results?.getAlbumBitmap()?.let {
+            noti.contentView.setImageViewBitmap(
+                R.id.player_album_art,
+                it
+            )
             noti.contentView.setTextViewText(R.id.player_song_name, results.songName)
             noti.contentView.setTextViewText(R.id.player_author_name, results.author)
         } ?: noti.contentView.setImageViewResource(

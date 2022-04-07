@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="isNull"
             type="Boolean" />
+
         <variable
             name="onClickPlayAll"
             type="android.view.View.OnClickListener" />
+
         <variable
             name="onClickUpdate"
             type="android.view.View.OnClickListener" />
@@ -18,8 +21,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.songListFragment.HistorySongFragment"
-        android:padding="10dp">
+        android:fitsSystemWindows="true"
+        android:padding="10dp"
+        tools:context=".ui.main.songListFragment.HistorySongFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLocalSong"
@@ -31,15 +35,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/list_item_search"/>
+            tools:listitem="@layout/list_item_search" />
 
         <TextView
+            isGone="@{!isNull}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="历史列表空无一物"
-            android:textSize="20sp"
             android:gravity="center"
-            isGone="@{!isNull}"
+            android:text="@string/historyList_null"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,17 +61,17 @@
             <TextView
                 android:id="@+id/tvPlayAll"
                 style="@style/text_title"
-                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:drawableEnd="@mipmap/playall"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless"
                 android:onClick="@{onClickPlayAll}"
-                android:text="全部播放"
+                android:text="@string/play_all"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:drawableEndCompat="@mipmap/play_all" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

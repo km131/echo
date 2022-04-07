@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data class="PlayFragmentBinding">
+    <data>
+
         <variable
             name="pvm"
             type="com.example.echo_kt.ui.main.MainViewModel" />
+
         <variable
             name="onClick"
             type="android.view.View.OnClickListener" />
@@ -15,22 +17,22 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white60">
-
+        tools:context=".ui.main.MusicFragment">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAlbumPic"
-            urlAlbum2="@{pvm.albumPic}"
-            android:onClick="@{onClick}"
-            android:elevation="10dp"
+            uriRoundRect="@{pvm.albumPic}"
             android:layout_width="315dp"
             android:layout_height="315dp"
+            android:elevation="10dp"
+            android:onClick="@{onClick}"
             android:scaleType="fitXY"
+            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.15"
+            app:layout_constraintVertical_bias="0.05"
             tools:src="@tools:sample/avatars" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -39,16 +41,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="22dp"
             android:layout_marginEnd="16dp"
             android:maxEms="8"
             android:maxLines="1"
             android:text="@{pvm.songName}"
+            android:textColor="#FFFFFF"
             android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgAlbumPic" />
+            app:layout_constraintTop_toBottomOf="@+id/imgAlbumPic"
+            app:layout_constraintVertical_bias="0.050000012" />
 
         <TextView
             android:id="@+id/tvProgress"
@@ -56,15 +61,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@{pvm.currentDuration}"
+            android:textColor="#FFFFFF"
             app:layout_constraintStart_toStartOf="@+id/tv_singer"
             app:layout_constraintTop_toBottomOf="@+id/tv_singer"
-            tools:text ="00:00"/>
+            tools:text="00:00" />
 
         <TextView
             android:id="@+id/tvMaxDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{pvm.maxDuration}"
+            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/tvProgress"
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintHorizontal_bias="1.0"
@@ -79,24 +86,25 @@
             android:layout_marginTop="28dp"
             android:max="@{pvm.maxProgress}"
             android:progress="@{pvm.playProgress}"
+            android:shadowColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="@+id/tvName"
             app:layout_constraintStart_toStartOf="@+id/tvProgress"
             app:layout_constraintTop_toBottomOf="@+id/tvProgress" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPlayStart"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:elevation="10dp"
             android:onClick="@{onClick}"
-            android:src="@drawable/selector_play_pic"
             android:scaleType="fitXY"
+            android:src="@drawable/selector_play_pic"
             app:imgPlay="@{pvm.playStatus}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintStart_toStartOf="@+id/seekBar"
             app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            app:layout_constraintVertical_bias="0.53"
+            app:layout_constraintVertical_bias="0.5"
             app:shapeAppearanceOverlay="@style/circle" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -104,58 +112,58 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="24dp"
-            android:onClick="@{onClick}"
             android:elevation="5dp"
-            app:shapeAppearance="@style/circle"
-            android:src="@drawable/ic_prev"
+            android:onClick="@{onClick}"
             android:scaleType="fitXY"
+            android:src="@drawable/ic_prev"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintEnd_toStartOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
+            app:shapeAppearance="@style/circle" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgNext"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="24dp"
-            android:elevation="5dp"
-            app:shapeAppearance="@style/circle"
             android:contentDescription="@string/next"
+            android:elevation="5dp"
             android:onClick="@{onClick}"
-            android:src="@drawable/ic_next"
             android:scaleType="fitXY"
+            android:src="@drawable/ic_next"
             app:layout_constraintBottom_toBottomOf="@+id/imgPlayStart"
             app:layout_constraintStart_toEndOf="@+id/imgPlayStart"
-            app:layout_constraintTop_toTopOf="@+id/imgPlayStart" />
+            app:layout_constraintTop_toTopOf="@+id/imgPlayStart"
+            app:shapeAppearance="@style/circle" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAudioList"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:shapeAppearanceOverlay="@style/circle"
             android:layout_marginStart="16dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_play_list"
             android:onClick="@{onClick}"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/imgNext"
             app:layout_constraintEnd_toEndOf="@+id/seekBar"
             app:layout_constraintStart_toEndOf="@+id/imgNext"
-            app:layout_constraintTop_toTopOf="@+id/imgNext" />
+            app:layout_constraintTop_toTopOf="@+id/imgNext"
+            app:shapeAppearanceOverlay="@style/circle"
+            app:srcCompat="@drawable/ic_play_list" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgListMode"
-            url="@{pvm.playModePic}"
+            resId="@{pvm.playModePic}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
+            android:elevation="5dp"
             android:onClick="@{onClick}"
             android:scaleType="fitXY"
-            android:elevation="5dp"
-            app:shapeAppearanceOverlay="@style/circle"
             app:layout_constraintBottom_toBottomOf="@+id/imgPrevious"
             app:layout_constraintEnd_toStartOf="@+id/imgPrevious"
             app:layout_constraintStart_toStartOf="@+id/seekBar"
-            app:layout_constraintTop_toTopOf="@+id/imgPrevious" />
+            app:layout_constraintTop_toTopOf="@+id/imgPrevious"
+            app:shapeAppearanceOverlay="@style/circle" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_singer"
@@ -164,6 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@{pvm.singer}"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/tvName"
             app:layout_constraintHorizontal_bias="0.0"

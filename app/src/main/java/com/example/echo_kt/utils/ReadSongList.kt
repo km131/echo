@@ -25,6 +25,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
+
 /**
  * 读取本地音频列表
  */
@@ -39,12 +40,17 @@ fun readLocalPlayList(context: Context): MutableList<SongBean> {
     if (cursor != null) {
         while (cursor.moveToNext()) {
             if (cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)) > 60000) {
+                val albumId =
+                    cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
                 val audioBean = SongBean(
                     songName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
                     id = "local/" + cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
                     author = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
                     audioUrl = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                    albumUrl = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
+                    albumUrl = if (albumId.toString().toLongOrNull() != null) {
+                        Uri.parse("content://media/external/audio/albumart/${albumId.toLongOrNull()!!}")
+                            .toString()
+                    } else albumId,
                     source = "local"
                 )
                 audioList.add(audioBean)
@@ -125,7 +131,7 @@ fun writeResponseBodyToDisk(body: ResponseBody?, fileName: String, fileType: Str
             outputStream?.close()
         }
     }
-    Toast.makeText(BaseApplication.getContext(),"文件写入路径获取失败",Toast.LENGTH_SHORT).show()
+    Toast.makeText(BaseApplication.getContext(), "文件写入路径获取失败", Toast.LENGTH_SHORT).show()
     return false
 }
 
@@ -143,7 +149,7 @@ fun getAudioUri(fileName: String): Uri? {
 /**
  * 获取存储路径(包名下的file文件夹)
  */
-fun getPublicDiskFileDir(fileName: String): File?  {
+fun getPublicDiskFileDir(fileName: String): File? {
     val cachePath: String? = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
         || !Environment.isExternalStorageRemovable()
     ) { //此目录下的是外部存储下的私有的fileName目录
@@ -173,7 +179,7 @@ suspend fun updateUrl(wyyService: WyyMusicServer, qqServer: QQMusicServer) {
                 .updateSongs(this.onEach {
                     val map = it.requestParameter!!
                     it.audioUrl = KuGouServer.create2()
-                        .searchMusic(hash = map["hash"]!!,albumId = map["id"]!!).data.play_url
+                        .searchMusic(hash = map["hash"]!!, albumId = map["id"]!!).data.play_url
                 })
         }
     AppDataBase.getInstance()

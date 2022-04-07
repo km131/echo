@@ -2,6 +2,8 @@ package com.example.echo_kt.data
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -9,6 +11,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.bumptech.glide.Glide
 import com.example.echo_kt.BaseApplication
+import com.example.echo_kt.R
 import com.example.echo_kt.room.Converters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -49,12 +52,20 @@ data class SongBean(
 
     fun getAlbumBitmap(): Bitmap? {
         if (bitmap == null) {
-            bitmap = runBlocking(Dispatchers.IO){
-                Log.i("SongBean", "getAlbumBitmap: $albumUrl")
-                Glide.with(BaseApplication.getContext()).asBitmap()
-                    .load(albumUrl)
-                    .submit()
-                    .get()
+            try {
+                bitmap = runBlocking(Dispatchers.IO) {
+                    Log.i("SongBean", "getAlbumBitmap: $albumUrl")
+                    Glide.with(BaseApplication.getContext()).asBitmap()
+                        .load(albumUrl)
+                        .submit()
+                        .get()
+                }
+            } catch (e: Exception) {
+                return ResourcesCompat.getDrawable(
+                    BaseApplication.getContext().resources,
+                    R.mipmap.album,
+                    null
+                )?.toBitmap()
             }
         }
         return bitmap

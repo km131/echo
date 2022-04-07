@@ -1,28 +1,37 @@
 package com.example.echo_kt.ui.main
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.example.echo_kt.R
-import com.example.echo_kt.databinding.PlayFragmentBinding
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.echo_kt.adapter.getGaussianBlurBitmap
+import com.example.echo_kt.data.SongBean
+import com.example.echo_kt.databinding.FragmentPlayBinding
 import com.example.echo_kt.play.AudioObserver
-import com.example.echo_kt.play.PlayList
 import com.example.echo_kt.play.PlayerManager
-import com.example.echo_kt.utils.stringForTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlayFragment : Fragment(), AudioObserver {
 
-    private val viewModel: MainViewModel by activityViewModels()
-    private var _binding:PlayFragmentBinding?=null
-    private val binding get()=_binding!!
+    private var _binding: FragmentPlayBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //因背景图多为深色，故将状态栏颜色设置为白色
+        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         this.context?.let { PlayerManager.instance.register(this) }
     }
 
@@ -30,71 +39,66 @@ class PlayFragment : Fragment(), AudioObserver {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding= PlayFragmentBinding.inflate(inflater,container,false)
+        _binding = FragmentPlayBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
-        binding.pvm=viewModel
-        binding.onClick=onClick()
-        initSeekBar()
-    }
-
-    private fun initSeekBar() {
-        binding.seekBar.apply {
-            setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    binding.tvProgress.text=stringForTime(seekBar.progress)
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    PlayerManager.instance.seekTo(seekBar!!.progress)
-                }
-
-            })
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding=null
-    }
-
-    private fun onClick(): View.OnClickListener {
-        return View.OnClickListener{
-            when(it.id){
-                R.id.imgListMode -> PlayerManager.instance.switchPlayMode()
-                R.id.imgPrevious -> PlayerManager.instance.previous()
-                R.id.imgPlayStart -> PlayerManager.instance.controlPlay()
-                R.id.imgNext -> PlayerManager.instance.next()
-                R.id.imgAudioList -> findNavController(this).navigate(R.id.action_playFragment_to_audioListDialogFragment)
-                R.id.imgAlbumPic -> findNavController(this).navigate(R.id.action_playFragment_to_lyricFragment)
+        binding.apply {
+            vp.adapter = PlayPagerAdapter(this@PlayFragment)
+            ibBack.setOnClickListener {
+                findNavController().navigateUp()
             }
         }
     }
 
-    override fun onPlayMode(playMode: Int) {
-        when (playMode){
-            PlayList.PlayMode.ORDER_PLAY_MODE -> viewModel.playModePic.set(R.drawable.ic_order_play)
-            PlayList.PlayMode.RANDOM_PLAY_MODE ->viewModel.playModePic.set(R.mipmap.random)
-            PlayList.PlayMode.SINGLE_PLAY_MODE ->viewModel.playModePic.set(R.drawable.ic_cycle_play)
-        }
+    override fun onDestroy() {
+        this.context?.let { PlayerManager.instance.unregister(this) }
+        //根据是否为深色模式恢复状态栏之前的颜色
+        requireActivity().window.decorView.systemUiVisibility =
+            if (this.resources.configuration.uiMode == 0x11) {
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            }
+        _binding = null
+        super.onDestroy()
     }
 
     override fun onReset() {
-        viewModel.reset()
+
     }
 
-    override fun onProgress(currentDuration: Int, totalDuration: Int) {
-        viewModel.currentDuration.set(stringForTime(currentDuration))
-        viewModel.maxDuration.set(stringForTime(totalDuration))
-        viewModel.playProgress.postValue(currentDuration)
-        viewModel.maxProgress.set(totalDuration)
+    override fun onAudioBean(audioBean: SongBean) {
+        audioBean.getAlbumBitmap()?.let {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val s = BitmapDrawable(resources, getGaussianBlurBitmap(it, 10f, 20)).apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.MULTIPLY)
+                    } else {
+                        setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    binding.cl.background = s
+                }
+            }
+        }
+    }
+}
+
+const val SONG_PAGE_INDEX = 0
+const val LYRIC_PAGE_INDEX = 1
+
+class PlayPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
+        SONG_PAGE_INDEX to { MusicFragment() },
+        LYRIC_PAGE_INDEX to { LyricFragment() }
+    )
+
+    override fun getItemCount(): Int = tabFragmentsCreators.size
+
+    override fun createFragment(position: Int): Fragment {
+        return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="MainFragmentBinding">
+
         <variable
             name="mainVM"
             type="com.example.echo_kt.ui.main.MainViewModel" />
@@ -13,6 +14,7 @@
         android:id="@+id/cl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.main.MainFragment">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -32,8 +34,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:background="@drawable/radius_16_theme"
-            android:theme="@style/navigation"
             android:elevation="5dp"
+            android:theme="@style/navigation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,16 +56,16 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                urlAlbum="@{mainVM.albumPic}"
+                uriCircle="@{mainVM.albumPic}"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:contentDescription="@string/albumPic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/albumPic" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_music"
@@ -89,8 +91,8 @@
                 android:layout_marginEnd="8dp"
                 android:background="#00000000"
                 android:contentDescription="@string/play"
-                android:scaleType="fitXY"
                 android:elevation="5dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/selector_play_pic"
                 app:imgPlay="@{mainVM.playStatus}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -102,14 +104,14 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
-                android:scaleType="fitXY"
-                android:elevation="5dp"
                 android:background="#00000000"
+                android:contentDescription="@string/currentList"
+                android:elevation="5dp"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_play_list"
-                android:contentDescription="@string/currentList" />
+                app:srcCompat="@drawable/ic_play_list" />
 
             <TextView
                 android:id="@+id/textView2"

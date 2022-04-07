@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.example.echo_kt.ui.search.SearchViewModel" />
@@ -11,9 +12,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clSearchHistory"
-        android:paddingHorizontal="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:paddingHorizontal="2dp"
         tools:context=".ui.search.SearchFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,8 +51,8 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:hint="@string/searchByKeyWord"
-                android:inputType="text"
                 android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:singleLine="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -59,33 +61,33 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/rvFlexBox"-->
-<!--            android:layout_width="404dp"-->
-<!--            android:layout_height="108dp"-->
-<!--            android:layout_marginTop="32dp"-->
-<!--            android:clipToPadding="false"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="1.0"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/clSearch"-->
-<!--            app:layout_constraintVertical_bias="0.0"-->
-<!--            tools:listitem="@layout/item_flex_string" />-->
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/rvFlexBox"-->
+        <!--            android:layout_width="404dp"-->
+        <!--            android:layout_height="108dp"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:clipToPadding="false"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="1.0"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/clSearch"-->
+        <!--            app:layout_constraintVertical_bias="0.0"-->
+        <!--            tools:listitem="@layout/item_flex_string" />-->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/engineLogo"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:shapeAppearanceOverlay="@style/circle"
-            android:elevation="20dp"
             android:background="@color/white"
+            android:elevation="20dp"
             android:src="@mipmap/kugou"
             app:layout_constraintBottom_toBottomOf="@+id/clSearch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/clSearch" />
+            app:layout_constraintTop_toTopOf="@+id/clSearch"
+            app:shapeAppearanceOverlay="@style/circle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchList"

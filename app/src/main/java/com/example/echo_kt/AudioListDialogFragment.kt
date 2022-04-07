@@ -64,8 +64,9 @@ class AudioListDialogFragment : BottomSheetDialogFragment(),
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        this.context?.let { PlayerManager.instance.unregister(this) }
         _binding=null
+        super.onDestroy()
     }
     override fun onAudioBean(audioBean: SongBean) {
         if (_binding != null)

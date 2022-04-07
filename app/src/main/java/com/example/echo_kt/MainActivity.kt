@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
             (findViewById<ViewGroup>(R.id.main_container)).apply {
                 background = BitmapDrawable(resources, bitmap)
             }
-            initSystemBars(false)
-        }?:initSystemBars(true)
+        }//?:initSystemBars(true)
+        initSystemBars(true)
 
         registerReceiver(myBroadcastReceiver, IntentFilter().apply {
             //音频输出切回到内置扬声器广播
