@@ -19,7 +19,7 @@
         <LinearLayout
             android:id="@+id/ll_play"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:foreground="?android:attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
