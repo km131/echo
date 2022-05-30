@@ -1,14 +1,11 @@
 package com.example.echo_kt.ui.main
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Path
 import android.graphics.PixelFormat
 import android.os.Build
 import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +15,6 @@ import com.example.echo_kt.customview.FloatWindowView
 import com.example.echo_kt.play.PlayerManager
 import com.example.echo_kt.ui.float_window.ItemViewTouchListener
 import java.lang.ref.WeakReference
-import kotlin.coroutines.coroutineContext
 
 class MainViewModel : ViewModel() {
     /**

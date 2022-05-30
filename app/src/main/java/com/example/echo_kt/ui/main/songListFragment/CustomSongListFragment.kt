@@ -95,7 +95,6 @@ class CustomSongListFragment : Fragment() {
 
     private fun onCreateDialog() {
         val newFragment = SongListDialogFragment()
-        // The device is using a large layout, so show the fragment as a dialog
         newFragment.show(childFragmentManager, "歌单操作对话框")
     }
 
@@ -106,7 +105,7 @@ class CustomSongListFragment : Fragment() {
         //-1是收藏列表所传的参数
         if (args.index == -1) {
             songList =
-                SongListBean("like", "我的收藏", getDate(), getMipmapToUri(R.mipmap.album_like))
+                SongListBean("like", "我的收藏", getDate(), getMipmapToUri(R.drawable.ic_collect))
             binding.songListBean = songList
             lifecycleScope.launch(Dispatchers.Main) {
                 viewModel.likeSongs.observe(viewLifecycleOwner, {

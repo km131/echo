@@ -25,6 +25,7 @@ import androidx.media.app.NotificationCompat as MediaNotificationCompat
 
 /**
  * 每播放一个新的音频或者播放状态改变，发送一个新的通知
+ * 新写的service，未完成，故暂未使用
  */
 class PlayServiceNew : MediaBrowserServiceCompat() {
     companion object {

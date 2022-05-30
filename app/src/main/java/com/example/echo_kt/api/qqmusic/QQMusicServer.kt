@@ -1,5 +1,6 @@
 package com.example.echo_kt.api.qqmusic
 
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -66,6 +67,7 @@ interface QQMusicServer {
          * 搜索列表和请求地址参数接口
          */
         fun create(): QQMusicServer {
+            Log.i("QQMusicServer", "create")
 
             val logger = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BASIC

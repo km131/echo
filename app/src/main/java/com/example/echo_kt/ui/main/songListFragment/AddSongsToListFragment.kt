@@ -1,15 +1,12 @@
 package com.example.echo_kt.ui.main.songListFragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import com.example.echo_kt.R
 import com.example.echo_kt.databinding.AddSongsToListFragmentBinding
-import com.example.echo_kt.ui.main.MainFragmentDirections
 
 class AddSongsToListFragment : Fragment() {
 

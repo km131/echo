@@ -19,7 +19,11 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 import kotlin.collections.HashMap
 
-
+/**
+ * 此文件中的所以代码都是用JEB反编译咪咕音乐APK拿到的参数加密相关的java代码，一键转换为kotlin后略微修改了一下
+ *（直接丢到JEB里一键转为Java代码的，apk应该是没有加壳，比较意外）
+ * 这些代码不用看，看不懂的，懂了也没什么用
+ */
 class Migu {
      private var b :String = String()
      private var g :String = String()
@@ -45,11 +49,11 @@ class Migu {
 
         try {
             val v3 = MessageDigest.getInstance("MD5").digest(arg.toByteArray())
-            var v0_1 = ""
+            var v01 = ""
             v2 = 0
             while(true) {
                 if(v2 >= v3.size) {
-                    return v0_1
+                    return v01
                 }
 
                 var v1:String = Integer.toHexString(v3[v2].toInt() and 0xFF)
@@ -57,7 +61,7 @@ class Migu {
                     v1 = "0$v1"
                 }
 
-                v0_1 += v1
+                v01 += v1
                 ++v2
             }
         }
@@ -68,12 +72,9 @@ class Migu {
 
     }
 
-    /**
-     * devicedId
-     */
     @SuppressLint("HardwareIds")
     fun j(): String {
-        val v0_3: MessageDigest?
+        val v03: MessageDigest?
         return try {
             if (!TextUtils.isEmpty(b)) {
                 return b
@@ -100,31 +101,29 @@ class Migu {
             BluetoothAdapter.getDefaultAdapter()
             val v7 = StringBuilder()
             v7.append(v01).append(v2).append(v4).append(v5).append("")
-            v0_3 = try {
+            v03 = try {
                 MessageDigest.getInstance("MD5")
             } catch (v0_2: NoSuchAlgorithmException) {
                 null
             }
-            if (v0_3 == null) {
+            if (v03 == null) {
                 return v7.toString().toUpperCase(Locale.getDefault())
             }
-            v0_3.update(v7.toString().toByteArray(), 0, v7.length)
-            val v2_1: ByteArray = v0_3.digest()
-            val v4_1 = StringBuilder()
-            var v0_4: Int
-            v0_4 = 0
-            while (v0_4 < v2_1.size) {
-                val v1: Int = v2_1[v0_4].toInt() and 0xFF
+            v03.update(v7.toString().toByteArray(), 0, v7.length)
+            val v21: ByteArray = v03.digest()
+            val v41 = StringBuilder()
+            var v04 = 0
+            while (v04 < v21.size) {
+                val v1: Int = v21[v04].toInt() and 0xFF
                 if (v1 <= 15) {
-                    v4_1.append("0")
+                    v41.append("0")
                 }
-                v4_1.append(Integer.toHexString(v1))
-                ++v0_4
+                v41.append(Integer.toHexString(v1))
+                ++v04
             }
-            val v05 = v4_1.toString().toUpperCase(Locale.getDefault())
+            val v05 = v41.toString().toUpperCase(Locale.getDefault())
             v3.a("key_device_id", v05)
             return v05
-            v05
         } catch (v0: java.lang.Exception) {
             val v1: K = K.a(BaseApplication.getContext())
                 ?: return "USSc077ba7087554560ab5d86eade004dd232aeb9e2c2d14a6cb34a4cd18a5070bd"
@@ -183,14 +182,14 @@ class Migu {
             return d
         }
         try {
-            val v0_1 = (Objects.requireNonNull(
+            val v01 = (Objects.requireNonNull(
                 BaseApplication.getContext()
                 .getSystemService("connectivity") as ConnectivityManager
             ) as ConnectivityManager).activeNetworkInfo
             //检测网络是否正常
-            if (v0_1 != null && v0_1.isAvailable && v0_1.state == NetworkInfo.State.CONNECTED && v0_1.type == 0) {
-                val v2 = v0_1.subtypeName
-                return when (v0_1.subtype) {
+            if (v01 != null && v01.isAvailable && v01.state == NetworkInfo.State.CONNECTED && v01.type == 0) {
+                val v2 = v01.subtypeName
+                return when (v01.subtype) {
                     1, 2, 4, 7, 11 -> {
                         d = "02"
                         d
@@ -228,14 +227,14 @@ class Migu {
             return e
         }
         try {
-            val v0_1 = (BaseApplication.getContext()
+            val v01 = (BaseApplication.getContext()
                 .getSystemService("connectivity") as ConnectivityManager).activeNetworkInfo
-            if (v0_1 == null || !v0_1.isAvailable) {
+            if (v01 == null || !v01.isAvailable) {
                 e = "01"
                 return e
             }
-            if (v0_1.type == 0 && !TextUtils.isEmpty(v0_1.extraInfo)) {
-                val v0_2 = v0_1.extraInfo
+            if (v01.type == 0 && !TextUtils.isEmpty(v01.extraInfo)) {
+                val v0_2 = v01.extraInfo
                 if ("cmwap".equals(v0_2, ignoreCase = true)) {
                     e = "02"
                     return e
@@ -273,26 +272,26 @@ class Migu {
         return Build.BRAND
     }
     fun c(): String {
-        var v0_1: String
+        var v01: String
         val v1: Class<*> = Migu::class.java
         synchronized(v1) {
             if (TextUtils.isEmpty(i)) {
                 try {
-                    val v0_3: Context = BaseApplication.getContext()
-                    i = v0_3.packageManager.getPackageInfo(v0_3.packageName, 0).versionName
+                    val v03: Context = BaseApplication.getContext()
+                    i = v03.packageManager.getPackageInfo(v03.packageName, 0).versionName
                     return i
                 } catch (v0_2: java.lang.Exception) {
                 }
-                v0_1 = ""
+                v01 = ""
             } else {
-                v0_1 = i
+                v01 = i
             }
         }
-        return v0_1
+        return v01
     }
 
     /**
-     * 注释掉是因为应用程序不同
+     * 注释掉是因为应用程序不同，此处直接返回的字符串的来源是用Fiddler拦截抓包获得的
      */
     fun o(): String {
 //        return try {
@@ -308,6 +307,139 @@ class Migu {
 //        }
 //    }
         return "6cdc72a439cef99a3418d2a78aa28c73"
+    }
+}
+
+class UnionSearch private constructor() {
+
+    val androidId: String
+        get() {
+            if (TextUtils.isEmpty(Companion.androidId)) {
+                Companion.androidId = ""
+            }
+            return Companion.androidId
+        }
+    val appChannel: String
+        get() {
+//            if (TextUtils.isEmpty(Companion.appChannel)) {
+//                Companion.appChannel = ""
+//            }
+//            return Companion.appChannel
+            return ""
+        }
+    val hWID: String
+        get() {
+            if (TextUtils.isEmpty(hwid)) {
+                hwid = ""
+            }
+            return hwid
+        }
+    val oAID: String
+        get() {
+            if (TextUtils.isEmpty(oaid)) {
+                oaid = ""
+            }
+            return oaid
+        }
+
+    /**
+     * uid可以为空
+     */
+    val uid: String get() = ""
+    //        if(TextUtils.isEmpty(UnionSearch.uid)) {
+//            UnionSearch.uid = com.migu.tsg.a.g(UnionSearch.mApplicationContext);
+//        }
+//
+//        return UnionSearch.uid;
+
+
+    companion object {
+        fun newInstance() = UnionSearch()
+        var UI_VERSION: String = "A_music_3.5.0"
+        private var androidId: String = ""
+        private var hwid: String = ""
+        private var oaid: String = ""
+
+//        fun init(arg2: Application) {
+//            application = arg2
+//            val v0 = K.a(arg2)!!.a("key_env_config")
+//            if (!TextUtils.isEmpty(v0) && "*#prs#*" == v0) {
+//                SEARCH_URL = "https://jadeite.migu.cn:8030/music_search"
+//                UI_VERSION = "Test_A_music_3.5.0"
+//                return
+//            }
+//            if (TextUtils.equals(v0, "*#testrs#*")) {
+//                SEARCH_URL = "http://39.156.1.73:8080/test/music_search"
+//                UI_VERSION = "Test_A_music_3.5.0"
+//                return
+//            }
+//            if (!TextUtils.isEmpty(v0) && "*#devrs#*" == v0) {
+//                SEARCH_URL = "http://39.156.1.73:8080/music_search"
+//                UI_VERSION = "Dev_A_music_3.5.0"
+//                return
+//            }
+//            SEARCH_URL = "https://jadeite.migu.cn/music_search"
+//            UI_VERSION = "A_music_3.5.0"
+//        }
+        //    public void register(OnSearchEventListener arg1) {
+        //        UnionSearch.mOnSearchEventListener = arg1;
+        //    }
+        //    public void search24Bit(Context arg4, String arg5) {
+        //        Intent v0 = new Intent(arg4, MultipleTypeSearchActivity.class);
+        //        v0.putExtra("search_word", arg5);
+        //        v0.putExtra("type", "24bit");
+        //        arg4.startActivity(v0);
+        //    }
+        //
+        //    public void searchAll(Context arg3, Bundle arg4) {
+        //        Intent v0 = new Intent(arg3, SearchActivity.class);
+        //        v0.putExtras(arg4);
+        //        arg3.startActivity(v0);
+        //    }
+        //
+        //    public void searchAll(Context arg3, String arg4, String arg5, String arg6) {
+        //        Intent v0 = new Intent(arg3, SearchActivity.class);
+        //        v0.putExtra("search_word", arg4);
+        //        v0.putExtra("title", arg5);
+        //        v0.putExtra("sub_title", arg6);
+        //        arg3.startActivity(v0);
+        //    }
+        //
+        //    public void searchConcert(Context arg3) {
+        //        arg3.startActivity(new Intent(arg3, UnionSearchConcertActivity.class));
+        //    }
+        //
+        //    public void searchMv1080(Context arg4, String arg5) {
+        //        Intent v0 = new Intent(arg4, MultipleTypeSearchActivity.class);
+        //        v0.putExtra("search_word", arg5);
+        //        v0.putExtra("type", "mv1080");
+        //        arg4.startActivity(v0);
+        //    }
+        //
+        //    public void searchSongsAddList(Context arg3, String arg4) {
+        //        Intent v0 = new Intent(arg3, SearchSongAddListActivity.class);
+        //        v0.putExtra("ColumnName", arg4);
+        //        arg3.startActivity(v0);
+        //    }
+        //
+        //    public void searchTicket(Context arg3, String arg4) {
+        //        Intent v0 = new Intent(arg3, TicketSearchActivity.class);
+        //        v0.putExtra("search_word", arg4);
+        //        arg3.startActivity(v0);
+        //    }
+        //
+        //    public void searchVideoTone(Context arg4, String arg5) {
+        //        Intent v0 = new Intent(arg4, MultipleTypeSearchActivity.class);
+        //        v0.putExtra("search_word", arg5);
+        //        v0.putExtra("type", "video_tone");
+        //        arg4.startActivity(v0);
+        //    }
+        //
+        //    public void unRegister() {
+        //        if(UnionSearch.mOnSearchEventListener != null) {
+        //            UnionSearch.mOnSearchEventListener = null;
+        //        }
+        //    }
     }
 }
 
@@ -363,15 +495,15 @@ class K private constructor(arg3: Context?) {
     companion object {
         private var a: K? = null
         fun a(arg3: Context?): K? {
-            var v0_1: K?
+            var v01: K?
             val v1: Class<*> = K::class.java
             synchronized(v1) {
                 if (a == null && arg3 != null) {
                     a = K(arg3.applicationContext)
                 }
-                v0_1 = a
+                v01 = a
             }
-            return v0_1
+            return v01
         }
     }
 
@@ -415,5 +547,3 @@ class Params{
         return v1
     }
 }
-
-

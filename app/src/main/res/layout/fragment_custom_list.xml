@@ -104,7 +104,7 @@
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
                     app:menu="@menu/menu_songlist"
-                    app:navigationIcon="?android:attr/textCheckMarkInverse"
+                    app:navigationIcon="@drawable/ic_detail_back"
                     app:titleTextColor="?attr/colorOnSurface" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.echo_kt.databinding.FragmentInfoBinding
-import com.example.echo_kt.ui.video.listadapter.VideoMainAdapter
 
 class InfoFragment : Fragment() {
 
